@@ -1,1 +1,1 @@
-export const MUTUAL_CHAT_ID = 1;
+export const MUTUAL_CHAT_ID = 'f3539399-ed28-4e53-9862-3d81616014bf';
