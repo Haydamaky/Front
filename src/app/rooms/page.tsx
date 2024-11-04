@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { socket } from '../../socket';
-import { MUTUAL_CHAT_ID } from 'lib/constants';
+import { MUTUAL_CHAT_ID } from '@/lib/constants';
+import { useRouter } from 'next/navigation';
+import { Game } from '@/types/game';
 
 type MessageObjType = {
   text: string;
@@ -11,12 +13,8 @@ type MessageObjType = {
   nickname?: string;
 };
 
-type Game = {
-  id: string;
-  players: any[];
-};
-
 const RoomsPage = () => {
+  const router = useRouter();
   const [message, setMessage] = useState<MessageObjType>({
     text: '',
     chatId: MUTUAL_CHAT_ID,
@@ -24,15 +22,33 @@ const RoomsPage = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [games, setGames] = useState<Game[]>([]);
   const [messages, setMessages] = useState<MessageObjType[]>([]);
+
   useEffect(() => {
     fetch('http://localhost:3000/games', { credentials: 'include' })
       .then(data => data.json())
       .then(games => {
-        console.log(games);
         setGames(games);
       });
     socket.on('onMessage', (data: MessageObjType) => {
       setMessages(prevMessage => [...prevMessage, data]);
+    });
+
+    socket.on('clearStartedGame', (gameId: string) => {
+      setGames(prevGames => {
+        const indexOfGame = prevGames.findIndex(
+          curGame => curGame.id === gameId,
+        );
+        const copyOfGames = [...prevGames];
+        copyOfGames.splice(indexOfGame, 1);
+        return copyOfGames;
+      });
+    });
+
+    socket.on('startGame', ({ gameId }: { gameId: string }) => {
+      if (gameId) {
+        document.cookie = `gameId=${gameId}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+      }
+      router.push('/game');
     });
 
     socket.on('error', (err: any) => {
@@ -41,23 +57,19 @@ const RoomsPage = () => {
 
     socket.on('connect', () => {
       setIsConnected(true);
-      console.log('Connected to WebSocket');
     });
 
     socket.on('disconnect', () => {
       setIsConnected(false);
-      console.log('Disconnected from WebSocket');
     });
 
     socket.on('onParticipateGame', (game: any) => {
-      console.log('On Participation', game);
       setGames(prevGames => {
         const indexOfGame = prevGames.findIndex(
           curGame => curGame.id === game.id,
         );
         const copyOfGames = [...prevGames];
         copyOfGames.splice(indexOfGame, 1, game);
-        console.log(copyOfGames);
         return copyOfGames;
       });
     });
@@ -92,7 +104,6 @@ const RoomsPage = () => {
 
   const hadleLeaveGame = (id: string) => {
     socket?.emit('leaveGame', { id });
-    console.log('leaveGame', socket.id);
   };
   return (
     <div className="space-between flex">
@@ -120,7 +131,6 @@ const RoomsPage = () => {
         <div>
           {games.length &&
             games.map(game => {
-              console.log(game);
               return (
                 <div key={game.id}>
                   <p>id: {game.id}</p>
@@ -129,14 +139,14 @@ const RoomsPage = () => {
                     {game.players.map(player => (
                       <div key={player.id}>
                         <p>{player.user.nickname}</p>
-                        <button
-                          className="bg-rose-600"
-                          onClick={() => hadleLeaveGame(game.id)}
-                        >
-                          Leave game
-                        </button>
                       </div>
                     ))}
+                    <button
+                      className="bg-rose-600"
+                      onClick={() => hadleLeaveGame(game.id)}
+                    >
+                      Leave game
+                    </button>
                   </div>
                   <button
                     className="bg-lime-600"
