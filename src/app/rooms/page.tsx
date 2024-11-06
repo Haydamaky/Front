@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { socket } from '../../socket';
-import { MUTUAL_CHAT_ID } from 'lib/constants';
+import { socket } from '../../../socket';
+import { MUTUAL_CHAT_ID } from '@/lib/constants';
 
 type MessageObjType = {
   text: string;
