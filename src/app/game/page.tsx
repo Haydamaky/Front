@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { socket } from '../../socket';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setGame, setGame as setGameRedux } from '../../store/GameSlice';
@@ -22,18 +22,45 @@ const GamePage = () => {
   const [messages, setMessages] = useState<MessageObjType[]>([]);
   const game = useAppSelector(state => state.game.game);
   const [dices, setDices] = useState<Dices>({} as Dices);
+  const [turnTime, setTurnTime] = useState(0);
   const dispatch = useAppDispatch();
   useEffect(() => {
     fetch('http://localhost:3000/games/currentGame', { credentials: 'include' })
       .then(data => data.json())
       .then(currentGame => {
-        dispatch(setGame(currentGame));
+        //setTurnTime(currentGame.timeOfTurn);
+        setTurnTime(10);
+        dispatch(setGameRedux(currentGame));
       });
-    socket.on('rolledDice', data => {
-      setDices(data.dices);
+
+    socket.on('error', (err: any) => {
+      console.log(err);
     });
-    dispatch(setGameRedux(game));
+    let interval: NodeJS.Timeout;
+    socket.on('rolledDice', data => {
+      console.log('rolledDIce');
+      const now = Date.now();
+      const timeToEnd = Math.ceil((data.turnEnds - now) / 1000);
+      setTurnTime(timeToEnd);
+      let countDown = timeToEnd;
+      if (interval) clearInterval(interval);
+      interval = setInterval(() => {
+        console.log({ countDown, timeToEnd });
+        if (countDown <= 0) {
+          console.log('clearINterval');
+          clearInterval(interval);
+          return;
+        }
+        countDown--;
+        setTurnTime(prev => prev - 1);
+      }, 1000);
+    });
+
     return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+      socket.off('rolledDice');
       socket.off('onMessage');
       socket.off('error');
     };
@@ -54,10 +81,11 @@ const GamePage = () => {
           ))}
         </div>
       </div>
-      <div>
+      <div className="mr-20">{turnTime}</div>
+      <div className="mr-20">
         <div>
           <div>First Dice: {dices.firstDice}</div>
-          <div>Second Dice: {dices.secondDice}</div>
+          <div className="min-w-60">Second Dice: {dices.secondDice}</div>
         </div>
         <button className="bg-lime-400" onClick={onRollDice}>
           Roll Dice

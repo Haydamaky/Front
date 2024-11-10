@@ -136,7 +136,7 @@ const RoomsPage = () => {
                   <p>id: {game.id}</p>
                   <div>
                     Players:
-                    {game.players.map(player => (
+                    {game.players?.map(player => (
                       <div key={player.id}>
                         <p>{player.user.nickname}</p>
                       </div>
