@@ -39,6 +39,8 @@ const GamePage = () => {
     let interval: NodeJS.Timeout;
     socket.on('rolledDice', data => {
       console.log('rolledDIce');
+      const dices = data.dices.split(':');
+      setDices({ firstDice: dices[0], secondDice: dices[1] });
       const now = Date.now();
       const timeToEnd = Math.ceil((data.turnEnds - now) / 1000);
       setTurnTime(timeToEnd);
@@ -69,6 +71,10 @@ const GamePage = () => {
   const onRollDice = () => {
     socket.emit('rollDice');
   };
+
+  const onRejoin = () => {
+    socket.emit('rejoinGame');
+  };
   return (
     <div className="space-between flex">
       <div className="w-1/2">
@@ -89,6 +95,9 @@ const GamePage = () => {
         </div>
         <button className="bg-lime-400" onClick={onRollDice}>
           Roll Dice
+        </button>
+        <button className="ml-24 bg-pink-400" onClick={onRejoin}>
+          Rejoin
         </button>
       </div>
       <div className="w-1/2">
