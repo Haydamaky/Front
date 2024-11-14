@@ -12,37 +12,85 @@ type MessageObjType = {
   nickname?: string;
 };
 
-interface Dices {
-  firstDice: number;
-  secondDice: number;
-}
-
 const GamePage = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<MessageObjType[]>([]);
   const game = useAppSelector(state => state.game.game);
-  const [dices, setDices] = useState<Dices>({} as Dices);
+  const [dices, setDices] = useState<string[]>([]);
   const [turnTime, setTurnTime] = useState(0);
   const dispatch = useAppDispatch();
   useEffect(() => {
     fetch('http://localhost:3000/games/currentGame', { credentials: 'include' })
       .then(data => data.json())
       .then(currentGame => {
-        //setTurnTime(currentGame.timeOfTurn);
-        setTurnTime(10);
         dispatch(setGameRedux(currentGame));
       });
 
     socket.on('error', (err: any) => {
       console.log(err);
     });
+
+    socket.on('rejoin', (data: any) => {
+      let dicesData = data.dices;
+      if (!data.dices) {
+        setDices([]);
+      } else {
+        const dices = dicesData.split(':');
+        setDices(dices);
+      }
+      const now = Date.now();
+      const timeToEnd = Math.floor((+data.turnEnds - now) / 1000);
+      setTurnTime(timeToEnd);
+      let countDown = timeToEnd;
+      if (interval) clearInterval(interval);
+      interval = setInterval(() => {
+        console.log({ countDown, timeToEnd });
+        if (countDown <= 0) {
+          console.log('clearINterval');
+          clearInterval(interval);
+          return;
+        }
+        countDown--;
+        setTurnTime(prev => prev - 1);
+      }, 1000);
+    });
+
+    socket.on('tradedField', (data: any) => {
+      let dicesData = data.dices;
+      if (!data.dices) {
+        setDices([]);
+      } else {
+        const dices = dicesData.split(':');
+        setDices(dices);
+      }
+      const now = Date.now();
+      const timeToEnd = Math.floor((+data.turnEnds - now) / 1000);
+      setTurnTime(timeToEnd);
+      let countDown = timeToEnd;
+      if (interval) clearInterval(interval);
+      interval = setInterval(() => {
+        console.log({ countDown, timeToEnd });
+        if (countDown <= 0) {
+          console.log('clearINterval');
+          clearInterval(interval);
+          return;
+        }
+        countDown--;
+        setTurnTime(prev => prev - 1);
+      }, 1000);
+    });
     let interval: NodeJS.Timeout;
     socket.on('rolledDice', data => {
       console.log('rolledDIce');
-      const dices = data.dices.split(':');
-      setDices({ firstDice: dices[0], secondDice: dices[1] });
+      let dicesData = data.dices;
+      if (!data.dices) {
+        setDices([]);
+      } else {
+        const dices = dicesData.split(':');
+        setDices(dices);
+      }
       const now = Date.now();
-      const timeToEnd = Math.ceil((data.turnEnds - now) / 1000);
+      const timeToEnd = Math.floor((+data.turnEnds - now) / 1000);
       setTurnTime(timeToEnd);
       let countDown = timeToEnd;
       if (interval) clearInterval(interval);
@@ -64,7 +112,10 @@ const GamePage = () => {
       }
       socket.off('rolledDice');
       socket.off('onMessage');
+      socket.off('startTradeField');
       socket.off('error');
+      socket.off('rejoin');
+      socket.off('tradedField');
     };
   }, []);
 
@@ -74,6 +125,10 @@ const GamePage = () => {
 
   const onRejoin = () => {
     socket.emit('rejoinGame');
+  };
+
+  const onTradeField = () => {
+    socket.emit('tradeField');
   };
   return (
     <div className="space-between flex">
@@ -90,15 +145,19 @@ const GamePage = () => {
       <div className="mr-20">{turnTime}</div>
       <div className="mr-20">
         <div>
-          <div>First Dice: {dices.firstDice}</div>
-          <div className="min-w-60">Second Dice: {dices.secondDice}</div>
+          <div>First Dice: {dices[0]}</div>
+          <div className="min-w-60">Second Dice: {dices[1]}</div>
         </div>
-        <button className="bg-lime-400" onClick={onRollDice}>
-          Roll Dice
-        </button>
-        <button className="ml-24 bg-pink-400" onClick={onRejoin}>
-          Rejoin
-        </button>
+        {!!dices.length && (
+          <button className="bg-orange-500" onClick={onTradeField}>
+            Trade Field
+          </button>
+        )}
+        {!dices.length && (
+          <button className="ml-4 bg-lime-400" onClick={onRollDice}>
+            Roll Dice
+          </button>
+        )}
       </div>
       <div className="w-1/2">
         <h1>Chat</h1>
