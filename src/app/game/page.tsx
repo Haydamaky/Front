@@ -18,113 +18,74 @@ const GamePage = () => {
   const game = useAppSelector(state => state.game.game);
   const [dices, setDices] = useState<string[]>([]);
   const [turnTime, setTurnTime] = useState(0);
+  const intervalRef = useRef<null | NodeJS.Timeout>(null);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
+    const startCountdown = (timeToEnd: any) => {
+      let countDown = timeToEnd;
+      if (intervalRef.current) clearInterval(intervalRef.current);
+
+      intervalRef.current = setInterval(() => {
+        console.log({ countDown, timeToEnd });
+        if (countDown <= 0) {
+          console.log('clearInterval');
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          return;
+        }
+        countDown--;
+        setTurnTime(prev => prev - 1);
+      }, 1000);
+    };
+
     fetch('http://localhost:3000/games/currentGame', { credentials: 'include' })
       .then(data => data.json())
       .then(currentGame => {
         dispatch(setGameRedux(currentGame));
       });
 
-    socket.on('error', (err: any) => {
-      console.log(err);
+    socket.emit('getGame', (game: any) => {
+      let dicesData = game.dices;
+      setDices(dicesData ? dicesData.split(':') : []);
+      const now = Date.now();
+      const timeToEnd = Math.floor((+game.turnEnds - now) / 1000);
+      setTurnTime(timeToEnd);
+      startCountdown(timeToEnd);
     });
 
-    socket.on('rejoin', (data: any) => {
-      let dicesData = data.dices;
-      if (!data.dices) {
-        setDices([]);
-      } else {
-        const dices = dicesData.split(':');
-        setDices(dices);
-      }
-      const now = Date.now();
-      const timeToEnd = Math.floor((+data.turnEnds - now) / 1000);
-      setTurnTime(timeToEnd);
-      let countDown = timeToEnd;
-      if (interval) clearInterval(interval);
-      interval = setInterval(() => {
-        console.log({ countDown, timeToEnd });
-        if (countDown <= 0) {
-          console.log('clearINterval');
-          clearInterval(interval);
-          return;
-        }
-        countDown--;
-        setTurnTime(prev => prev - 1);
-      }, 1000);
-    });
+    socket.on('error', (err: any) => console.log(err));
 
     socket.on('tradedField', (data: any) => {
       let dicesData = data.dices;
-      if (!data.dices) {
-        setDices([]);
-      } else {
-        const dices = dicesData.split(':');
-        setDices(dices);
-      }
+      setDices(dicesData ? dicesData.split(':') : []);
       const now = Date.now();
       const timeToEnd = Math.floor((+data.turnEnds - now) / 1000);
       setTurnTime(timeToEnd);
-      let countDown = timeToEnd;
-      if (interval) clearInterval(interval);
-      interval = setInterval(() => {
-        console.log({ countDown, timeToEnd });
-        if (countDown <= 0) {
-          console.log('clearINterval');
-          clearInterval(interval);
-          return;
-        }
-        countDown--;
-        setTurnTime(prev => prev - 1);
-      }, 1000);
-    });
-    let interval: NodeJS.Timeout;
-    socket.on('rolledDice', data => {
-      console.log('rolledDIce');
-      let dicesData = data.dices;
-      if (!data.dices) {
-        setDices([]);
-      } else {
-        const dices = dicesData.split(':');
-        setDices(dices);
-      }
-      const now = Date.now();
-      const timeToEnd = Math.floor((+data.turnEnds - now) / 1000);
-      setTurnTime(timeToEnd);
-      let countDown = timeToEnd;
-      if (interval) clearInterval(interval);
-      interval = setInterval(() => {
-        console.log({ countDown, timeToEnd });
-        if (countDown <= 0) {
-          console.log('clearINterval');
-          clearInterval(interval);
-          return;
-        }
-        countDown--;
-        setTurnTime(prev => prev - 1);
-      }, 1000);
+      startCountdown(timeToEnd);
     });
 
+    socket.on('rolledDice', (data: any) => {
+      console.log('rolledDice');
+      let dicesData = data.dices;
+      setDices(dicesData ? dicesData.split(':') : []);
+      const now = Date.now();
+      const timeToEnd = Math.floor((+data.turnEnds - now) / 1000);
+      setTurnTime(timeToEnd);
+      startCountdown(timeToEnd);
+    });
+
+    // Cleanup function to clear interval and remove event listeners on unmount
     return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
       socket.off('rolledDice');
-      socket.off('onMessage');
-      socket.off('startTradeField');
+      socket.off('getGame');
       socket.off('error');
-      socket.off('rejoin');
       socket.off('tradedField');
     };
   }, []);
 
   const onRollDice = () => {
     socket.emit('rollDice');
-  };
-
-  const onRejoin = () => {
-    socket.emit('rejoinGame');
   };
 
   const onTradeField = () => {
