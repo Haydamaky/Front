@@ -25,4 +25,4 @@ const gameSlice = createSlice({
 
 export const { updatePlayers, setGame } = gameSlice.actions;
 
-export default gameSlice.reducer;
+export default gameSlice;
