@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { socket } from '../../socket';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setGame, setGame as setGameRedux } from '../../store/GameSlice';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { setGame } from '@/store/slices/game';
 
 type MessageObjType = {
   text: string;
@@ -41,7 +41,7 @@ const GamePage = () => {
     fetch('http://localhost:3000/games/currentGame', { credentials: 'include' })
       .then(data => data.json())
       .then(currentGame => {
-        dispatch(setGameRedux(currentGame));
+        dispatch(setGame(currentGame));
       });
 
     socket.emit('getGame', (game: any) => {
