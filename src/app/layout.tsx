@@ -5,14 +5,14 @@ import { Providers } from './providers';
 import clsx from 'clsx';
 import { Navbar } from '@/components/navbar';
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
+const titleFont = localFont({
+  src: './fonts/queen_of_melbourne.ttf',
+  variable: '--font-titleFont',
   weight: '100 900',
 });
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
+const genFont = localFont({
+  src: './fonts/FixelDisplay-Regular.ttf',
+  variable: '--font-genFont',
   weight: '100 900',
 });
 

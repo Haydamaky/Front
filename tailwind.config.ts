@@ -10,9 +10,20 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens:{
+        sm: '480px',
+        md: '768px',
+        lg: '976px',
+        xl: '1440px',
+      },
       fontFamily: {
         custom: ['var(--font-titleFont)', 'sans-serif'],
         second: ['var(--font-genFont)', 'sans-serif'],
+      },
+      fontSize: {
+        baseMob: '10px',
+        base: '13px',
+        lg: '16px',
       },
       colors: {
         primary: 'rgb(115, 113, 252)',
