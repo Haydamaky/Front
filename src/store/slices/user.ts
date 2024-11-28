@@ -1,7 +1,7 @@
 import { client } from '@/client';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type User = {
+export type User = {
   id: string;
   nickname: string;
   email: string;
@@ -37,6 +37,9 @@ const slice = createSlice({
   initialState,
   reducers: {
     resetUserState: () => initialState,
+    setUserState: (state, action: PayloadAction<User>) => {
+      state.data = { ...action.payload };
+    },
   },
 
   extraReducers(builder) {
@@ -58,5 +61,5 @@ const slice = createSlice({
   },
 });
 
-export const { resetUserState } = slice.actions;
+export const { resetUserState, setUserState } = slice.actions;
 export default slice;
