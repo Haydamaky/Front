@@ -21,7 +21,7 @@ import { siteConfig } from '@/config/site';
 import { client } from '@/client';
 import { setUserState, User } from '@/store/slices/user';
 import { useAppDispatch } from '@/hooks/store';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export const formSchema = z.object({
   email: z.string().email({ message: 'Please provide a valid email address' }),
@@ -41,6 +41,7 @@ export const SignUpForm: FC = () => {
     },
   });
   const router = useRouter();
+  console.log(router);
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isReveal, setIsReveal] = useState<boolean>(false);

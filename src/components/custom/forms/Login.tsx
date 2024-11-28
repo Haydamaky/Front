@@ -19,7 +19,7 @@ import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import { client } from '@/client';
 import { useAppDispatch } from '@/hooks/store';
 import { setUserState, User } from '@/store/slices/user';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 export const formSchema = z.object({
   username: z.string().min(2),
   password: z.string().min(2),
