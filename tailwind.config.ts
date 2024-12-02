@@ -19,8 +19,8 @@ const config: Config = {
         second: ['var(--font-genFont)', 'sans-serif'],
       },
       fontSize: {
-        baseMob: '10px',
-        base: '13px',
+        standardMob: '10px',
+        standard: '13px',
         lg: '16px',
       },
       colors: {
@@ -28,7 +28,8 @@ const config: Config = {
         secondary: 'rgb(165, 148, 249)',
         tertiary: 'rgb(205, 193, 255)',
         base: 'rgb(245, 239, 255)',
-        helper: 'rgb(229, 217, 242)'
+        helper: 'rgb(229, 217, 242)',
+        black: 'rgb(0,0,0)',
       },
     },
   },
