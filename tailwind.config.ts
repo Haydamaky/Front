@@ -10,7 +10,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      screens:{
+      screens: {
         sm: '480px',
         md: '768px',
         lg: '976px',
@@ -21,8 +21,8 @@ const config: Config = {
         second: ['var(--font-genFont)', 'sans-serif'],
       },
       fontSize: {
-        baseMob: '10px',
-        base: '13px',
+        standardMob: '10px',
+        standard: '13px',
         lg: '16px',
       },
       colors: {
