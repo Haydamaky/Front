@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
   Form,
@@ -14,14 +14,15 @@ import {
 import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 import { Link } from '@nextui-org/react';
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import { client } from '@/client';
 import { useAppDispatch } from '@/hooks/store';
 import { setUserState, User } from '@/store/slices/user';
 import { useRouter } from 'next/navigation';
+import { GoogleIcon } from '@/components/icons';
 export const formSchema = z.object({
-  username: z.string().min(2),
+  email: z.string().email(),
   password: z.string().min(2),
 });
 
@@ -29,7 +30,7 @@ export const LogInForm: FC = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   });
@@ -38,20 +39,50 @@ export const LogInForm: FC = () => {
   const dispatch = useAppDispatch();
   const [isReveal, setIsReveal] = useState<boolean>(false);
 
+  const [message, setMessage] = useState({
+    message: '',
+    isHidden: true,
+    status: 200,
+  });
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      const res = await client.post('/auth/local/signin');
-      if (res.status === 200) {
-        dispatch(setUserState(res.data.user as User));
-        router.push('/');
-      } else
-        throw new Error(res.data?.message || 'Some error occured, try later');
+      const res = await client.post<{
+        message?: string;
+        user?: User;
+      }>('auth/local/signin', values);
+
+      if (res.status === 200 && res.data.user) {
+        dispatch(setUserState(res.data.user));
+
+        router.replace('/');
+      }
     } catch (error: any) {
-      form.setError('root', { message: error.message });
+      form.setError('root', {
+        type: 'value',
+        message:
+          error.response.data.message instanceof Array
+            ? error.response.data.message[0]
+            : error.response.data.message,
+      });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const onChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<
+      {
+        email: string;
+        password: string;
+      },
+      'email' | 'password'
+    >,
+  ) => {
+    field.onChange(e);
+    form.clearErrors('root');
   };
 
   return (
@@ -61,39 +92,31 @@ export const LogInForm: FC = () => {
         className="mt-16 w-[10rem] space-y-8 rounded-2xl border-2 p-8 lg:w-[26rem]"
         autoFocus
       >
-        <p className="text-center text-2xl font-bold">Log In</p>
+        <p className="text-center text-2xl font-bold">Вхід</p>
         <div className="flex flex-col gap-4">
           <Button
             radius="sm"
             size="lg"
             className="w-full bg-zinc-200 text-large font-bold text-black"
-            // startContent={<AppleIcon />}
+            startContent={<GoogleIcon />}
           >
-            Log In with Apple
-          </Button>
-
-          <Button
-            radius="sm"
-            size="lg"
-            className="w-full bg-zinc-200 text-large font-bold text-black"
-            // startContent={<GoogleIcon />}
-          >
-            Log In with Google
+            Увійти за допомогою Google
           </Button>
         </div>
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="capitalize">{field.name}</FormLabel>
+              <FormLabel className="capitalize">Емейл</FormLabel>
               <FormControl>
                 <Input
                   size="lg"
-                  placeholder="shadcn"
+                  placeholder="youremail@email.com"
                   isClearable
-                  onClear={() => form.resetField('username')}
+                  onClear={() => form.resetField('email')}
                   {...field}
+                  onChange={e => onChange(e, field)}
                 />
               </FormControl>
 
@@ -107,10 +130,10 @@ export const LogInForm: FC = () => {
           render={({ field }) => (
             <FormItem>
               <div className="flex flex-row justify-between">
-                <FormLabel className="capitalize">{field.name}</FormLabel>
+                <FormLabel className="capitalize">Пароль</FormLabel>
                 <FormLabel>
-                  <Link className="text-sm text-zinc-400" href="/">
-                    Forgot Password?
+                  <Link className="text-sm text-zinc-500" href="/">
+                    Забули пароль?
                   </Link>
                 </FormLabel>
               </div>
@@ -132,6 +155,8 @@ export const LogInForm: FC = () => {
                       />
                     )
                   }
+                  {...field}
+                  onChange={e => onChange(e, field)}
                 />
               </FormControl>
 
@@ -146,12 +171,19 @@ export const LogInForm: FC = () => {
           size="lg"
           className="w-full bg-zinc-200 text-large font-bold text-black"
         >
-          Log In
+          Увійти
         </Button>
+        {form.formState.errors.root && (
+          <p className="text-center text-red-600">
+            {form.formState.errors.root.message}
+          </p>
+        )}
         <footer className="text-center">
-          Don`t have an account?{' '}
+          Не маєте акаунта?{' '}
           <Link href={'/signup'}>
-            <span className="ml-1 text-green-400">Sign Up</span>
+            <span className="ml-1 font-semibold text-green-600">
+              Зареєструватись
+            </span>
           </Link>
         </footer>
       </form>

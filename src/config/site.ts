@@ -1,66 +1,54 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Kurosawa - streaming platform",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: 'Kurosawa - streaming platform',
+  description: 'Make beautiful websites regardless of your design experience.',
   navItems: [
     {
-      label: "Home",
-      href: "/",
+      label: 'TV',
+      href: '/',
     },
     {
-      label: "Catalog",
-      href: "/catalog",
+      label: 'Друзі',
+      href: '/',
     },
     {
-      label: "News",
-      href: "/news",
+      label: 'Інвентар',
+      href: '/',
     },
     {
-      label: "Collections",
-      href: "/collections",
+      label: 'Магазин',
+      href: '/',
     },
   ],
   navMenuItems: [
     {
-      label: "Profile",
-      href: "/profile",
+      label: 'TV',
+      href: '/',
     },
     {
-      label: "Dashboard",
-      href: "/dashboard",
+      label: 'Друзі',
+      href: '/',
     },
     {
-      label: "Projects",
-      href: "/projects",
+      label: 'Інвентар',
+      href: '/',
     },
     {
-      label: "Team",
-      href: "/team",
+      label: 'Магазин',
+      href: '/',
     },
     {
-      label: "Calendar",
-      href: "/calendar",
-    },
-    {
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      label: "Help & Feedback",
-      href: "/help-feedback",
-    },
-    {
-      label: "Logout",
-      href: "/logout",
+      label: 'Вийти',
+      href: '/logout',
     },
   ],
   links: {
-    login: "/login",
-    signup: "/signup",
-    twitter: "https://twitter.com/getnextui",
-    docs: "https://nextui.org",
-    discord: "https://discord.gg/9b6yyZKmH4",
-    sponsor: "https://patreon.com/jrgarciadev",
+    login: '/login',
+    signup: '/signup',
+    twitter: 'https://twitter.com/getnextui',
+    docs: 'https://nextui.org',
+    discord: 'https://discord.gg/9b6yyZKmH4',
+    sponsor: 'https://patreon.com/jrgarciadev',
   },
 };

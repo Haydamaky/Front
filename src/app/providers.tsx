@@ -13,7 +13,7 @@ export function Providers({ children }: Props) {
   const router = useRouter();
   return (
     <NextUIProvider navigate={router.push}>
-      <NextThemesProvider attribute="class" defaultTheme="dark">
+      <NextThemesProvider attribute="class" themes={['light']}>
         <Provider store={store}>{children}</Provider>;
       </NextThemesProvider>
     </NextUIProvider>

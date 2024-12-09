@@ -22,10 +22,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  themeColor: [{ media: '(prefers-color-scheme: light)', color: 'white' }],
 };
 
 export default function RootLayout({
@@ -37,7 +34,7 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={clsx(
-          'bg-background min-h-screen font-sans antialiased',
+          'min-h-screen bg-background font-sans antialiased light',
           geistSans.variable,
         )}
       >

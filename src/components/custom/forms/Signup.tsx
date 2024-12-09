@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { ControllerRenderProps, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
   Form,
@@ -15,7 +15,7 @@ import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 import { Link } from '@nextui-org/link';
 
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { client } from '@/client';
@@ -25,7 +25,7 @@ import { useRouter } from 'next/navigation';
 
 export const formSchema = z.object({
   email: z.string().email({ message: 'Please provide a valid email address' }),
-  username: z
+  nickname: z
     .string()
     .min(4, { message: 'Name should contain atleast 4 symbols' }),
   password: z.string().min(2),
@@ -36,7 +36,7 @@ export const SignUpForm: FC = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
-      username: '',
+      nickname: '',
       password: '',
     },
   });
@@ -49,17 +49,38 @@ export const SignUpForm: FC = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      const res = await client.post('/auth/local/signup', values);
-      if (res.status === 200) {
-        dispatch(setUserState(res.data.user as User));
-        router.push('/login');
-      } else
-        throw new Error(res.data?.message || 'Some error occured, try later');
+      const res = await client.post<{
+        message?: string;
+      }>('auth/local/signup', values);
+
+      if ([200, 201].includes(res.status))
+        router.replace(siteConfig.links.login);
     } catch (error: any) {
-      form.setError('root', { message: error.message });
+      form.setError('root', {
+        type: 'value',
+        message:
+          error.response.data.message instanceof Array
+            ? error.response.data.message[0]
+            : error.response.data.message,
+      });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const onChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<
+      {
+        email: string;
+        nickname: string;
+        password: string;
+      },
+      'email' | 'password' | 'nickname'
+    >,
+  ) => {
+    field.onChange(e);
+    form.clearErrors('root');
   };
 
   return (
@@ -68,14 +89,14 @@ export const SignUpForm: FC = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-16 w-[10rem] space-y-8 rounded-2xl border-2 p-8 lg:w-[26rem]"
       >
-        <p className="text-center text-2xl font-bold">Create An Account</p>
+        <p className="text-center text-2xl font-bold">Створити акаунт</p>
 
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="capitalize">{field.name}</FormLabel>
+              <FormLabel className="capitalize">Емейл</FormLabel>
               <FormControl>
                 <Input
                   size="lg"
@@ -83,6 +104,7 @@ export const SignUpForm: FC = () => {
                   isClearable
                   onClear={() => form.resetField('email')}
                   {...field}
+                  onChange={e => onChange(e, field)}
                 />
               </FormControl>
 
@@ -93,17 +115,18 @@ export const SignUpForm: FC = () => {
 
         <FormField
           control={form.control}
-          name="username"
+          name="nickname"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="capitalize">{field.name}</FormLabel>
+              <FormLabel className="capitalize">Нікнейм</FormLabel>
               <FormControl>
                 <Input
                   size="lg"
                   placeholder="Shun12"
                   isClearable
-                  onClear={() => form.resetField('username')}
+                  onClear={() => form.resetField('nickname')}
                   {...field}
+                  onChange={e => onChange(e, field)}
                 />
               </FormControl>
               <FormMessage />
@@ -115,13 +138,12 @@ export const SignUpForm: FC = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="capitalize">{field.name}</FormLabel>
+              <FormLabel className="capitalize">Пароль</FormLabel>
               <FormControl>
                 <Input
                   size="lg"
                   type={isReveal ? 'text' : 'password'}
                   placeholder="Choose your password"
-                  {...field}
                   endContent={
                     isReveal ? (
                       <EyeIcon
@@ -135,6 +157,8 @@ export const SignUpForm: FC = () => {
                       />
                     )
                   }
+                  {...field}
+                  onChange={e => onChange(e, field)}
                 />
               </FormControl>
 
@@ -146,12 +170,13 @@ export const SignUpForm: FC = () => {
           radius="sm"
           type="submit"
           size="lg"
+          isLoading={isLoading}
           className="w-full bg-zinc-200 text-large font-bold text-black"
         >
           Sign Up
         </Button>
         <footer className="flex flex-col items-center justify-center text-center">
-          <p>By signing up you agree to</p>
+          <p>Реєструючись, ви погоджуєтесь на</p>
           <Link href={'/'}>
             <span className="ml-1 text-green-500">Terms & Privacy</span>
           </Link>
