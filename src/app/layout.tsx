@@ -35,7 +35,7 @@ export default function RootLayout({
       <body
         className={clsx(
           'min-h-screen bg-background font-sans antialiased light',
-          geistSans.variable,
+          genFont.variable,
         )}
       >
         <Providers>

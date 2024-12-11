@@ -29,18 +29,19 @@ export const Navbar = () => {
   return (
     <NextUINavbar
       position="static"
+      maxWidth="2xl"
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       className="text-custom md:px-[10% relative mx-auto mt-[35px] flex h-[32px] w-full max-w-[1170px] items-center justify-start overflow-visible rounded-[17.5px] bg-primary px-[25px] text-base"
     >
       <NavbarContent className="basis-1/5 gap-12 sm:basis-full" justify="start">
         <Button
-          className="ml-[105px] h-[40px] w-[140px] rounded-[17.5px] border-[4px] border-primary bg-base text-center font-custom text-[15px] leading-[22px] text-primary transition-colors duration-300 hover:bg-primary hover:text-base md:ml-0"
+          className="ml-0 h-[40px] w-[140px] rounded-[17.5px] border-[4px] border-primary bg-base text-center font-custom text-[15px] leading-[22px] text-primary transition-colors duration-300 hover:bg-primary hover:text-base md:ml-[105px]"
           aria-label="Грати"
         >
           Грати
         </Button>
-        <ul className="ml-[30px] flex h-10 items-center space-x-[30px] font-custom text-base">
+        <ul className="ml-[30px] hidden h-10 items-center space-x-[30px] font-custom text-base md:flex">
           {siteConfig.navItems.map(item => (
             <Link
               className="text-standard relative transition-all duration-300 hover:text-lg hover:after:absolute hover:after:left-0 hover:after:top-[calc(100%+10px)] hover:after:h-[2px] hover:after:w-full hover:after:bg-primary"
@@ -56,7 +57,7 @@ export const Navbar = () => {
         justify="end"
       >
         <MessageCircleIcon
-          className="absolute right-[10rem] cursor-pointer"
+          className="absolute right-[10rem] hidden cursor-pointer md:flex"
           size={24}
         />
         {!data ? (
