@@ -19,11 +19,11 @@ const initialState: InitialState = {
   isError: false,
 };
 
-const getUserInfo = createAsyncThunk(
+export const getUserInfo = createAsyncThunk(
   'user/getUserInfo',
-  async (userId: string, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      const response = await client.get(`user/${userId}`);
+      const response = await client.get(`auth/local/me`);
 
       return thunkAPI.fulfillWithValue(response.data);
     } catch (err: any) {

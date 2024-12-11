@@ -4,24 +4,28 @@ import {
   NavbarContent,
   NavbarMenu,
   NavbarMenuToggle,
-  NavbarBrand,
-  NavbarItem,
   NavbarMenuItem,
 } from '@nextui-org/navbar';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
-import { useAppSelector } from '@/hooks/store';
-import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { useEffect, useState } from 'react';
 import { Avatar } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { MessageCircleIcon } from 'lucide-react';
+import { getUserInfo } from '@/store/slices/user';
 
 export const Navbar = () => {
-  const { data } = useAppSelector(state => state.user);
+  const { data, loading } = useAppSelector(state => state.user);
+  const dispatch = useAppDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
-  console.log(data);
+
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
+
   return (
     <NextUINavbar
       position="static"

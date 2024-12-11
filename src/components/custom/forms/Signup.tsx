@@ -19,8 +19,6 @@ import { ChangeEvent, FC, useState } from 'react';
 import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { client } from '@/client';
-import { setUserState, User } from '@/store/slices/user';
-import { useAppDispatch } from '@/hooks/store';
 import { useRouter } from 'next/navigation';
 
 export const formSchema = z.object({
@@ -41,8 +39,6 @@ export const SignUpForm: FC = () => {
     },
   });
   const router = useRouter();
-  console.log(router);
-  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isReveal, setIsReveal] = useState<boolean>(false);
 
