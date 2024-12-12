@@ -6,12 +6,12 @@ import clsx from 'clsx';
 import { Navbar } from '@/components/navbar';
 
 const titleFont = localFont({
-  src: './fonts/queen_of_melbourne.ttf',
+  src: '../../public/fonts/queen_of_melbourne.ttf',
   variable: '--font-titleFont',
   weight: '100 900',
 });
 const genFont = localFont({
-  src: './fonts/FixelDisplay-Regular.ttf',
+  src: '../../public/fonts/FixelDisplay-Regular.ttf',
   variable: '--font-genFont',
   weight: '100 900',
 });
@@ -34,8 +34,9 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={clsx(
-          'min-h-screen bg-background font-sans antialiased light',
+          'min-h-screen font-sans antialiased light',
           genFont.variable,
+          titleFont.variable,
         )}
       >
         <Providers>

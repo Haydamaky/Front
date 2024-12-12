@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      height: {
+        '7.5': '1.875rem',
+      },
       screens: {
         sm: '480px',
         md: '768px',
@@ -17,8 +20,8 @@ const config: Config = {
         xl: '1440px',
       },
       fontFamily: {
-        custom: ['var(--font-titleFont)', 'sans-serif'],
-        second: ['var(--font-genFont)', 'sans-serif'],
+        custom: ['var(--font-titleFont)'],
+        second: ['var(--font-genFont)'],
       },
       fontSize: {
         standardMob: '10px',
