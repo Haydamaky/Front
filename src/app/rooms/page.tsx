@@ -120,8 +120,8 @@ const RoomsPage = () => {
   }, [messages]);
 
   return (
-    <div>
-      <div className="mx-auto flex h-96 max-w-3xl flex-col rounded-lg border-2 border-solid px-2">
+    <div className="mx-auto grid h-[300vh] w-11/12 max-w-7xl grid-cols-1 md:w-full md:grid-cols-[45fr_55fr] md:gap-8 lg:gap-16">
+      <div className="flex h-[40vh] max-w-3xl flex-col rounded-lg border-2 border-solid px-2 md:sticky md:top-[10vh] md:h-[80vh]">
         <h1 className="mx-auto w-32 text-center font-custom text-sm">
           Спільний чат
         </h1>
