@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { socket } from '../../socket';
 import { MUTUAL_CHAT_ID } from '@/lib/constants';
 import { useRouter } from 'next/navigation';
@@ -7,12 +7,14 @@ import { Game } from '@/types/game';
 import { MessageObjType } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@nextui-org/input';
+import { formatDateToTime } from '@/lib/utils';
 
 const RoomsPage = () => {
   const router = useRouter();
   const [message, setMessage] = useState<MessageObjType>({
     text: '',
     chatId: MUTUAL_CHAT_ID,
+    updatedAt: '',
   });
   const [messages, setMessages] = useState<MessageObjType[]>([]);
   const [games, setGames] = useState<Game[]>([]);
@@ -88,7 +90,13 @@ const RoomsPage = () => {
 
   const sendMessage = () => {
     socket.emit('newMessage', { text: message.text, chatId: MUTUAL_CHAT_ID });
-    setMessage({ text: '', chatId: MUTUAL_CHAT_ID });
+    setMessage(prevMessage => ({ ...prevMessage, text: '' }));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
   };
 
   const handleJoinGame = (id: string) => {
@@ -98,23 +106,42 @@ const RoomsPage = () => {
   const handleLeaveGame = (id: string) => {
     socket.emit('leaveGame', { id });
   };
+
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'instant' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
-    <div className="h-full">
-      <div className="flex h-1/2 flex-col rounded border-2 border-solid">
+    <div>
+      <div className="mx-auto flex h-96 max-w-3xl flex-col rounded-lg border-2 border-solid px-2">
         <h1 className="mx-auto w-32 text-center font-custom text-sm">
           Спільний чат
         </h1>
-        <div className="flex-1 overflow-y-auto">
-          {messages.map((msgObj, index) => (
-            <p key={index}>{msgObj.text}</p>
-          ))}
+        <div className="scrollbar flex-1 overflow-y-scroll">
+          {messages.map(message => {
+            const time = formatDateToTime(message.updatedAt);
+            return (
+              <div key={message.id} ref={messagesEndRef}>
+                <p>{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
+              </div>
+            );
+          })}
         </div>
-        <div className="mb-1 flex items-center px-2">
+        <div className="mb-1 mt-1 flex items-center">
           <Input
             className="mr-2 w-full"
             type="text"
             size={'sm'}
             value={message.text}
+            onKeyDown={handleKeyDown}
             classNames={{
               input: ['bg-base', 'text-primary', 'placeholder:text-primary'],
               inputWrapper: ['divide-solid border-2'],

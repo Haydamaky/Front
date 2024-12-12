@@ -9,3 +9,25 @@
     @apply bg-base text-primary;
   }
 }
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #ffffff;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #7371fc;
+    border-radius: 100vh;
+    border: none;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #918ffe;
+  }
+}
