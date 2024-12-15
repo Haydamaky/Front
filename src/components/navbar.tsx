@@ -7,7 +7,6 @@ import {
   NavbarMenuItem,
 } from '@nextui-org/navbar';
 import { Button } from '@nextui-org/button';
-import Link from 'next/link';
 import { siteConfig } from '@/config/site';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useEffect, useState } from 'react';
@@ -15,6 +14,7 @@ import { Avatar } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { MessageCircleIcon } from 'lucide-react';
 import { getUserInfo } from '@/store/slices/user';
+import Link from 'next/link';
 
 export const Navbar = () => {
   const { data, loading } = useAppSelector(state => state.user);
@@ -36,15 +36,18 @@ export const Navbar = () => {
     >
       <NavbarContent className="basis-1/5 gap-12 sm:basis-full" justify="start">
         <Button
+          as={Link}
+          href="/rooms"
           className="ml-0 h-[40px] w-[140px] rounded-[17.5px] border-[4px] border-primary bg-base text-center font-custom text-[15px] leading-[22px] text-primary transition-colors duration-300 hover:bg-primary hover:text-base md:ml-[105px]"
           aria-label="Грати"
         >
           Грати
         </Button>
+
         <ul className="ml-[30px] hidden h-10 items-center space-x-[30px] font-custom text-base md:flex">
           {siteConfig.navItems.map(item => (
             <Link
-              className="text-standard relative transition-all duration-300 hover:text-lg hover:after:absolute hover:after:left-0 hover:after:top-[calc(100%+10px)] hover:after:h-[2px] hover:after:w-full hover:after:bg-primary"
+              className="relative text-standard transition-all duration-300 hover:text-lg hover:after:absolute hover:after:left-0 hover:after:top-[calc(100%+10px)] hover:after:h-[2px] hover:after:w-full hover:after:bg-primary"
               href={item.href}
             >
               {item.label}
@@ -94,7 +97,7 @@ export const Navbar = () => {
             >
               <Link
                 href={item.href}
-                className="text-standard relative transition-all duration-300 hover:text-lg hover:after:absolute hover:after:left-0 hover:after:top-[calc(100%+10px)] hover:after:h-[2px] hover:after:w-full hover:after:bg-primary"
+                className="relative text-standard transition-all duration-300 hover:text-lg hover:after:absolute hover:after:left-0 hover:after:top-[calc(100%+10px)] hover:after:h-[2px] hover:after:w-full hover:after:bg-primary"
               >
                 {item.label}
               </Link>

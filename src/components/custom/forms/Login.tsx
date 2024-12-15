@@ -39,12 +39,6 @@ export const LogInForm: FC = () => {
   const dispatch = useAppDispatch();
   const [isReveal, setIsReveal] = useState<boolean>(false);
 
-  const [message, setMessage] = useState({
-    message: '',
-    isHidden: true,
-    status: 200,
-  });
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
