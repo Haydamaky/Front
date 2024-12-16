@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { socket } from '../../socket';
+import { socket } from '@/socket';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { setGame } from '@/store/slices/game';
 

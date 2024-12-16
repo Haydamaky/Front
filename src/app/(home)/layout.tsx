@@ -1,20 +1,9 @@
 import type { Metadata, Viewport } from 'next';
-import localFont from 'next/font/local';
-import './globals.css';
-import { Providers } from './providers';
+import '@/styles/globals.css';
+import { Providers } from '../../providers/providers';
 import clsx from 'clsx';
 import { Navbar } from '@/components/navbar';
-
-const titleFont = localFont({
-  src: '../../public/fonts/queen_of_melbourne.ttf',
-  variable: '--font-titleFont',
-  weight: '100 900',
-});
-const genFont = localFont({
-  src: '../../public/fonts/FixelDisplay-Regular.ttf',
-  variable: '--font-genFont',
-  weight: '100 900',
-});
+import { genFont, titleFont } from '@/config/fonts';
 
 export const metadata: Metadata = {
   title: 'Create Next App',

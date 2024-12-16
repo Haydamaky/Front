@@ -1,11 +1,12 @@
-import { Fira_Code as FontMono, Inter as FontSans } from "next/font/google";
+import localFont from 'next/font/local';
 
-export const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
+export const titleFont = localFont({
+  src: '../public/fonts/queen_of_melbourne.ttf',
+  variable: '--font-titleFont',
+  weight: '100 900',
 });
-
-export const fontMono = FontMono({
-  subsets: ["latin"],
-  variable: "--font-mono",
+export const genFont = localFont({
+  src: '../public/fonts/FixelDisplay-Regular.ttf',
+  variable: '--font-genFont',
+  weight: '100 900',
 });
