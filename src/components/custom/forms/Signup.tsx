@@ -171,6 +171,11 @@ export const SignUpForm: FC = () => {
         >
           Sign Up
         </Button>
+        {form.formState.errors.root && (
+          <p className="text-center text-red-600">
+            {form.formState.errors.root.message}
+          </p>
+        )}
         <footer className="flex flex-col items-center justify-center text-center">
           <p>Реєструючись, ви погоджуєтесь на</p>
           <Link href={'/'}>
