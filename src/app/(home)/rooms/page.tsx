@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { socket } from '../../socket';
+import { socket } from '@/socket';
 import { MUTUAL_CHAT_ID } from '@/lib/constants';
 import { useRouter } from 'next/navigation';
 import { Game } from '@/types/game';
