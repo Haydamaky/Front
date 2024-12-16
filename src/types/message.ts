@@ -5,4 +5,5 @@ export interface MessageObjType {
   userId?: number;
   sender?: { nickname?: string };
   updatedAt: string;
+  senderId: string;
 }

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { socket } from '../../socket';
 import { MUTUAL_CHAT_ID } from '@/lib/constants';
 import { useRouter } from 'next/navigation';
@@ -8,6 +8,7 @@ import { MessageObjType } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@nextui-org/input';
 import { formatDateToTime } from '@/lib/utils';
+import { useAppSelector } from '@/hooks/store';
 
 const RoomsPage = () => {
   const router = useRouter();
@@ -15,12 +16,21 @@ const RoomsPage = () => {
     text: '',
     chatId: MUTUAL_CHAT_ID,
     updatedAt: '',
+    senderId: '',
   });
   const [messages, setMessages] = useState<MessageObjType[]>([]);
   const [games, setGames] = useState<Game[]>([]);
-
+  const user = useAppSelector(state => state.user);
   const handleOnMessage = (data: MessageObjType) => {
     setMessages(prevMessages => [...prevMessages, data]);
+    console.log('hui');
+    console.log({ scrolledToBottom: isScrolledToBottom(containerRef.current) });
+    if (
+      data.senderId === user.data?.id ||
+      isScrolledToBottom(containerRef.current)
+    ) {
+      setScroll(_ => true);
+    }
   };
 
   const handleClearStartedGame = (gameId: string) => {
@@ -65,25 +75,18 @@ const RoomsPage = () => {
   };
 
   useEffect(() => {
-    // Register socket event listeners
     socket.on('onMessage', handleOnMessage);
     socket.on('clearStartedGame', handleClearStartedGame);
     socket.on('startGame', handleStartGame);
     socket.on('onParticipateGame', handleOnParticipateGame);
     socket.on('error', console.error);
-
-    // Fetch initial chat data
     fetchChatData();
     fetchGames();
-
-    // Cleanup listeners on component unmount
     return () => {
       socket.off('onMessage', handleOnMessage);
       socket.off('clearStartedGame', handleClearStartedGame);
       socket.off('startGame', handleStartGame);
       socket.off('onParticipateGame', handleOnParticipateGame);
-      socket.off('connect');
-      socket.off('disconnect');
       socket.off('error');
     };
   }, [router]);
@@ -107,17 +110,26 @@ const RoomsPage = () => {
     socket.emit('leaveGame', { id });
   };
 
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'instant' });
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  function isScrolledToBottom(container: HTMLDivElement | null) {
+    if (container) {
+      return (
+        container.scrollHeight - container.scrollTop - container.clientHeight <
+        10
+      );
     }
-  };
+  }
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  const [scroll, setScroll] = useState(true);
+  const messageRef = useCallback((node: any) => {
+    if (node) {
+      node.scrollIntoView({
+        behavior: 'auto',
+        block: 'nearest',
+      });
+      setScroll(false);
+    }
+  }, []);
 
   return (
     <div className="mx-auto grid h-[300vh] w-11/12 max-w-7xl grid-cols-1 md:w-full md:grid-cols-[45fr_55fr] md:gap-8 lg:gap-16">
@@ -125,11 +137,21 @@ const RoomsPage = () => {
         <h1 className="mx-auto w-32 text-center font-custom text-sm">
           Спільний чат
         </h1>
-        <div className="scrollbar flex-1 overflow-y-scroll">
-          {messages.map(message => {
+        <div className="scrollbar flex-1 overflow-y-scroll" ref={containerRef}>
+          {messages.map((message, index: number) => {
             const time = formatDateToTime(message.updatedAt);
+            if (index === messages.length - 1 && scroll) {
+              return (
+                <div key={message.id}>
+                  <p
+                    className="bg-pink-400"
+                    ref={messageRef}
+                  >{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
+                </div>
+              );
+            }
             return (
-              <div key={message.id} ref={messagesEndRef}>
+              <div key={message.id}>
                 <p>{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
               </div>
             );
