@@ -30,7 +30,9 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <main className="h-screen w-full pl-24 pr-14">{children}</main>
+          <main className="h-screen w-full pl-24 pr-14 md:py-4 md:pl-40 md:pr-24 lg:pl-60 lg:pr-40">
+            {children}
+          </main>
         </Providers>
       </body>
     </html>
