@@ -28,8 +28,7 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <h1>Just New layout</h1>
-          <main className="w-full px-6 pt-16">{children}</main>
+          <main className="h-screen w-full pl-24 pr-14">{children}</main>
         </Providers>
       </body>
     </html>
