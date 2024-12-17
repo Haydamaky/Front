@@ -87,7 +87,7 @@ const PlayersList = () => {
   };
 
   return (
-    <div className="flex h-full flex-col justify-between py-2 text-xs">
+    <div className="flex h-full flex-col justify-between py-2 text-xs md:text-sm lg:text-lg">
       {game.players?.map((player: Player) => {
         const borderColor = colorVariants[player.color];
         const highLigthedShadow =
@@ -100,7 +100,7 @@ const PlayersList = () => {
             className={`bg-playerCard ${borderColor} ${highLigthedShadow} relative flex h-[23%] flex-col items-center justify-center overflow-hidden border-2 border-solid`}
           >
             {player.userId === usersTurnId && (
-              <div className="absolute right-[5%] top-[-2%] rounded-[0.150rem] bg-base px-1 py-[2px] text-primary">
+              <div className="absolute right-[5%] top-[-2%] rounded-[0.150rem] bg-base px-1 py-[2px] text-primary md:px-2 md:py-1 lg:px-3 lg:py-2">
                 {turnTime}
               </div>
             )}
