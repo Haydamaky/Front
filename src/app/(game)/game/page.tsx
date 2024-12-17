@@ -37,7 +37,7 @@ const GamePage = () => {
   return (
     <div className="grid h-full grid-cols-[12fr_88fr] gap-5">
       <PlayersList />
-      <div className="">
+      <div className="bg-pink-500">
         <div>
           <div>First Dice: {dices[0]}</div>
           <div className="min-w-60">Second Dice: {dices[1]}</div>
