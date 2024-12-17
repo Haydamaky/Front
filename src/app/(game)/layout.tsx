@@ -23,6 +23,8 @@ export default function RootLayout({
       <body
         className={clsx(
           'min-h-screen font-sans antialiased light',
+          'bg-primary',
+          'text-white',
           genFont.variable,
           titleFont.variable,
         )}
