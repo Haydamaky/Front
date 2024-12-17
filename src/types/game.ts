@@ -8,5 +8,6 @@ export interface Game {
   gameMoves: [];
   fieldTransactions: [];
   fields: [];
+  turnOfUserId: string;
   playersCapacity: number;
 }
