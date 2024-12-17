@@ -34,6 +34,7 @@ const config: Config = {
         tertiary: 'rgb(205, 193, 255)',
         base: 'rgb(245, 239, 255)',
         helper: 'rgb(229, 217, 242)',
+        playerCard: 'rgba(245, 239, 255, 0.2)',
       },
     },
   },
