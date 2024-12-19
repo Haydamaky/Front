@@ -16,11 +16,13 @@ const GamesList: FC = () => {
     socket.on('clearStartedGame', handleClearStartedGame);
     socket.on('startGame', handleStartGame);
     socket.on('onParticipateGame', handleOnParticipateGame);
+    socket.on('newGameCreated', onNewGameCreated);
     fetchGames();
     return () => {
       socket.off('clearStartedGame', handleClearStartedGame);
       socket.off('startGame', handleStartGame);
       socket.off('onParticipateGame', handleOnParticipateGame);
+      socket.off('newGameCreated', onNewGameCreated);
     };
   }, [router]);
 
@@ -36,6 +38,10 @@ const GamesList: FC = () => {
   const fetchGames = async () => {
     const games = await socket.emitWithAck('getVisibleGames');
     setGames(games);
+  };
+
+  const onNewGameCreated = (game: Game) => {
+    setGames(prevGames => [game, ...prevGames]);
   };
 
   const handleStartGame = ({ gameId }: { gameId: string }) => {
@@ -60,13 +66,20 @@ const GamesList: FC = () => {
   const handleLeaveGame = (id: string) => {
     socket.emit('leaveGame', { id });
   };
+
+  const onCreateGame = () => socket.emit('createGame');
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-start gap-8 font-custom">
         <h1 className="self-end text-6xl text-primary">кімнати</h1>
-        <Button className="bg-primary text-white">Створити кімнату</Button>
+        <Button className="bg-primary text-white" onClick={onCreateGame}>
+          Створити кімнату
+        </Button>
       </div>
-      <ul>{games?.map(game => <GameRow game={game} key={game.id} />)}</ul>
+      <ul className="flex flex-col gap-6">
+        {games?.map(game => <GameRow game={game} key={game.id} />)}
+      </ul>
     </div>
   );
 };
