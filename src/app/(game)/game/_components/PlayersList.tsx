@@ -6,6 +6,7 @@ import { setGame } from '@/store/slices/game';
 import { useEffect, useRef, useState } from 'react';
 import { Avatar } from '@nextui-org/react';
 import { getUserInfo } from '@/store/slices/user';
+import { setFields } from '@/store/slices/fields';
 
 type PlayerColor = 'white' | 'black' | 'blue' | 'red' | 'yellow';
 
@@ -40,6 +41,7 @@ const PlayersList = () => {
 
     socket.emit('getGameData', ({ game, fields }: any) => {
       dispatch(setGame(game));
+      dispatch(setFields(fields));
       const now = Date.now();
       const timeToEnd = Math.floor((+game.turnEnds - now) / 1000);
       setTurnTime(timeToEnd);
