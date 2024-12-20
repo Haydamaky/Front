@@ -89,7 +89,7 @@ const PlayersList = () => {
   };
 
   return (
-    <div className="flex h-full flex-col justify-between py-2 text-xs md:text-sm lg:text-lg">
+    <div className="flex h-full flex-col justify-between py-6 text-xs md:text-sm lg:text-lg">
       {game.players?.map((player: Player) => {
         const borderColor = colorVariants[player.color];
         const highLigthedShadow =
