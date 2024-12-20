@@ -22,7 +22,7 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={clsx(
-          'min-h-screen font-sans antialiased light',
+          'max-h-screen overflow-y-hidden font-sans antialiased light',
           'bg-primary',
           'text-white',
           genFont.variable,
@@ -30,9 +30,7 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <main className="h-screen w-full pl-24 pr-14 md:py-4 md:pl-40 md:pr-24 lg:pl-60 lg:pr-40">
-            {children}
-          </main>
+          <main className="h-screen w-full pl-[23%]">{children}</main>
         </Providers>
       </body>
     </html>
