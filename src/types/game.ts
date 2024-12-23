@@ -9,4 +9,5 @@ export interface Game {
   fieldTransactions: [];
   fields: [];
   turnOfUserId: string;
+  dices: string;
 }
