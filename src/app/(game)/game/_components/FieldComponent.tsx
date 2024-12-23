@@ -27,6 +27,11 @@ function FieldComponent({ field }: FieldProps) {
   };
   const priceColor = colorVariants[field.color];
   const fieldColorPos = fieldColorPosVariants[field.line];
+  const textPos = field.line.includes('vertical-right')
+    ? 'rotate-90'
+    : field.line.includes('vertical-left')
+      ? 'rotate-[-90deg]'
+      : '';
   return (
     <div className={`relative h-full w-full text-wrap bg-white`}>
       <div className={`h-full w-full`}>
@@ -41,7 +46,11 @@ function FieldComponent({ field }: FieldProps) {
         </div>
       </div>
       {field.hasOwnProperty('price') && (
-        <div className={`absolute ${fieldColorPos} ${priceColor}`}></div>
+        <div
+          className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-xs text-gray-100`}
+        >
+          <p className={`${textPos}`}>{field.price}</p>
+        </div>
       )}
     </div>
   );
