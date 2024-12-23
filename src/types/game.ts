@@ -10,4 +10,5 @@ export interface Game {
   fields: [];
   turnOfUserId: string;
   playersCapacity: number;
+  dices: string;
 }

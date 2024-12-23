@@ -19,7 +19,8 @@ export const positionCoors = [
   'left-[7%] top-[89%]',
   ...Array.from(
     { length: 9 },
-    (_, i) => 'left-[7%] top-[' + Math.floor((77.3 - 7.4 * i) * 10) / 10 + '%]',
+    (_, i) =>
+      'left-[7%] top-[' + Math.floor((77.5 - 7.35 * i) * 10) / 10 + '%]',
   ),
   'left-[7%] top-[9%]',
 ];
