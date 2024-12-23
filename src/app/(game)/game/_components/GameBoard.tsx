@@ -6,6 +6,7 @@ import FieldComponent from './FieldComponent';
 import { setFields } from '@/store/slices/fields';
 import PlayersChips from './PlayersChips';
 import { setGame } from '@/store/slices/game';
+
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
   const dispatch = useAppDispatch();

@@ -30,10 +30,11 @@ function FieldComponent({ field }: FieldProps) {
   return (
     <div className={`relative h-full w-full text-wrap bg-white`}>
       <div className={`h-full w-full`}>
-        <div className="h-full w-full">
+        <div className="relative h-full w-full">
           <Image
             src={field.imageUrl}
             alt={field.name}
+            sizes="100%"
             fill
             className="object-contain"
           />
