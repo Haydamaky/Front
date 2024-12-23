@@ -1,9 +1,13 @@
 import { useAppSelector } from '@/hooks/store';
 import { createColorVariants, positionCoors } from '../_utils';
+import { findClosest } from '../_utils/findClosest';
+import { useEffect, useRef, useState } from 'react';
+import PlayerChip from './PlayerChip';
 const colorVariants = createColorVariants('500');
 const colorVariantsDarker = createColorVariants('700');
 const PlayersChips = () => {
   const game = useAppSelector(state => state.game.game);
+
   return (
     <>
       {game.players?.length > 0 &&
@@ -19,8 +23,41 @@ const PlayersChips = () => {
           const isHorizonatlField =
             player.currentFieldIndex < 11 ||
             (player.currentFieldIndex > 20 && player.currentFieldIndex < 31);
+          const dicesStringsArr = game.dices.split(':');
+          const dicesNumArr = dicesStringsArr.map(Number);
+          let indexBefore =
+            player.currentFieldIndex - dicesNumArr[0] - dicesNumArr[1];
+          if (indexBefore < 0) {
+            indexBefore += 40;
+          }
+          const onSameLineStill =
+            (indexBefore <= 11 && player.currentFieldIndex <= 11) ||
+            (indexBefore >= 11 &&
+              indexBefore <= 21 &&
+              player.currentFieldIndex >= 11 &&
+              player.currentFieldIndex <= 21) ||
+            (indexBefore >= 21 &&
+              indexBefore <= 31 &&
+              player.currentFieldIndex >= 21 &&
+              player.currentFieldIndex <= 31) ||
+            (indexBefore >= 31 && player.currentFieldIndex >= 31);
           const indexInPositionsArray = player.currentFieldIndex - 1;
-          const posOfPlayer = positionCoors[indexInPositionsArray];
+          let closestCornerOnWay = (indexBefore + player.currentFieldIndex) / 2;
+          let posOfPlayer = positionCoors[indexInPositionsArray];
+          const beforeToPos =
+            !onSameLineStill &&
+            player.userId === game.turnOfUserId &&
+            positionCoors[
+              indexBefore >= 31 ? 0 : findClosest(closestCornerOnWay)
+            ];
+          console.log({
+            posOfPlayer,
+            beforeToPos,
+            onSameLineStill,
+            color: player.color,
+            indexBefore,
+            playerCurrentFieldIndex: player.currentFieldIndex,
+          });
           const userIdsInOrderToTurn = game.players.map(
             player => player.userId,
           );
@@ -86,15 +123,13 @@ const PlayersChips = () => {
           }
 
           return (
-            <div
-              style={{ transform: `${translate}` }}
-              key={player.id}
-              className={`${colorOfPlayerDarker} absolute shadow-combined ${posOfPlayer} flex h-3 w-3 items-center justify-center rounded-full transition-all duration-1000 lg:h-6 lg:w-6`}
-            >
-              <div
-                className={`${colorOfPlayer} z-20 h-2 w-2 rounded-full border border-[#FBFBFA] lg:h-[1.15rem] lg:w-[1.15rem]`}
-              ></div>
-            </div>
+            <PlayerChip
+              posOfPlayer={posOfPlayer}
+              beforeToPos={beforeToPos}
+              translate={translate}
+              colorOfPlayer={colorOfPlayer}
+              colorOfPlayerDarker={colorOfPlayerDarker}
+            />
           );
         })}
     </>
