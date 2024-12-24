@@ -6,6 +6,7 @@ import FieldComponent from './FieldComponent';
 import { setFields } from '@/store/slices/fields';
 import PlayersChips from './PlayersChips';
 import { setGame } from '@/store/slices/game';
+import Center from './Center';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
@@ -44,8 +45,8 @@ const GameBoard = () => {
         if (index === 13) {
           return (
             <>
-              <div className="col-span-9 col-start-2 row-span-9 row-start-2 bg-white">
-                <p className="text-center">Center</p>
+              <div className="col-span-9 col-start-2 row-span-9 row-start-2 bg-primary">
+                <Center />
               </div>
               <FieldComponent field={field} key={field.id} />
             </>

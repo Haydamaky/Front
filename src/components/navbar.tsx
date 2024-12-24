@@ -32,7 +32,7 @@ export const Navbar = () => {
       maxWidth="2xl"
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
-      className="text-custom md:px-[10% relative mx-auto mt-[35px] flex h-[32px] w-full max-w-[1170px] items-center justify-start overflow-visible rounded-[17.5px] bg-primary px-[25px] text-base"
+      className="md:px-[10% relative mx-auto mt-[35px] flex h-[32px] w-full max-w-[1170px] items-center justify-start overflow-visible rounded-[17.5px] bg-primary px-[25px] text-base"
     >
       <NavbarContent className="basis-1/5 gap-12 sm:basis-full" justify="start">
         <Button
