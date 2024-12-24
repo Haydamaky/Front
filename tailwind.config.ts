@@ -32,6 +32,7 @@ const config: Config = {
         second: ['var(--font-genFont)'],
       },
       fontSize: {
+        smallMob: '8px',
         standardMob: '10px',
         standard: '13px',
         lg: '16px',

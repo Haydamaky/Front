@@ -47,7 +47,7 @@ function FieldComponent({ field }: FieldProps) {
       </div>
       {field.hasOwnProperty('price') && (
         <div
-          className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-xs text-gray-100`}
+          className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-[0.5rem] text-gray-100`}
         >
           <p className={`${textPos}`}>{field.price}</p>
         </div>
