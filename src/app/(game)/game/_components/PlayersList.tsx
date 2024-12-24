@@ -56,11 +56,12 @@ const PlayersList = () => {
       startCountdown(timeToEnd);
     });
 
-    socket.on('passTurnToNext', (data: any) => {
+    socket.on('passTurnToNext', (game: any) => {
       const now = Date.now();
-      const timeToEnd = Math.floor((+data.turnEnds - now) / 1000);
+      dispatch(setGame(game));
+      const timeToEnd = Math.floor((+game.turnEnds - now) / 1000);
       setTurnTime(timeToEnd);
-      setUsersTurnId(data.turnOfNextUserId);
+      setUsersTurnId(game.turnOfUserId);
       startCountdown(timeToEnd);
     });
 

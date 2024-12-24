@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  fields: [],
+  fields: [] as any[],
 };
 
 const fieldsSlice = createSlice({

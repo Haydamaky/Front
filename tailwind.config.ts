@@ -44,6 +44,7 @@ const config: Config = {
         base: 'rgb(245, 239, 255)',
         helper: 'rgb(229, 217, 242)',
         playerCard: 'rgba(245, 239, 255, 0.2)',
+        gameWhite: 'rgba(251, 251, 250, 1)',
       },
       boxShadow: {
         combined: '0px 4px 4px 0px #00000040 inset, 0px 2px 1px 0px #0000004D',
