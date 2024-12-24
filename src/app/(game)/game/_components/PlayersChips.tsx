@@ -50,14 +50,6 @@ const PlayersChips = () => {
             positionCoors[
               indexBefore >= 31 ? 0 : findClosest(closestCornerOnWay)
             ];
-          console.log({
-            posOfPlayer,
-            beforeToPos,
-            onSameLineStill,
-            color: player.color,
-            indexBefore,
-            playerCurrentFieldIndex: player.currentFieldIndex,
-          });
           const userIdsInOrderToTurn = game.players.map(
             player => player.userId,
           );
