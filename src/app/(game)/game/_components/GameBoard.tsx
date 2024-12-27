@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { socket } from '@/socket';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { Field } from '@/types/field';
@@ -14,10 +14,6 @@ const GameBoard = () => {
   const [dices, setDices] = useState<string[]>([]);
   useEffect(() => {
     socket.on('error', (err: any) => console.log(err));
-    socket.on('tradedField', (data: any) => {
-      let dicesData = data.dices;
-      setDices(dicesData ? dicesData.split(':') : []);
-    });
     socket.on('rolledDice', (data: any) => {
       console.log('rolledDice');
       let dicesData = data.dices;
@@ -28,7 +24,6 @@ const GameBoard = () => {
     return () => {
       socket.off('rolledDice');
       socket.off('error');
-      socket.off('tradedField');
     };
   }, []);
 
@@ -44,31 +39,17 @@ const GameBoard = () => {
       {fields.map((field: Field, index: number) => {
         if (index === 13) {
           return (
-            <>
+            <Fragment key={field.id}>
               <div className="col-span-9 col-start-2 row-span-9 row-start-2 bg-primary">
                 <Center />
               </div>
-              <FieldComponent field={field} key={field.id} />
-            </>
+              <FieldComponent field={field} />
+            </Fragment>
           );
         }
         return <FieldComponent field={field} key={field.id} />;
       })}
       <PlayersChips />
-      {/* <div>
-        <div>First Dice: {dices[0]}</div>
-        <div className="min-w-60">Second Dice: {dices[1]}</div>
-      </div>
-      {!!dices.length && (
-        <button className="bg-orange-500" onClick={onTradeField}>
-          Trade Field
-        </button>
-      )}
-      {!dices.length && (
-        <button className="ml-4 bg-lime-400" onClick={onRollDice}>
-          Roll Dice
-        </button>
-      )} */}
     </div>
   );
 };

@@ -1,20 +1,33 @@
-import { useAppSelector } from '@/hooks/store';
 import { createColorVariants, positionCoors } from '../_utils';
 import { findClosest } from '../_utils/findClosest';
 import { useEffect, useRef, useState } from 'react';
 import PlayerChip from './PlayerChip';
+import { Game } from '@/types';
+import { socket } from '@/socket';
 const colorVariants = createColorVariants('500');
 const colorVariantsDarker = createColorVariants('700');
 const PlayersChips = () => {
-  const game = useAppSelector(state => state.game.game);
-
+  const [gameAfterDiceRoll, setGameAfterDiceRoll] = useState<null | Game>(null);
+  useEffect(() => {
+    const handleRollDiced = (data: any) => {
+      setGameAfterDiceRoll(data.game);
+    };
+    const handleGetGameData = (data: any) => {
+      setGameAfterDiceRoll(data.game);
+    };
+    socket.emit('getGameData', handleGetGameData);
+    socket.on('rolledDice', handleRollDiced);
+    return () => {
+      socket.off('rolledDice', handleRollDiced);
+    };
+  }, []);
   return (
     <>
-      {game.players?.length > 0 &&
-        game.players.map((player: any, index: number) => {
+      {gameAfterDiceRoll &&
+        gameAfterDiceRoll?.players.map((player: any, index: number) => {
           const colorOfPlayer = colorVariants[player.color];
           const colorOfPlayerDarker = colorVariantsDarker[player.color];
-          const playersOnSameField = game.players.filter(
+          const playersOnSameField = gameAfterDiceRoll?.players.filter(
             (checkingPlayer: any) =>
               checkingPlayer.currentFieldIndex === player.currentFieldIndex &&
               checkingPlayer.userId !== player.userId,
@@ -23,7 +36,7 @@ const PlayersChips = () => {
           const isHorizonatlField =
             player.currentFieldIndex < 11 ||
             (player.currentFieldIndex > 20 && player.currentFieldIndex < 31);
-          const dicesStringsArr = game.dices.split(':');
+          const dicesStringsArr = gameAfterDiceRoll?.dices.split(':');
           const dicesNumArr = dicesStringsArr.map(Number);
           let indexBefore =
             player.currentFieldIndex - dicesNumArr[0] - dicesNumArr[1];
@@ -46,27 +59,32 @@ const PlayersChips = () => {
           let posOfPlayer = positionCoors[indexInPositionsArray];
           const beforeToPos =
             !onSameLineStill &&
-            player.userId === game.turnOfUserId &&
+            player.userId === gameAfterDiceRoll?.turnOfUserId &&
             positionCoors[
               indexBefore >= 31 ? 0 : findClosest(closestCornerOnWay)
             ];
-          const userIdsInOrderToTurn = game.players.map(
+          const userIdsInOrderToTurn = gameAfterDiceRoll?.players.map(
             player => player.userId,
           );
           let indexOfPlayerToTurn =
-            userIdsInOrderToTurn.indexOf(game.turnOfUserId) + 1 === 4
+            userIdsInOrderToTurn.indexOf(gameAfterDiceRoll?.turnOfUserId) +
+              1 ===
+            4
               ? 0
-              : userIdsInOrderToTurn.indexOf(game.turnOfUserId) + 1;
+              : userIdsInOrderToTurn.indexOf(gameAfterDiceRoll?.turnOfUserId) +
+                1;
 
           let numberOfPlayersToTurnBefore =
-            (index - indexOfPlayerToTurn + game.players.length) %
-            game.players.length;
+            (index - indexOfPlayerToTurn + gameAfterDiceRoll?.players.length) %
+            gameAfterDiceRoll?.players.length;
           const playersToTurnBefore: any = [];
           let indexOfPlayerToTurnTemp = indexOfPlayerToTurn;
           for (let i = 0; i < numberOfPlayersToTurnBefore; i++) {
-            playersToTurnBefore.push(game.players[indexOfPlayerToTurnTemp]);
+            playersToTurnBefore.push(
+              gameAfterDiceRoll?.players[indexOfPlayerToTurnTemp],
+            );
             indexOfPlayerToTurnTemp++;
-            if (indexOfPlayerToTurnTemp === game.players.length) {
+            if (indexOfPlayerToTurnTemp === gameAfterDiceRoll?.players.length) {
               indexOfPlayerToTurnTemp = 0;
             }
           }
@@ -116,6 +134,7 @@ const PlayersChips = () => {
 
           return (
             <PlayerChip
+              key={player.id}
               posOfPlayer={posOfPlayer}
               beforeToPos={beforeToPos}
               translate={translate}

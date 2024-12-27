@@ -2,8 +2,10 @@ import MutualChat from '@/app/(home)/rooms/_components/MutualChat';
 import { Button } from '@/components/ui/button';
 import { genFont, titleFont } from '@/config/fonts';
 import useScreenSize from '@/hooks/screenSize';
-import { useAppSelector } from '@/hooks/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { socket } from '@/socket';
+import { setFields } from '@/store/slices/fields';
+import { setGame } from '@/store/slices/game';
 import { useEffect, useState } from 'react';
 
 type Action = 'rollDice' | 'auction' | 'buy' | '';
@@ -11,6 +13,7 @@ type Action = 'rollDice' | 'auction' | 'buy' | '';
 const Center = () => {
   const screenSize = useScreenSize();
   const [action, setAction] = useState<Action>('');
+  const dispatch = useAppDispatch();
   const fields = useAppSelector(state => state.fields.fields);
   const game = useAppSelector(state => state.game.game);
   const { data: user } = useAppSelector(state => state.user);
@@ -33,22 +36,34 @@ const Center = () => {
         setAction('');
       }
     };
+    const handleBoughtField = (data: any) => {
+      dispatch(setFields(data.fields));
+      console.log({ game: data.game });
+      dispatch(setGame(data.game));
+    };
 
     socket.on('error', handleError);
     socket.on('rolledDice', handleRolledDice);
     socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
     socket.on('passTurnToNext', handlePassTurnToNext);
+    socket.on('boughtField', handleBoughtField);
     return () => {
       socket.off('error', handleError);
       socket.off('rolledDice', handleRolledDice);
       socket.off('hasPutUpForAuction', handleHasPutUpForAuction);
       socket.off('passTurnToNext', handlePassTurnToNext);
+      socket.off('boughtField', handleBoughtField);
     };
   }, [user]);
-  console.log({ action });
+  const rollDice = () => {
+    socket.emit('rollDice');
+  };
+  const buyField = () => {
+    socket.emit('buyField');
+  };
   return (
     <div className="flex h-full flex-col justify-between">
-      {game.turnOfUserId === user?.id && (
+      {(game.turnOfUserId === user?.id || action === 'auction') && (
         <div className="mx-6 mt-6 flex h-1/4 flex-col items-center justify-between rounded-md bg-[#FBFBFA] py-2 text-xs text-primary lg:py-3">
           <div className="text-small md:text-standard lg:text-lg xl:text-2xl">
             {action === 'rollDice'
@@ -56,13 +71,14 @@ const Center = () => {
               : action === 'buy'
                 ? 'Придбати'
                 : action === 'auction'
-                  ? 'Виставити на аукціон'
+                  ? 'Аукціон'
                   : ''}
           </div>
           {action === 'rollDice' && (
             <Button
               size={screenSize.width > 1200 ? 'default' : 'xs'}
               className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+              onClick={rollDice}
             >
               Кинути кубики
             </Button>
@@ -72,6 +88,7 @@ const Center = () => {
               <Button
                 size={screenSize.width > 1200 ? 'default' : 'xs'}
                 className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                onClick={buyField}
               >
                 Придбати за {currentField.price}
               </Button>
