@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { socket } from '@/socket';
 import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
+import { DataWithGame } from '@/types';
 import { useEffect, useState } from 'react';
 
 type Action = 'rollDice' | 'auction' | 'buy' | '';
@@ -28,8 +29,8 @@ const Center = () => {
     const handleHasPutUpForAuction = (data: any) => {
       setAction('auction');
     };
-    const handlePassTurnToNext = (game: any) => {
-      if (game.turnOfUserId === user?.id) {
+    const handlePassTurnToNext = (data: DataWithGame) => {
+      if (data.game.turnOfUserId === user?.id) {
         setAction('rollDice');
       } else {
         setAction('');

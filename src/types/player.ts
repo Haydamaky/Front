@@ -12,3 +12,5 @@ export interface Player {
   game: Game;
   createdAt: Date;
 }
+
+export type PlayerColor = 'green' | 'pink' | 'blue' | 'red' | 'yellow';

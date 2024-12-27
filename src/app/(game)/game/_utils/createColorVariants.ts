@@ -1,4 +1,4 @@
-export const createColorVariants = (suffix: string) =>
+export const createColorVariants = (property: string, suffix: string) =>
   ({
     pink: `bg-pink-${suffix}`,
     green: `bg-green-${suffix}`,
@@ -12,3 +12,5 @@ export const createColorVariants = (suffix: string) =>
     black: 'bg-black',
     tortoise: `bg-teal-${suffix}`,
   }) as Record<string, string>;
+
+export const colorVariatsBorder500 = createColorVariants('border', '500');
