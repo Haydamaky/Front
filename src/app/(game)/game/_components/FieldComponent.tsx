@@ -1,11 +1,15 @@
+import { useAppSelector } from '@/hooks/store';
 import { Field } from '@/types/field';
 import Image from 'next/image';
+import { memo } from 'react';
 
 interface FieldProps {
   field: Field;
 }
 
-function FieldComponent({ field }: FieldProps) {
+const FieldComponent = ({ field }: FieldProps) => {
+  const game = useAppSelector(state => state.game.game);
+  const { data: user } = useAppSelector(state => state.user);
   const fieldColorPosVariants: Record<string, string> = {
     'vertical-left': 'left-0 top-0 h-[100%] w-[8%] translate-x-[-100%]',
     'vertical-right': 'right-0 top-0 h-[100%] w-[8%] translate-x-[100%]',
@@ -32,19 +36,23 @@ function FieldComponent({ field }: FieldProps) {
     : field.line.includes('vertical-left')
       ? 'rotate-[-90deg]'
       : '';
+  const [player] = game.players.filter(player => player.userId === user?.id);
+  const bgColor = field.ownedBy === player?.userId ? player.color : 'white';
   return (
-    <div className={`relative h-full w-full text-wrap bg-white`}>
-      <div className={`h-full w-full`}>
-        <div className="relative h-full w-full">
-          <Image
-            src={field.imageUrl}
-            alt={field.name}
-            sizes="100%"
-            fill
-            className="object-contain"
-          />
-        </div>
-      </div>
+    <div
+      className={`relative h-full w-full text-wrap`}
+      style={{ backgroundColor: bgColor }}
+    >
+      <div
+        className="w-ful relative h-full"
+        style={{
+          backgroundImage: `url(${field.imageUrl})`,
+          backgroundSize: 'contain',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      ></div>
+
       {field.hasOwnProperty('price') && (
         <div
           className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-[0.5rem] text-gray-100`}
@@ -54,6 +62,6 @@ function FieldComponent({ field }: FieldProps) {
       )}
     </div>
   );
-}
+};
 
 export default FieldComponent;
