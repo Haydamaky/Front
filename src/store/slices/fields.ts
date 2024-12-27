@@ -1,14 +1,15 @@
+import { Field } from '@/types/field';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  fields: [] as any[],
+  fields: [] as Field[],
 };
 
 const fieldsSlice = createSlice({
   name: 'fields',
   initialState: initialState,
   reducers: {
-    setFields(state, action: { payload: [] }) {
+    setFields(state, action: { payload: Field[] }) {
       state.fields = action.payload;
     },
   },

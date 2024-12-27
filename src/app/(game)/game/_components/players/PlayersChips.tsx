@@ -1,11 +1,11 @@
-import { createColorVariants, positionCoors } from '../_utils';
-import { findClosest } from '../_utils/findClosest';
+import { createColorVariants, positionCoors } from '../../_utils';
+import { findClosest } from '../../_utils/findClosest';
 import { useEffect, useRef, useState } from 'react';
 import PlayerChip from './PlayerChip';
 import { Game } from '@/types';
 import { socket } from '@/socket';
-const colorVariants = createColorVariants('500');
-const colorVariantsDarker = createColorVariants('700');
+const colorVariants = createColorVariants('bg', '500');
+const colorVariantsDarker = createColorVariants('bg', '700');
 const PlayersChips = () => {
   const [gameAfterDiceRoll, setGameAfterDiceRoll] = useState<null | Game>(null);
   useEffect(() => {

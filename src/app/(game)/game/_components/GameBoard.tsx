@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { Field } from '@/types/field';
 import FieldComponent from './FieldComponent';
 import { setFields } from '@/store/slices/fields';
-import PlayersChips from './PlayersChips';
+import PlayersChips from './players/PlayersChips';
 import { setGame } from '@/store/slices/game';
 import Center from './Center';
 
