@@ -72,14 +72,11 @@ const PlayersChips = () => {
             player => player.userId,
           );
           let indexOfPlayerToTurn =
-            userIdsInOrderToTurn.indexOf(gameAfterDiceRoll?.turnOfUserId) +
-              1 ===
-            4
-              ? 0
-              : userIdsInOrderToTurn.indexOf(gameAfterDiceRoll?.turnOfUserId) +
-                1;
-
-          let numberOfPlayersToTurnBefore =
+            userIdsInOrderToTurn.indexOf(gameAfterDiceRoll?.turnOfUserId) + 1;
+          indexOfPlayerToTurn === gameAfterDiceRoll.players.length
+            ? 0
+            : indexOfPlayerToTurn;
+          const numberOfPlayersToTurnBefore =
             (index - indexOfPlayerToTurn + gameAfterDiceRoll?.players.length) %
             gameAfterDiceRoll?.players.length;
           const playersToTurnBefore: any = [];
@@ -96,46 +93,29 @@ const PlayersChips = () => {
           const playersToTurnBeforeOnSameField = playersOnSameField.filter(
             playerOnSameField => {
               return playersToTurnBefore.some((playerToTurnBefore: any) => {
-                return playerToTurnBefore.userId === playerOnSameField.userId;
+                return playerToTurnBefore?.userId === playerOnSameField.userId;
               });
             },
           );
 
-          if (isHorizonatlField) {
-            translate = 'translateY(';
-            if (playersOnSameField.length === 3) {
-              translate +=
-                (100 * playersToTurnBeforeOnSameField.length - 150).toString() +
-                '%)';
-            } else if (playersOnSameField.length === 2) {
-              translate +=
-                (100 * playersToTurnBeforeOnSameField.length - 100).toString() +
-                '%)';
-            } else if (playersOnSameField.length === 1) {
-              translate +=
-                (100 * playersToTurnBeforeOnSameField.length - 50).toString() +
-                '%)';
-            } else {
-              translate = 'translateY(0)';
-            }
-          } else {
-            translate = 'translateX(';
-            if (playersOnSameField.length === 3) {
-              translate +=
-                (150 - 100 * playersToTurnBeforeOnSameField.length).toString() +
-                '%)';
-            } else if (playersOnSameField.length === 2) {
-              translate +=
-                (100 - 100 * playersToTurnBeforeOnSameField.length).toString() +
-                '%)';
-            } else if (playersOnSameField.length === 1) {
-              translate +=
-                (50 - 100 * playersToTurnBeforeOnSameField.length).toString() +
-                '%)';
-            } else {
-              translate = 'translateX(0)';
-            }
-          }
+          const calculateTranslate = (
+            playersOnSameFieldLength: number,
+            playersToTurnBeforeOnSameFieldLength: number,
+          ) => {
+            return (
+              (
+                playersToTurnBeforeOnSameFieldLength * 100 -
+                50 * playersOnSameFieldLength
+              ).toString() + '%)'
+            );
+          };
+          const translateOn = calculateTranslate(
+            playersOnSameField.length,
+            playersToTurnBeforeOnSameField.length,
+          );
+          translate = isHorizonatlField
+            ? 'translateY(' + translateOn
+            : 'translateX(' + translateOn;
 
           return (
             <PlayerChip
