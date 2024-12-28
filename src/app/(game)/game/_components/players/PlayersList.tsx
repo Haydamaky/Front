@@ -44,7 +44,7 @@ const PlayersList = () => {
       dispatch(setFields(data.fields!));
     };
 
-    socket.emit('getGameData', dispatchSetGame, dispatchSetFields);
+    socket.emitWithCallbacks('getGameData', dispatchSetGame, dispatchSetFields);
 
     socket.on(
       ['hasPutUpForAuction', 'getGameData', 'passTurnToNext', 'rolledDice'],
