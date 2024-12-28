@@ -31,9 +31,17 @@ export class UpgradedSocket {
     });
   }
 
-  emit(event: string, ...callbacks: EventCallback[]) {
+  emitWithCallbacks(event: string, ...callbacks: EventCallback[]) {
     this.socket.emit(event, (data: unknown) => {
       callbacks.forEach(callback => callback(data));
     });
+  }
+
+  emit(event: string, data: unknown | EventCallback) {
+    this.socket.emit(event, data);
+  }
+
+  emitWithAck(event: string, data?: unknown) {
+    return this.socket.emitWithAck(event, data);
   }
 }
