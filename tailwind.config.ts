@@ -1,10 +1,11 @@
-import { positionCoors } from './src/app/(game)/game/_utils';
-import { createColorVariants } from './src/app/(game)/game/_utils/createColorVariants';
+import {
+  colorVariats500,
+  colorVariats700,
+  colorVariatsBorder500,
+  positionCoors,
+} from './src/app/(game)/game/_utils';
 import { nextui } from '@nextui-org/react';
 import type { Config } from 'tailwindcss';
-const colorVariants = createColorVariants('bg', '500');
-const colorVariantsDarker = createColorVariants('bg', '700');
-const colorVariantsBorder = createColorVariants('border', '500');
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -13,9 +14,9 @@ const config: Config = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   safelist: [
-    ...Object.values(colorVariants),
-    ...Object.values(colorVariantsDarker),
-    ...Object.values(colorVariantsBorder),
+    ...Object.values(colorVariats500),
+    ...Object.values(colorVariats700),
+    ...Object.values(colorVariatsBorder500),
     ...positionCoors,
   ],
   theme: {
