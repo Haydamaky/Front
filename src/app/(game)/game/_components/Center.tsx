@@ -62,7 +62,7 @@ const Center = () => {
   return (
     <div className="flex h-full flex-col justify-between">
       {(game.turnOfUserId === user?.id || action === 'auction') &&
-        (!currentField.specialField || action === 'rollDice') && (
+        (!currentField?.specialField || action === 'rollDice') && (
           <div className="mx-6 mt-6 flex h-1/4 flex-col items-center justify-between rounded-md bg-[#FBFBFA] py-2 text-xs text-primary lg:py-3">
             <div className="text-small md:text-standard lg:text-lg xl:text-2xl">
               {action === 'rollDice'

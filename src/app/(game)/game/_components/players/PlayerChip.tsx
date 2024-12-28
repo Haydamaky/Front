@@ -6,7 +6,7 @@ interface PlayerChipProps {
   translate: string;
   colorOfPlayer: string;
   colorOfPlayerDarker: string;
-  beforeToPos: string | boolean;
+  beforeToPositions: string[];
 }
 
 const PlayerChip = ({
@@ -14,16 +14,19 @@ const PlayerChip = ({
   translate,
   colorOfPlayer,
   colorOfPlayerDarker,
-  beforeToPos,
+  beforeToPositions,
 }: PlayerChipProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const [posToGo, setPosToGo] = useState<string>(
-    typeof beforeToPos === 'string' ? beforeToPos : posOfPlayer,
+    beforeToPositions.length ? beforeToPositions[0] : posOfPlayer,
   );
+  console.log({ beforeToPositions, posToGo, colorOfPlayer });
   const handleSequentialUpdates = async () => {
-    if (beforeToPos) {
-      setPosToGo(beforeToPos as string);
-      await waitForTransition(elementRef.current);
+    if (beforeToPositions.length) {
+      for (const beforeToPos of beforeToPositions) {
+        setPosToGo(beforeToPos);
+        await waitForTransition(elementRef.current);
+      }
       setPosToGo(posOfPlayer);
     } else {
       setPosToGo(posOfPlayer);
