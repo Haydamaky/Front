@@ -20,7 +20,7 @@ const PlayerChip = ({
   const [posToGo, setPosToGo] = useState<string>(
     beforeToPositions.length ? beforeToPositions[0] : posOfPlayer,
   );
-  console.log({ beforeToPositions, posToGo, colorOfPlayer });
+
   const handleSequentialUpdates = async () => {
     if (beforeToPositions.length) {
       for (const beforeToPos of beforeToPositions) {

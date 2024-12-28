@@ -37,7 +37,7 @@ export class UpgradedSocket {
     });
   }
 
-  emit(event: string, data: unknown | EventCallback) {
+  emit(event: string, data?: unknown | EventCallback) {
     this.socket.emit(event, data);
   }
 
