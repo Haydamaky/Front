@@ -12,8 +12,8 @@ export const withinMonopolyLineRange = (
   return rangesOfLines.some(
     ([start, end]) =>
       firstNumber >= start &&
-      firstNumber < end &&
+      firstNumber <= end &&
       secondNumber >= start &&
-      secondNumber < end,
+      secondNumber <= end,
   );
 };

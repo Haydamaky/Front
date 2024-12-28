@@ -6,4 +6,3 @@ export const findClosest = (num: number, quantity: number) => {
   const closestTargets = sortedTargets.slice(0, quantity);
   return closestTargets.map(target => (target === 40 ? 0 : target));
 };
-console.log(findClosest(29, 2));

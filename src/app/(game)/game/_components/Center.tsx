@@ -38,7 +38,6 @@ const Center = () => {
     };
     const handleBoughtField = (data: any) => {
       dispatch(setFields(data.fields));
-      console.log({ game: data.game });
       dispatch(setGame(data.game));
     };
 

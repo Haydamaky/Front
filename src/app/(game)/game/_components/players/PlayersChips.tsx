@@ -3,8 +3,8 @@ import {
   colorVariats700,
   positionCoors,
   withinMonopolyLineRange,
+  findClosest,
 } from '../../_utils';
-import { findClosest } from '../../_utils/findClosest';
 import { useEffect, useState } from 'react';
 import PlayerChip from './PlayerChip';
 import { Game } from '@/types';
@@ -44,11 +44,11 @@ const PlayersChips = () => {
           const dicesNumArr = dicesStringsArr.map(Number);
           let indexBefore =
             player.currentFieldIndex - dicesNumArr[0] - dicesNumArr[1];
-          const isHorizonatlFieldBefore =
-            indexBefore <= 11 || (indexBefore > 20 && indexBefore <= 31);
           if (indexBefore < 0) {
             indexBefore += 40;
           }
+          const isHorizonatlFieldBefore =
+            indexBefore <= 11 || (indexBefore > 20 && indexBefore <= 31);
           const onSameLineStill = withinMonopolyLineRange(
             indexBefore,
             player.currentFieldIndex,
@@ -57,6 +57,7 @@ const PlayersChips = () => {
             player.userId === gameAfterDiceRoll?.turnOfUserId;
           const indexInPositionsArray = player.currentFieldIndex - 1;
           let closestCornerOnWay = (indexBefore + player.currentFieldIndex) / 2;
+          if (indexBefore >= 31) closestCornerOnWay = 40;
           let posOfPlayer = positionCoors[indexInPositionsArray];
           const beforeToIndexes =
             !onSameLineStill && currentPlayersTurn
@@ -65,9 +66,8 @@ const PlayersChips = () => {
                 : findClosest(closestCornerOnWay, 2)
               : [];
           const beforeToPositions = beforeToIndexes.map(
-            beforeToIndex => positionCoors[beforeToIndex],
+            (beforeToIndex: number) => positionCoors[beforeToIndex],
           );
-
           const userIdsInOrderToTurn = gameAfterDiceRoll?.players.map(
             player => player.userId,
           );
