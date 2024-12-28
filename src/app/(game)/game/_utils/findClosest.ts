@@ -1,14 +1,9 @@
-export const findClosest = (num: number): number => {
+export const findClosest = (num: number, quantity: number) => {
   const targets = [10, 20, 30, 40];
-  let closest = targets[0];
-  let minDiff = Math.abs(num - closest);
-  for (const target of targets.slice(1)) {
-    const diff = Math.abs(num - target);
-    if (diff < minDiff) {
-      minDiff = diff;
-      closest = target;
-    }
-  }
-
-  return closest === 40 ? 0 : closest;
+  const sortedTargets = targets.sort(
+    (a, b) => Math.abs(num - a) - Math.abs(num - b),
+  );
+  const closestTargets = sortedTargets.slice(0, quantity);
+  return closestTargets.map(target => (target === 40 ? 0 : target));
 };
+console.log(findClosest(29, 2));
