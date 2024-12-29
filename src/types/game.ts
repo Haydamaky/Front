@@ -1,3 +1,5 @@
+import { Field } from './field';
+
 export interface Game {
   id: string;
   createdAt: Date;
@@ -8,4 +10,12 @@ export interface Game {
   gameMoves: [];
   fieldTransactions: [];
   fields: [];
+  turnOfUserId: string;
+  dices: string;
+  turnEnds: string;
+}
+
+export interface DataWithGame {
+  game: Game;
+  fields?: Field[];
 }

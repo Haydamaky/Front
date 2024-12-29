@@ -22,14 +22,15 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={clsx(
-          'min-h-screen font-sans antialiased light',
+          'max-h-screen overflow-y-hidden font-sans antialiased light',
+          'bg-primary',
+          'text-white',
           genFont.variable,
           titleFont.variable,
         )}
       >
         <Providers>
-          <h1>Just New layout</h1>
-          <main className="w-full px-6 pt-16">{children}</main>
+          <main className="h-screen w-full pl-[23%]">{children}</main>
         </Providers>
       </body>
     </html>
