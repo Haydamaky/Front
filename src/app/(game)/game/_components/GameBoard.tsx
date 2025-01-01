@@ -35,7 +35,7 @@ const GameBoard = () => {
     socket.emit('tradeField');
   };
   return (
-    <div className="relative grid h-[100vh] w-[calc(100vh-1.5rem)] grid-cols-[16fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_16fr] grid-rows-[16fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_16fr] gap-[1px] py-4 text-black">
+    <div className="relative grid h-[100vh] w-[calc(100vh-1.5rem)] grid-cols-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] grid-rows-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] gap-[1px] py-4 text-black">
       {fields.map((field: Field, index: number) => {
         if (index === 13) {
           return (
