@@ -13,6 +13,7 @@ const GamePage = () => {
     dispatch(getUserInfo());
     const handleError = (err: any) => console.log(err);
     socket.on('error', handleError);
+    socket.on('playerWon', data => console.log(data));
     return () => {
       socket.off('error', handleError);
     };

@@ -52,10 +52,10 @@ const PlayerChip = ({
     <div
       ref={elementRef}
       style={{ transform: `${translate}` }}
-      className={`${colorOfPlayerDarker} absolute shadow-combined ${posToGo} flex h-3 w-3 items-center justify-center rounded-full transition-all duration-1000 lg:h-6 lg:w-6`}
+      className={`${colorOfPlayerDarker} absolute shadow-combined ${posToGo} flex h-[3.3%] w-[3.3%] items-center justify-center rounded-full transition-all duration-1000`}
     >
       <div
-        className={`${colorOfPlayer} z-20 h-2 w-2 rounded-full border border-[#FBFBFA] lg:h-[1.15rem] lg:w-[1.15rem]`}
+        className={`${colorOfPlayer} z-20 h-[78%] w-[78%] rounded-full border border-[#FBFBFA]`}
       ></div>
     </div>
   );
