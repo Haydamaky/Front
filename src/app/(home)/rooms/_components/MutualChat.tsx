@@ -41,11 +41,9 @@ const MutualChat = () => {
 
   useEffect(() => {
     socket.on('onMessage', handleOnMessage);
-    socket.on('error', console.error);
     fetchChatData();
     return () => {
       socket.off('onMessage', handleOnMessage);
-      socket.off('error');
     };
   }, []);
 

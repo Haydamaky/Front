@@ -47,6 +47,7 @@ export const Navbar = () => {
         <ul className="ml-[30px] hidden h-10 items-center space-x-[30px] font-custom text-base md:flex">
           {siteConfig.navItems.map(item => (
             <Link
+              key={item.href + item.label}
               className="relative text-standard transition-all duration-300 hover:text-lg hover:after:absolute hover:after:left-0 hover:after:top-[calc(100%+10px)] hover:after:h-[2px] hover:after:w-full hover:after:bg-primary"
               href={item.href}
             >
