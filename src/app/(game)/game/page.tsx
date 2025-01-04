@@ -19,7 +19,7 @@ const GamePage = () => {
     };
   }, []);
   return (
-    <div className="grid h-full grid-cols-[11fr_89fr] gap-10">
+    <div className="grid h-full grid-cols-[10fr_90fr] gap-10">
       <PlayersList />
       <GameBoard />
     </div>

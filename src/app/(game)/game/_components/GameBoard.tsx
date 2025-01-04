@@ -27,20 +27,13 @@ const GameBoard = () => {
     };
   }, []);
 
-  const onRollDice = () => {
-    socket.emit('rollDice');
-  };
-
-  const onTradeField = () => {
-    socket.emit('tradeField');
-  };
   return (
-    <div className="relative grid h-[100vh] w-[calc(100vh-1.5rem)] grid-cols-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] grid-rows-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] gap-[1px] py-4 text-black">
+    <div className="relative grid h-[100vh] w-[calc(100vh-3rem)] grid-cols-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] grid-rows-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] gap-[1px] py-8 text-black">
       {fields.map((field: Field, index: number) => {
         if (index === 13) {
           return (
             <Fragment key={field.id}>
-              <div className="col-span-9 col-start-2 row-span-9 row-start-2 bg-primary">
+              <div className="bg-primaryGame col-span-9 col-start-2 row-span-9 row-start-2">
                 <Center />
               </div>
               <FieldComponent field={field} />

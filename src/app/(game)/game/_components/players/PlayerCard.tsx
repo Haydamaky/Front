@@ -17,7 +17,7 @@ const PlayerCard = ({ player, turnOfUserId, turnTime }: PlayerCardProps) => {
   return (
     <div
       key={player.id}
-      className={`bg-playerCard ${borderColor} ${highLigthedShadow} relative flex h-[23%] flex-col items-center justify-center overflow-hidden border-2 border-solid`}
+      className={`bg-playerGradient ${borderColor} ${highLigthedShadow} relative flex h-[23%] flex-col items-center justify-center overflow-hidden border-2 border-solid`}
     >
       {player.userId === turnOfUserId && (
         <div className="absolute right-[5%] top-[-2%] rounded-[0.150rem] bg-base px-1 py-[2px] text-primary md:px-2 md:py-1 lg:px-3 lg:py-2">
