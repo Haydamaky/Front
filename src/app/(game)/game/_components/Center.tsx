@@ -62,12 +62,12 @@ const Center = () => {
     <div className="flex h-full flex-col justify-between">
       {(game.turnOfUserId === user?.id || action === 'auction') &&
         (!currentField?.specialField || action === 'rollDice') && (
-          <div className="bg-gameCenterModal shadow-gameCenterModaShadowCombined mx-6 mt-6 flex h-1/4 flex-col items-center justify-between rounded-md py-2 text-xs text-white lg:py-3">
-            <div className="text-small md:text-standard lg:text-lg xl:text-2xl">
+          <div className="bg-gameCenterModal shadow-gameCenterModaShadowCombined mx-6 mt-6 flex h-1/4 flex-col justify-between rounded-md px-4 py-2 text-xs text-white lg:py-3">
+            <div className="text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
               {action === 'rollDice'
                 ? 'Ваш хід'
                 : action === 'buy'
-                  ? 'Придбати'
+                  ? 'Придбати поле?'
                   : action === 'auction'
                     ? 'Аукціон'
                     : ''}
@@ -83,7 +83,7 @@ const Center = () => {
               </Button>
             )}
             {action === 'buy' && (
-              <div className="flex gap-1 lg:gap-4">
+              <div className="flex w-full gap-1 lg:gap-4">
                 <Button
                   variant={'blueGame'}
                   size={screenSize.width > 1200 ? 'default' : 'xs'}
@@ -92,13 +92,19 @@ const Center = () => {
                 >
                   Придбати за {currentField.price}
                 </Button>
-                <Button
-                  variant={'empty'}
-                  size={screenSize.width > 1200 ? 'default' : 'xs'}
-                  className="font-custom text-[9px] md:text-sm lg:text-lg"
+                <div
+                  className={`bg-buttonBlueGradient flex h-[38px] w-full flex-col items-center justify-center overflow-hidden rounded-md px-[1px]`}
                 >
-                  На аукціон
-                </Button>
+                  <Button
+                    variant={'gameDarkBlue'}
+                    size={screenSize.width > 1200 ? 'default' : 'xs'}
+                    className="font-custom"
+                  >
+                    <p className="bg-[linear-gradient(184.39deg,#5AB2F7_4.38%,#12CFF3_97.25%)] bg-clip-text text-4xl text-[9px] font-bold text-transparent md:text-sm lg:text-lg">
+                      На аукціон
+                    </p>
+                  </Button>
+                </div>
               </div>
             )}
             {action === 'auction' && (
