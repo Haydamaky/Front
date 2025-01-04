@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .my-div {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        background-color: aqua;
+      }
+      .my-div::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50px;
+        padding: 10px;
+        background: linear-gradient(45deg, red, blue);
+        mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        mask-composite: exclude;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="my-div"></div>
+  </body>
+</html>
