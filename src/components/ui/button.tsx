@@ -22,12 +22,13 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         blueGame: 'bg-buttonBlueGradient text-white shadow hover:bg-primary/90',
-        empty: 'bg-transparent shadow-none hover:bg-buttonBlueGradient/90',
+        gameDarkBlue:
+          'bg-gameCenterModal shadow-none hover:bg-buttonBlueGradient/90',
       },
       size: {
         xs: 'h-5 rounded-sm w-15',
         sm: 'h-6 rounded-md w-18',
-        default: 'h-9 px-4 w-27',
+        default: 'h-9 w-full',
         lg: 'h-10 rounded-md w-30',
         icon: 'h-9 w-9',
       },
