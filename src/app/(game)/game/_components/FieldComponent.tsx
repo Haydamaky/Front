@@ -11,10 +11,10 @@ const FieldComponent = ({ field }: FieldProps) => {
   const game = useAppSelector(state => state.game.game);
   const { data: user } = useAppSelector(state => state.user);
   const fieldColorPosVariants: Record<string, string> = {
-    'vertical-left': 'left-0 top-0 h-[100%] w-[8%] translate-x-[-100%]',
-    'vertical-right': 'right-0 top-0 h-[100%] w-[8%] translate-x-[100%]',
-    'horizontal-top': 'left-0 top-0 h-[8%] w-[100%] translate-y-[-100%]',
-    'horizontal-bottom': 'left-0 bottom-0 h-[8%] w-[100%] translate-y-[100%]',
+    'vertical-left': 'left-0 top-0 h-[100%] w-[18%] translate-x-[-100%]',
+    'vertical-right': 'right-0 top-0 h-[100%] w-[18%] translate-x-[100%]',
+    'horizontal-top': 'left-0 top-0 h-[18%] w-[100%] translate-y-[-100%]',
+    'horizontal-bottom': 'left-0 bottom-0 h-[18%] w-[100%] translate-y-[100%]',
   };
   const colorVariants: Record<string, string> = {
     pink: 'bg-pink-500',
@@ -55,9 +55,9 @@ const FieldComponent = ({ field }: FieldProps) => {
 
       {field.hasOwnProperty('price') && (
         <div
-          className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-[0.5rem] text-gray-100`}
+          className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-sm text-gray-100`}
         >
-          <p className={`${textPos}`}>{field.price}</p>
+          <p className={`${textPos}`}>{field.price}mm</p>
         </div>
       )}
     </div>

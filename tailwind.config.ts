@@ -48,6 +48,11 @@ const config: Config = {
         helper: 'rgb(229, 217, 242)',
         playerCard: 'rgba(245, 239, 255, 0.2)',
         gameWhite: 'rgba(251, 251, 250, 1)',
+        primaryGame: 'rgba(0, 33, 71, 1)',
+      },
+      backgroundImage: {
+        playerGradient:
+          'linear-gradient(171.61deg, rgba(0, 3, 40, 0.3) 9.18%, rgba(0, 69, 142, 0.3) 93.58%)',
       },
       boxShadow: {
         combined: '0px 4px 4px 0px #00000040 inset, 0px 2px 1px 0px #0000004D',

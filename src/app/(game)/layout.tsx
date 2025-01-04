@@ -23,14 +23,14 @@ export default function RootLayout({
       <body
         className={clsx(
           'max-h-screen overflow-y-hidden font-sans antialiased light',
-          'bg-primary',
+          'bg-primaryGame',
           'text-white',
           genFont.variable,
           titleFont.variable,
         )}
       >
         <Providers>
-          <main className="h-screen w-full pl-[23%]">{children}</main>
+          <main className="h-screen w-full pl-[24%]">{children}</main>
         </Providers>
       </body>
     </html>
