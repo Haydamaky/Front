@@ -17,7 +17,7 @@ const PlayerCard = ({ player, turnOfUserId, turnTime }: PlayerCardProps) => {
       className={`${playerBg} relative flex h-full w-full flex-col items-center justify-center rounded-[6%]`}
     >
       {player.userId === turnOfUserId && (
-        <div className="absolute right-[5%] top-[-2%] rounded-[0.150rem] bg-base px-1 py-[2px] text-primary md:px-2 md:py-1 lg:px-3 lg:py-2">
+        <div className="text-primaryGame absolute right-[5%] top-[-2%] rounded-[0.150rem] bg-[#F0F7FF] px-1 py-[2px] md:px-2 md:py-1 lg:px-3 lg:py-2">
           {turnTime}
         </div>
       )}
