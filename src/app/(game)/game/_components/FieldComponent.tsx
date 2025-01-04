@@ -2,6 +2,10 @@ import { useAppSelector } from '@/hooks/store';
 import { Field } from '@/types/field';
 import Image from 'next/image';
 import { memo } from 'react';
+import {
+  gradientColorVariantsFields,
+  gradientColorVariantsFields0Deg,
+} from '../_utils';
 
 interface FieldProps {
   field: Field;
@@ -37,11 +41,18 @@ const FieldComponent = ({ field }: FieldProps) => {
       ? 'rotate-[-90deg]'
       : '';
   const [player] = game.players.filter(player => player.userId === user?.id);
-  const bgColor = field.ownedBy === player?.userId ? player.color : 'white';
+  const bg =
+    field.ownedBy === player?.userId
+      ? field.line.includes('vertical-right') ||
+        field.line.includes('vertical-left')
+        ? gradientColorVariantsFields[player.color]
+        : gradientColorVariantsFields0Deg[player.color]
+      : 'white';
+
   return (
     <div
       className={`relative h-full w-full text-wrap`}
-      style={{ backgroundColor: bgColor }}
+      style={{ background: bg }}
     >
       <div
         className="w-ful relative h-full"
