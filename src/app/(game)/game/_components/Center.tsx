@@ -62,7 +62,7 @@ const Center = () => {
     <div className="flex h-full flex-col justify-between">
       {(game.turnOfUserId === user?.id || action === 'auction') &&
         (!currentField?.specialField || action === 'rollDice') && (
-          <div className="mx-6 mt-6 flex h-1/4 flex-col items-center justify-between rounded-md bg-[#FBFBFA] py-2 text-xs text-primary lg:py-3">
+          <div className="bg-gameCenterModal shadow-gameCenterModaShadowCombined mx-6 mt-6 flex h-1/4 flex-col items-center justify-between rounded-md py-2 text-xs text-white lg:py-3">
             <div className="text-small md:text-standard lg:text-lg xl:text-2xl">
               {action === 'rollDice'
                 ? 'Ваш хід'
@@ -74,6 +74,7 @@ const Center = () => {
             </div>
             {action === 'rollDice' && (
               <Button
+                variant={'blueGame'}
                 size={screenSize.width > 1200 ? 'default' : 'xs'}
                 className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                 onClick={rollDice}
@@ -84,6 +85,7 @@ const Center = () => {
             {action === 'buy' && (
               <div className="flex gap-1 lg:gap-4">
                 <Button
+                  variant={'blueGame'}
                   size={screenSize.width > 1200 ? 'default' : 'xs'}
                   className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                   onClick={buyField}
@@ -91,11 +93,11 @@ const Center = () => {
                   Придбати за {currentField.price}
                 </Button>
                 <Button
-                  variant={'white'}
+                  variant={'empty'}
                   size={screenSize.width > 1200 ? 'default' : 'xs'}
                   className="font-custom text-[9px] md:text-sm lg:text-lg"
                 >
-                  Виставити на аукціон
+                  На аукціон
                 </Button>
               </div>
             )}
