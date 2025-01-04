@@ -10,50 +10,38 @@ interface PlayerCardProps {
 
 const PlayerCard = ({ player, turnOfUserId, turnTime }: PlayerCardProps) => {
   const borderColor = gradientColorVariants[player.color];
-  const highLigthedShadow =
-    player.userId === turnOfUserId
-      ? 'shadow-[0px_0px_4px_3px_rgba(255,247,0,1)]'
-      : '';
-  console.log({ borderColor, color: player.color });
-  const playerId = player.id;
+  const playerBg = player.userId !== turnOfUserId ? 'bg-playerGradient' : '';
+  const playerHTML = (
+    <div
+      key={player.id}
+      className={`${playerBg} relative flex h-full w-full flex-col items-center justify-center rounded-[6%]`}
+    >
+      {player.userId === turnOfUserId && (
+        <div className="absolute right-[5%] top-[-2%] rounded-[0.150rem] bg-base px-1 py-[2px] text-primary md:px-2 md:py-1 lg:px-3 lg:py-2">
+          {turnTime}
+        </div>
+      )}
+      <Avatar
+        className="h-[5rem] w-[5rem]"
+        src="https://i.pravatar.cc/150?u=a04258114e29026302d"
+      />
+      <p className="text-2xl">{player.user.nickname}</p>
+      <p className="text-sm">{player.money}$</p>
+    </div>
+  );
   return (
-    <>
-      <style>
-        {`
-          .my-div-${player.id} {
-             position: relative;
-          }
-          .my-div-${player.id}::before {
-            content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 5%; 
-  padding: 2px; 
-  background: ${borderColor}; 
-  mask: 
-    linear-gradient(#000 0 0) content-box, 
-    linear-gradient(#000 0 0);
-  mask-composite: exclude; 
-          }
-        `}
-      </style>
-      <div
-        key={player.id}
-        className={`my-div-${playerId} bg-playerGradient ${highLigthedShadow} flex h-[23%] flex-col items-center justify-center rounded-[5%]`}
-      >
-        {player.userId === turnOfUserId && (
-          <div className="absolute right-[5%] top-[-2%] rounded-[0.150rem] bg-base px-1 py-[2px] text-primary md:px-2 md:py-1 lg:px-3 lg:py-2">
-            {turnTime}
-          </div>
-        )}
-        <Avatar
-          size="md"
-          src="https://i.pravatar.cc/150?u=a04258114e29026302d"
-        />
-        <p>{player.user.nickname}</p>
-        <p>{player.money}$</p>
-      </div>
-    </>
+    <div
+      style={{ background: borderColor }}
+      className={`flex h-[23%] flex-col items-center justify-center overflow-hidden rounded-[6%]`}
+    >
+      {player.userId === turnOfUserId ? (
+        playerHTML
+      ) : (
+        <div className="bg-primaryGame h-[98%] w-[97%] rounded-[6%]">
+          {playerHTML}
+        </div>
+      )}
+    </div>
   );
 };
 
