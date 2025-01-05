@@ -64,14 +64,15 @@ const PlayersList = () => {
   }, []);
 
   return (
-    <div className="flex h-full flex-col justify-between py-9 text-xs md:text-sm lg:text-lg">
-      {game.players?.map((player: Player) => {
+    <div className="relative my-auto flex h-[88%] flex-col gap-[2.7%] overflow-visible bg-pink-300 text-xs md:text-sm lg:text-lg">
+      {game.players?.map((player: Player, index) => {
         return (
           <PlayerCard
             player={player}
             key={player.id}
             turnOfUserId={game.turnOfUserId}
             turnTime={turnTime}
+            index={index}
           ></PlayerCard>
         );
       })}

@@ -30,7 +30,7 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <main className="h-screen w-full pl-[23%]">{children}</main>
+          <main className="h-screen w-full pl-[24%]">{children}</main>
         </Providers>
       </body>
     </html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .flex-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        width: 300px;
+        border: 2px solid black;
+        overflow: visible; /* Allows items to go outside the container */
+        position: relative; /* For better positioning control */
+      }
+
+      .resizable-item {
+        height: 50px;
+        width: 100px;
+        background-color: lightblue;
+        transition: all 0.3s ease; /* Smooth transition */
+        z-index: 1; /* Ensures it appears on top */
+      }
+
+      .hover-trigger:hover + .resizable-item {
+        height: 100px; /* Increase height on hover */
+        transform: translateY(-10px); /* Move it slightly out of the flexbox */
+        z-index: 2; /* Ensure it's on top of other elements */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="flex-container">
+      <div class="hover-trigger">Hover me</div>
+      <div class="resizable-item">I grow on hover!</div>
+    </div>
+  </body>
+</html>
