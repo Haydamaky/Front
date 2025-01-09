@@ -24,6 +24,10 @@ const buttonVariants = cva(
         blueGame: 'bg-buttonBlueGradient text-white shadow hover:bg-primary/90',
         gameDarkBlue:
           'bg-gameCenterModal shadow-none hover:bg-buttonBlueGradient/90',
+        playerOption:
+          'flex w-full font-normal cursor-pointer items-center gap-1 py-[3px] hover:bg-[#002147] justify-normal',
+        close:
+          'mt-auto w-full bg-transparent text-center text-[#FF8C8C] transition-all duration-300 ease-in-out hover:bg-[#002147]',
       },
       size: {
         xs: 'h-5 rounded-sm w-15',
@@ -31,6 +35,7 @@ const buttonVariants = cva(
         default: 'h-9 w-full',
         lg: 'h-10 rounded-md w-30',
         icon: 'h-9 w-9',
+        widthFull: 'w-full h-6',
       },
     },
     defaultVariants: {
