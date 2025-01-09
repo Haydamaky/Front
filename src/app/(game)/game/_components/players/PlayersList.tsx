@@ -8,7 +8,7 @@ import { Avatar } from '@nextui-org/react';
 import { setFields } from '@/store/slices/fields';
 import { Player, PlayerColor } from '@/types/player';
 import { DataWithGame } from '@/types';
-import PlayerCard from './PlayerCard';
+import PlayerCard from '../playerCard/PlayerCard';
 
 const PlayersList = () => {
   const dispatch = useAppDispatch();

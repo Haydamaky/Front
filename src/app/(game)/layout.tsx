@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import { Providers } from '@/providers/providers';
 import clsx from 'clsx';
-import { genFont, titleFont } from '@/config/fonts';
+import { ermilovFont, genFont, titleFont } from '@/config/fonts';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -27,6 +27,7 @@ export default function RootLayout({
           'text-white',
           genFont.variable,
           titleFont.variable,
+          ermilovFont.variable,
         )}
       >
         <Providers>

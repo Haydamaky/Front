@@ -25,7 +25,7 @@ const buttonVariants = cva(
         gameDarkBlue:
           'bg-gameCenterModal shadow-none hover:bg-buttonBlueGradient/90',
         playerOption:
-          'flex w-full font-normal cursor-pointer items-center gap-1 py-[3px] hover:bg-[#002147] justify-normal',
+          'flex w-full font-normal cursor-pointer items-start gap-1 py-[3px] hover:bg-[#002147] justify-normal',
         close:
           'mt-auto w-full bg-transparent text-center text-[#FF8C8C] transition-all duration-300 ease-in-out hover:bg-[#002147]',
       },

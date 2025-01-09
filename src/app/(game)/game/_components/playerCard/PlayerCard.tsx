@@ -2,9 +2,9 @@ import { Player } from '@/types/player';
 import { gradientColorVariants } from '../../_utils';
 import { useState } from 'react';
 import { useAppSelector } from '@/hooks/store';
-import GiveUpButton from '../playerCard/GiveUpButton';
-import InnerPlayerCard from '../playerCard/InnerPlayerCard';
-import { OtherPlayerButtons } from '../playerCard/OtherPlayerButtons';
+import GiveUpButton from './GiveUpButton';
+import InnerPlayerCard from './InnerPlayerCard';
+import { OtherPlayerButtons } from './OtherPlayerButtons';
 
 interface PlayerCardProps {
   player: Player;
@@ -25,7 +25,8 @@ const PlayerCard = ({
   const [isPlayerClicked, setIsPlayerClicked] = useState(false);
 
   const borderColor = gradientColorVariants[player.color];
-  const playerBg = player.userId !== turnOfUserId ? 'bg-playerGradient' : '';
+  const playersTurn = player.userId === turnOfUserId;
+  const playerBg = !playersTurn ? 'bg-playerGradient' : '';
   const fromTop = fromTopArr[index];
   const mainPlayer = player.userId === user?.id;
 
@@ -60,7 +61,7 @@ const PlayerCard = ({
         zIndex: isPlayerClicked ? '1000' : '',
         height,
       }}
-      className={`${fromTop} trasnsition-all absolute flex h-[24%] w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-[6%] duration-300 ease-in-out`}
+      className={`${fromTop} trasnsition-all font-ermilov absolute flex h-[24%] w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-[6%] font-thin duration-300 ease-in-out`}
     >
       {player.userId === turnOfUserId ? (
         <div className="h-[98%] w-[97%] rounded-[6%] bg-transparent">

@@ -32,7 +32,8 @@ const config: Config = {
       },
       fontFamily: {
         custom: ['var(--font-titleFont)'],
-        second: ['var(--font-genFont)'],
+        fixelDisplay: ['var(--font-genFont)'],
+        ermilov: ['var(--font-ermilovFont)'],
       },
       fontSize: {
         smallMob: '8px',
