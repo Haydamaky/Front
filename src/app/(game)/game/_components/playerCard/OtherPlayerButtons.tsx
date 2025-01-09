@@ -29,7 +29,7 @@ export const OtherPlayerButtons = ({ opacity }: OtherPlayerButtonsProps) => {
 
   return (
     <div
-      className={`mt-auto w-full bg-transparent text-center text-[#FBFBFA] transition-all duration-300 ease-out ${opacity}`}
+      className={`font-fixelDisplay mt-auto w-full bg-transparent text-center text-[#FBFBFA] transition-all duration-300 ease-out ${opacity}`}
     >
       <Button
         variant="playerOption"
@@ -40,7 +40,7 @@ export const OtherPlayerButtons = ({ opacity }: OtherPlayerButtonsProps) => {
       >
         <ProfileIcon isHovered={hoveredStates.profile} />
         <p
-          className={`${getGradientClass(hoveredStates.profile)} transition-all duration-300 ease-out`}
+          className={`${getGradientClass(hoveredStates.profile)} text-[14px] transition-all duration-300 ease-out`}
         >
           Профіль
         </p>
@@ -55,7 +55,7 @@ export const OtherPlayerButtons = ({ opacity }: OtherPlayerButtonsProps) => {
       >
         <DocumentIcon isHovered={hoveredStates.exchange} />
         <p
-          className={`${getGradientClass(hoveredStates.exchange)} transition-all duration-300 ease-out`}
+          className={`${getGradientClass(hoveredStates.exchange)} text-[14px] transition-all duration-300 ease-out`}
         >
           Обмін
         </p>
@@ -70,7 +70,7 @@ export const OtherPlayerButtons = ({ opacity }: OtherPlayerButtonsProps) => {
       >
         <BellIcon isHovered={hoveredStates.report} />
         <p
-          className={`${getGradientClass(hoveredStates.report)} transition-all duration-300 ease-out`}
+          className={`${getGradientClass(hoveredStates.report)} text-[14px] transition-all duration-300 ease-out`}
         >
           Репорт
         </p>

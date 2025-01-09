@@ -1,6 +1,4 @@
-import MutualChat from '@/app/(home)/rooms/_components/MutualChat';
 import { Button } from '@/components/ui/button';
-import { genFont, titleFont } from '@/config/fonts';
 import useScreenSize from '@/hooks/screenSize';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { socket } from '@/socket';
@@ -62,7 +60,7 @@ const Center = () => {
     <div className="flex h-full flex-col justify-between">
       {(game.turnOfUserId === user?.id || action === 'auction') &&
         (!currentField?.specialField || action === 'rollDice') && (
-          <div className="bg-gameCenterModal shadow-gameCenterModaShadowCombined mx-6 mt-6 flex h-1/4 flex-col justify-between rounded-md px-4 py-2 text-xs text-white lg:py-3">
+          <div className="mx-6 mt-6 flex h-1/4 flex-col justify-between rounded-md bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
             <div className="text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
               {action === 'rollDice'
                 ? 'Ваш хід'
@@ -93,7 +91,7 @@ const Center = () => {
                   Придбати за {currentField.price}
                 </Button>
                 <div
-                  className={`bg-buttonBlueGradient flex h-[38px] w-full flex-col items-center justify-center overflow-hidden rounded-md px-[1px]`}
+                  className={`flex h-[38px] w-full flex-col items-center justify-center overflow-hidden rounded-md bg-buttonBlueGradient px-[1px]`}
                 >
                   <Button
                     variant={'gameDarkBlue'}
