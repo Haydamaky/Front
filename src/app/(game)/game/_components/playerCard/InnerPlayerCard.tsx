@@ -27,7 +27,7 @@ const InnerPlayerCard = ({
     >
       {player.userId === turnOfUserId && (
         <div
-          className={`font- absolute right-[5%] top-[-2%] rounded-[0.150rem] bg-[#F0F7FF] px-1 py-[2px] text-primaryGame md:px-2 md:py-1 lg:px-3 lg:py-2 ${inter.className} font-normal`}
+          className={`absolute right-[5%] top-[-0.2vh] flex h-[3.3vh] w-[21%] items-center justify-center rounded-[0.150rem] bg-[#F0F7FF] text-primaryGame ${inter.className} font-normal`}
         >
           {turnTime}
         </div>
