@@ -1,5 +1,4 @@
-import { Player } from '@/types/player';
-import { use, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface PlayerChipProps {
   posOfPlayer: string;

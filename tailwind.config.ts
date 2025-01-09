@@ -2,7 +2,7 @@ import {
   colorVariats500,
   colorVariats700,
   colorVariatsBorder500,
-  positionCoors,
+  // positionCoors,
 } from './src/app/(game)/game/_utils';
 import { nextui } from '@nextui-org/react';
 import type { Config } from 'tailwindcss';
@@ -17,7 +17,7 @@ const config: Config = {
     ...Object.values(colorVariats500),
     ...Object.values(colorVariats700),
     ...Object.values(colorVariatsBorder500),
-    ...positionCoors,
+    //...positionCoors,
   ],
   theme: {
     extend: {
