@@ -1,7 +1,7 @@
 import {
   colorVariats500,
   colorVariats700,
-  //positionCoors,
+  positionCoors,
   withinMonopolyLineRange,
   findClosest,
 } from '../../_utils';
@@ -10,49 +10,6 @@ import PlayerChip from './PlayerChip';
 import { Game } from '@/types';
 import { socket } from '@/socket';
 
-const positionCoors = [
-  'left-[6%] top-[9.5%]',
-  'left-[17.5%] top-[9.5%]',
-  'left-[25.2%] top-[9.5%]',
-  'left-[32.9%] top-[9.5%]',
-  'left-[40.6%] top-[9.5%]',
-  'left-[48.3%] top-[9.5%]',
-  'left-[56%] top-[9.5%]',
-  'left-[63.7%] top-[9.5%]',
-  'left-[71.4%] top-[9.5%]',
-  'left-[79.1%] top-[9.5%]',
-  'left-[90.8%] top-[9.5%]',
-  'left-[90.8%] top-[20%]',
-  'left-[90.8%] top-[27.1%]',
-  'left-[90.8%] top-[34.2%]',
-  'left-[90.8%] top-[41.3%]',
-  'left-[90.8%] top-[48.4%]',
-  'left-[90.8%] top-[55.5%]',
-  'left-[90.8%] top-[62.6%]',
-  'left-[90.8%] top-[69.6%]',
-  'left-[90.8%] top-[76.8%]',
-  'left-[90.8%] top-[87%]',
-  'left-[79.2%] top-[87%]',
-  'left-[71.5%] top-[87%]',
-  'left-[63.8%] top-[87%]',
-  'left-[56.1%] top-[87%]',
-  'left-[48.4%] top-[87%]',
-  'left-[40.7%] top-[87%]',
-  'left-[33%] top-[87%]',
-  'left-[25.3%] top-[87%]',
-  'left-[17.6%] top-[87%]',
-  'left-[6%] top-[87%]',
-  'left-[6%] top-[76.5%]',
-  'left-[6%] top-[69.4%]',
-  'left-[6%] top-[62.3%]',
-  'left-[6%] top-[55.2%]',
-  'left-[6%] top-[48.1%]',
-  'left-[6%] top-[41%]',
-  'left-[6%] top-[33.9%]',
-  'left-[6%] top-[26.8%]',
-  'left-[6%] top-[19.7%]',
-  'left-[6%] top-[9.5%]',
-];
 const PlayersChips = () => {
   const [gameAfterDiceRoll, setGameAfterDiceRoll] = useState<null | Game>(null);
   useEffect(() => {
