@@ -1,4 +1,4 @@
-const positionCoors = [
+export const positionCoors = [
   'left-[6%] top-[9.5%]',
   ...Array.from(
     { length: 9 },
@@ -24,4 +24,3 @@ const positionCoors = [
   ),
   'left-[6%] top-[9.5%]',
 ];
-console.log(positionCoors);
