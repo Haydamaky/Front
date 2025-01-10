@@ -4,6 +4,7 @@ import { Providers } from '../../providers/providers';
 import clsx from 'clsx';
 import { Navbar } from '@/components/navbar';
 import { genFont, titleFont } from '@/config/fonts';
+import GatewayError from './rooms/_components/GatewayError';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -32,9 +33,7 @@ export default function RootLayout({
           <div className="relative flex flex-col">
             <Navbar />
             <main className="w-full px-6 pt-16">{children}</main>
-            <footer className="flex w-full items-center justify-center py-3">
-              <p className="text-black">Test</p>
-            </footer>
+            <GatewayError />
           </div>
         </Providers>
       </body>
