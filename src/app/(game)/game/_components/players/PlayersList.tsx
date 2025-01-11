@@ -2,12 +2,11 @@
 
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { socket } from '@/socket';
-import { setGame } from '@/store/slices/game';
-import { useEffect, useRef, useState } from 'react';
-import { Avatar } from '@nextui-org/react';
 import { setFields } from '@/store/slices/fields';
-import { Player, PlayerColor } from '@/types/player';
+import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
+import { Player } from '@/types/player';
+import { useEffect, useRef, useState } from 'react';
 import PlayerCard from '../playerCard/PlayerCard';
 
 const PlayersList = () => {

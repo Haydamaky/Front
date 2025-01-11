@@ -83,7 +83,6 @@ const PlayersChips = () => {
           const playersToTurnBefore: any = [];
           let indexOfPlayerToTurnTemp = indexOfPlayerToTurn;
           for (let i = 0; i < numberOfPlayersToTurnBefore; i++) {
-            console.log({ indexOfPlayerToTurnTemp });
             playersToTurnBefore.push(
               gameAfterDiceRoll?.players[indexOfPlayerToTurnTemp],
             );
@@ -94,7 +93,6 @@ const PlayersChips = () => {
           }
           const playersToTurnBeforeOnSameField = playersOnSameField.filter(
             playerOnSameField => {
-              console.log({ playerOnSameField, playersToTurnBefore });
               return playersToTurnBefore.some((playerToTurnBefore: any) => {
                 return playerToTurnBefore?.userId === playerOnSameField.userId;
               });
@@ -119,14 +117,6 @@ const PlayersChips = () => {
           translate = isHorizonatlField
             ? 'translateY(' + translateOn
             : 'translateX(' + translateOn;
-          console.log({
-            translateOn,
-            color: player.color,
-            playersOnSameFieldLength: playersOnSameField.length,
-            playersToTurnBeforeOnSameField:
-              playersToTurnBeforeOnSameField.length,
-            playersToTurnBefore: playersToTurnBefore.length,
-          });
           return (
             <PlayerChip
               key={player.id}
