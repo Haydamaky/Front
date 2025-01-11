@@ -11,6 +11,7 @@ export interface Player {
   gameId: string;
   game: Game;
   createdAt: Date;
+  lost: boolean;
 }
 
 export type PlayerColor = 'green' | 'pink' | 'blue' | 'red' | 'yellow';

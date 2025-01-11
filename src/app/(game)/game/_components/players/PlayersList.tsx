@@ -51,7 +51,7 @@ const PlayersList = () => {
       calculateTimeToEndAndSetStates,
     );
 
-    socket.on('passTurnToNext', dispatchSetGame);
+    socket.on(['passTurnToNext', 'playerSurrendered'], dispatchSetGame);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -59,7 +59,7 @@ const PlayersList = () => {
         ['hasPutUpForAuction', 'getGameData', 'passTurnToNext', 'rolledDice'],
         calculateTimeToEndAndSetStates,
       );
-      socket.off('passTurnToNext', dispatchSetGame);
+      socket.off(['passTurnToNext', 'playerSurrendered'], dispatchSetGame);
     };
   }, []);
 

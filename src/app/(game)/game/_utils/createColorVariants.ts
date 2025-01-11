@@ -18,6 +18,7 @@ export const gradientColorVariants = {
   yellow: 'linear-gradient(180deg, #FF930F 0%, #FFF95B 100%)',
   blue: 'linear-gradient(180deg, #0D41E1 0%, #07C8F9 100%)',
   purple: 'linear-gradient(180deg, #A106F4 0%, #E707FA 100%)',
+  lost: 'linear-gradient(180deg, #EBF4F5 0%, #B5C6E0 100%)',
 } as Record<string, string>;
 
 export const gradientColorVariantsFields = {

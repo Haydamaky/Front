@@ -1,7 +1,5 @@
 import { useAppSelector } from '@/hooks/store';
 import { Field } from '@/types/field';
-import Image from 'next/image';
-import { memo } from 'react';
 import {
   gradientColorVariantsFields,
   gradientColorVariantsFields0Deg,

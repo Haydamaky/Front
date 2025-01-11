@@ -25,7 +25,9 @@ const PlayerCard = ({
   const [isPlayerClicked, setIsPlayerClicked] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const borderColor = gradientColorVariants[player.color];
+  const borderColor = !player.lost
+    ? gradientColorVariants[player.color]
+    : gradientColorVariants.lost;
   const playersTurn = player.userId === turnOfUserId;
   const playerBg = !playersTurn ? 'bg-playerGradient' : '';
   const fromTop = fromTopArr[index];
@@ -50,11 +52,12 @@ const PlayerCard = ({
     };
   }, []);
 
-  const playerButtons = mainPlayer ? (
+  let playerButtons = mainPlayer ? (
     <GiveUpButton opacity={opacity} />
   ) : (
     <OtherPlayerButtons opacity={opacityOtherPlayer} />
   );
+  if (player.lost && mainPlayer) playerButtons = <></>;
 
   const playerHTML = (
     <InnerPlayerCard
@@ -66,8 +69,9 @@ const PlayerCard = ({
     />
   );
 
-  const height = isPlayerClicked ? (mainPlayer ? '25%' : '31%') : '';
-
+  const height =
+    isPlayerClicked && !player.lost ? (mainPlayer ? '25%' : '31%') : '';
+  const cursor = player.lost ? '' : 'cursor-pointer';
   return (
     <div
       ref={cardRef}
@@ -77,7 +81,7 @@ const PlayerCard = ({
         zIndex: isPlayerClicked ? '1000' : '',
         height,
       }}
-      className={`${fromTop} trasnsition-all absolute flex h-[24%] w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-[6%] font-ermilov font-thin duration-300 ease-in-out`}
+      className={`${fromTop} trasnsition-all ${cursor} absolute flex h-[24%] w-full flex-col items-center justify-center overflow-hidden rounded-[6%] font-ermilov font-thin duration-300 ease-in-out`}
     >
       {player.userId === turnOfUserId ? (
         <div className="h-[98%] w-[97%] rounded-[6%] bg-transparent">
