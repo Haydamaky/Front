@@ -16,6 +16,9 @@ const Center = () => {
   const fields = useAppSelector(state => state.fields.fields);
   const game = useAppSelector(state => state.game.game);
   const { data: user } = useAppSelector(state => state.user);
+  const { data: chipTransition } = useAppSelector(
+    state => state.chipTransition,
+  );
   const [player] = game.players.filter(player => player.userId === user?.id);
   const [currentField] = fields.filter(
     field => field.index === player?.currentFieldIndex,
@@ -56,10 +59,12 @@ const Center = () => {
   const buyField = () => {
     socket.emit('buyField');
   };
+  const turnOfUser = game.turnOfUserId === user?.id;
   return (
     <div className="flex h-full flex-col justify-between">
-      {(game.turnOfUserId === user?.id || action === 'auction') &&
-        (!currentField?.specialField || action === 'rollDice') && (
+      {(turnOfUser || action === 'auction') &&
+        (!currentField?.specialField || action === 'rollDice') &&
+        !chipTransition && (
           <div className="mx-6 mt-6 flex h-1/4 flex-col justify-between rounded-md bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
             <div className="text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
               {action === 'rollDice'

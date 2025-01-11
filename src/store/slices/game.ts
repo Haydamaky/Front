@@ -1,11 +1,6 @@
 import { Game } from '@/types/game';
 import { createSlice } from '@reduxjs/toolkit';
 
-export type initialStateType = {
-  paymentAmount: number;
-  paymentDiscount: number;
-};
-
 const initialState = {
   game: {} as Game,
 };
