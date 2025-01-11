@@ -40,7 +40,9 @@ const PlayersList = () => {
     };
 
     const dispatchSetFields = (data: DataWithGame) => {
-      dispatch(setFields(data.fields!));
+      if (data.fields) {
+        dispatch(setFields(data.fields));
+      }
     };
 
     socket.emitWithCallbacks('getGameData', dispatchSetGame, dispatchSetFields);
@@ -50,15 +52,24 @@ const PlayersList = () => {
       calculateTimeToEndAndSetStates,
     );
 
-    socket.on(['passTurnToNext', 'playerSurrendered'], dispatchSetGame);
-
+    socket.on('passTurnToNext', dispatchSetGame);
+    socket.on(
+      ['payedForField', 'playerSurrendered'],
+      dispatchSetGame,
+      dispatchSetFields,
+    );
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       socket.off(
         ['hasPutUpForAuction', 'getGameData', 'passTurnToNext', 'rolledDice'],
         calculateTimeToEndAndSetStates,
       );
-      socket.off(['passTurnToNext', 'playerSurrendered'], dispatchSetGame);
+      socket.off(['passTurnToNext'], dispatchSetGame);
+      socket.off(
+        ['payedForField', 'playerSurrendered'],
+        dispatchSetFields,
+        dispatchSetGame,
+      );
     };
   }, []);
 
