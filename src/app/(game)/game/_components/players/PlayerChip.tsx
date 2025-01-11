@@ -1,3 +1,5 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { setChipTransition } from '@/store/slices/chipTransition';
 import { useEffect, useRef, useState } from 'react';
 
 interface PlayerChipProps {
@@ -19,16 +21,25 @@ const PlayerChip = ({
   const [posToGo, setPosToGo] = useState<string>(
     beforeToPositions.length ? beforeToPositions[0] : posOfPlayer,
   );
-
+  const dispatch = useAppDispatch();
   const handleSequentialUpdates = async () => {
     if (beforeToPositions.length) {
+      dispatch(setChipTransition(true));
       for (const beforeToPos of beforeToPositions) {
         setPosToGo(beforeToPos);
         await waitForTransition(elementRef.current);
       }
       setPosToGo(posOfPlayer);
+      await waitForTransition(elementRef.current);
+      setTimeout(
+        () => dispatch(setChipTransition(false)),
+        beforeToPositions.length * 1000,
+      );
     } else {
+      dispatch(setChipTransition(true));
       setPosToGo(posOfPlayer);
+      await waitForTransition(elementRef.current);
+      dispatch(setChipTransition(false));
     }
   };
   useEffect(() => {
@@ -50,8 +61,8 @@ const PlayerChip = ({
   return (
     <div
       ref={elementRef}
-      style={{ transform: `${translate}` }}
-      className={`${colorOfPlayerDarker} absolute shadow-combined ${posToGo} flex h-[3.3%] w-[3.3%] items-center justify-center rounded-full transition-all duration-1000`}
+      style={{ transform: `${translate}`, transitionDuration: '1000ms' }}
+      className={`${colorOfPlayerDarker} absolute shadow-combined ${posToGo} flex h-[3.3%] w-[3.3%] items-center justify-center rounded-full transition-all`}
     >
       <div
         className={`${colorOfPlayer} z-20 h-[78%] w-[78%] rounded-full border border-[#FBFBFA]`}
