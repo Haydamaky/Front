@@ -38,13 +38,13 @@ const PlayersChips = () => {
           );
           let translate = '';
           const isHorizonatlField =
-            player.currentFieldIndex <= 11 ||
-            (player.currentFieldIndex > 20 && player.currentFieldIndex <= 31);
+            player.currentFieldIndex < 11 ||
+            (player.currentFieldIndex > 20 && player.currentFieldIndex < 31);
           const dicesStringsArr = gameAfterDiceRoll?.dices.split(':');
           const dicesNumArr = dicesStringsArr.map(Number);
           let indexBefore =
             player.currentFieldIndex - dicesNumArr[0] - dicesNumArr[1];
-          if (indexBefore < 0) {
+          if (indexBefore <= 0) {
             indexBefore += 40;
           }
           const isHorizonatlFieldBefore =
