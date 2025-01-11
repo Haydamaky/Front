@@ -10,3 +10,8 @@ export const genFont = localFont({
   variable: '--font-genFont',
   weight: '100 900',
 });
+export const ermilovFont = localFont({
+  src: '../public/fonts/Ermilov-bold.otf',
+  variable: '--font-ermilovFont',
+  weight: '100 400 700 900',
+});

@@ -1,12 +1,23 @@
+import {
+  colorVariats500,
+  colorVariats700,
+  colorVariatsBorder500,
+  positionCoors,
+} from './src/app/(game)/game/_utils';
 import { nextui } from '@nextui-org/react';
 import type { Config } from 'tailwindcss';
-
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+  ],
+  safelist: [
+    ...Object.values(colorVariats500),
+    ...Object.values(colorVariats700),
+    ...Object.values(colorVariatsBorder500),
+    ...positionCoors,
   ],
   theme: {
     extend: {
@@ -21,9 +32,11 @@ const config: Config = {
       },
       fontFamily: {
         custom: ['var(--font-titleFont)'],
-        second: ['var(--font-genFont)'],
+        fixelDisplay: ['var(--font-genFont)'],
+        ermilov: ['var(--font-ermilovFont)'],
       },
       fontSize: {
+        smallMob: '8px',
         standardMob: '10px',
         standard: '13px',
         lg: '16px',
@@ -34,6 +47,21 @@ const config: Config = {
         tertiary: 'rgb(205, 193, 255)',
         base: 'rgb(245, 239, 255)',
         helper: 'rgb(229, 217, 242)',
+        playerCard: 'rgba(245, 239, 255, 0.2)',
+        gameWhite: 'rgba(251, 251, 250, 1)',
+        gameCenterModal: 'rgba(25, 55, 109, 1)',
+        primaryGame: 'rgba(0, 33, 71, 1)',
+      },
+      backgroundImage: {
+        playerGradient:
+          'linear-gradient(171.61deg, rgba(0, 3, 40, 0.3) 9.18%, rgba(0, 69, 142, 0.3) 93.58%)',
+        buttonBlueGradient:
+          'linear-gradient(184.39deg, #5AB2F7 4.38%, #12CFF3 97.25%)',
+      },
+      boxShadow: {
+        gameCenterModaShadowCombined:
+          '0px 4px 22.3px 5px rgba(0, 0, 0, 0.25) inset, 0px 0px 4px 2px rgba(251, 251, 250, 1)',
+        combined: '0px 4px 4px 0px #00000040 inset, 0px 2px 1px 0px #0000004D',
       },
     },
   },

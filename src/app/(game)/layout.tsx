@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import { Providers } from '@/providers/providers';
 import clsx from 'clsx';
-import { genFont, titleFont } from '@/config/fonts';
+import { ermilovFont, genFont, titleFont } from '@/config/fonts';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -22,14 +22,16 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={clsx(
-          'min-h-screen font-sans antialiased light',
+          'max-h-screen overflow-y-hidden font-sans antialiased light',
+          'bg-primaryGame',
+          'text-white',
           genFont.variable,
           titleFont.variable,
+          ermilovFont.variable,
         )}
       >
         <Providers>
-          <h1>Just New layout</h1>
-          <main className="w-full px-6 pt-16">{children}</main>
+          <main className="h-screen w-full pl-[24%]">{children}</main>
         </Providers>
       </body>
     </html>
