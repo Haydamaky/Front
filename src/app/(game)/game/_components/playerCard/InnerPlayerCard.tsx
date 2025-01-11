@@ -2,6 +2,7 @@ import { Player } from '@/types/player';
 import { Avatar } from '@nextui-org/react';
 
 import { Inter } from 'next/font/google';
+import LostIcon from './LostIcon';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -32,15 +33,25 @@ const InnerPlayerCard = ({
           {turnTime}
         </div>
       )}
-      <div className="h-[5rem] w-[5rem]">
-        <Avatar
-          className="h-full w-full"
-          src="https://i.pravatar.cc/150?u=a04258114e29026302d"
-        />
-      </div>
+      {!player.lost ? (
+        <div className="h-[5rem] w-[5rem]">
+          <Avatar
+            className="h-full w-full"
+            src="https://i.pravatar.cc/150?u=a04258114e29026302d"
+          />
+        </div>
+      ) : (
+        <div className="h-[5rem] w-[5rem]">
+          <LostIcon />
+        </div>
+      )}
 
       <p className="text-xl">{player.user.nickname}</p>
-      <p className="text-sm">{player.money}$</p>
+      {!player.lost ? (
+        <p className="mt-[2px] text-sm">{player.money}$</p>
+      ) : (
+        <p className="mt-[2px] text-sm">Банкрот</p>
+      )}
 
       {buttons}
     </div>
