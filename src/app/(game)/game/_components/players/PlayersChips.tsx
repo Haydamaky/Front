@@ -29,7 +29,6 @@ const PlayersChips = () => {
     <>
       {gameAfterDiceRoll &&
         gameAfterDiceRoll.players.map((player: any, index: number) => {
-          console.log({ player });
           const colorOfPlayer = colorVariats500[player.color];
           const colorOfPlayerDarker = colorVariats700[player.color];
           const playersOnSameField = gameAfterDiceRoll?.players.filter(
@@ -74,25 +73,28 @@ const PlayersChips = () => {
           );
           let indexOfPlayerToTurn =
             userIdsInOrderToTurn.indexOf(gameAfterDiceRoll?.turnOfUserId) + 1;
-          indexOfPlayerToTurn === gameAfterDiceRoll.players.length
-            ? 0
-            : indexOfPlayerToTurn;
+          indexOfPlayerToTurn =
+            indexOfPlayerToTurn >= gameAfterDiceRoll.players.length
+              ? 0
+              : indexOfPlayerToTurn;
           const numberOfPlayersToTurnBefore =
             (index - indexOfPlayerToTurn + gameAfterDiceRoll?.players.length) %
             gameAfterDiceRoll?.players.length;
           const playersToTurnBefore: any = [];
           let indexOfPlayerToTurnTemp = indexOfPlayerToTurn;
           for (let i = 0; i < numberOfPlayersToTurnBefore; i++) {
+            console.log({ indexOfPlayerToTurnTemp });
             playersToTurnBefore.push(
               gameAfterDiceRoll?.players[indexOfPlayerToTurnTemp],
             );
             indexOfPlayerToTurnTemp++;
-            if (indexOfPlayerToTurnTemp === gameAfterDiceRoll?.players.length) {
+            if (indexOfPlayerToTurnTemp >= gameAfterDiceRoll?.players.length) {
               indexOfPlayerToTurnTemp = 0;
             }
           }
           const playersToTurnBeforeOnSameField = playersOnSameField.filter(
             playerOnSameField => {
+              console.log({ playerOnSameField, playersToTurnBefore });
               return playersToTurnBefore.some((playerToTurnBefore: any) => {
                 return playerToTurnBefore?.userId === playerOnSameField.userId;
               });
@@ -117,7 +119,14 @@ const PlayersChips = () => {
           translate = isHorizonatlField
             ? 'translateY(' + translateOn
             : 'translateX(' + translateOn;
-
+          console.log({
+            translateOn,
+            color: player.color,
+            playersOnSameFieldLength: playersOnSameField.length,
+            playersToTurnBeforeOnSameField:
+              playersToTurnBeforeOnSameField.length,
+            playersToTurnBefore: playersToTurnBefore.length,
+          });
           return (
             <PlayerChip
               key={player.id}
