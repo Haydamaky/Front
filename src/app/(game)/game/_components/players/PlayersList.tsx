@@ -45,10 +45,19 @@ const PlayersList = () => {
       }
     };
 
-    socket.emitWithCallbacks('getGameData', dispatchSetGame, dispatchSetFields);
+    const getGameDataAndSetStates = () => {
+      socket.emitWithCallbacks(
+        'getGameData',
+        dispatchSetGame,
+        dispatchSetFields,
+        calculateTimeToEndAndSetStates,
+      );
+    };
+    getGameDataAndSetStates();
+    socket.on('rejoin', getGameDataAndSetStates);
 
     socket.on(
-      ['hasPutUpForAuction', 'getGameData', 'passTurnToNext', 'rolledDice'],
+      ['hasPutUpForAuction', 'passTurnToNext', 'rolledDice'],
       calculateTimeToEndAndSetStates,
     );
 
@@ -70,6 +79,7 @@ const PlayersList = () => {
         dispatchSetFields,
         dispatchSetGame,
       );
+      socket.off('rejoin', getGameDataAndSetStates);
     };
   }, []);
 
