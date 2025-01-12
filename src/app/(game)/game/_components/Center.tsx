@@ -6,6 +6,7 @@ import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
 import { useEffect, useState } from 'react';
+import Chat from './Chat/Chat';
 
 type Action = 'rollDice' | 'auction' | 'buy' | '';
 
@@ -125,7 +126,7 @@ const Center = () => {
           </div>
         )}
 
-      <div>Chat</div>
+      <Chat chatId={game.chatId} gameId={game.id} />
     </div>
   );
 };
