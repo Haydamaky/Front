@@ -14,7 +14,7 @@ export function Providers({ children }: Props) {
   return (
     <NextUIProvider navigate={router.push}>
       <NextThemesProvider attribute="class" themes={['light']}>
-        <Provider store={store}>{children}</Provider>;
+        <Provider store={store}>{children}</Provider>
       </NextThemesProvider>
     </NextUIProvider>
   );

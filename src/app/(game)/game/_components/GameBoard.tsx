@@ -15,7 +15,6 @@ const GameBoard = () => {
   useEffect(() => {
     socket.on('error', (err: any) => console.log(err));
     socket.on('rolledDice', (data: any) => {
-      console.log('rolledDice');
       let dicesData = data.dices;
       dispatch(setFields(data.fields));
       dispatch(setGame(data.game));

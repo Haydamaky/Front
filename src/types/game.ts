@@ -1,11 +1,12 @@
 import { Field } from './field';
+import { Player } from './player';
 
 export interface Game {
   id: string;
   createdAt: Date;
   updatedAt: Date;
   isStarted: boolean;
-  players: any[];
+  players: Player[];
   gameFields: [];
   gameMoves: [];
   fieldTransactions: [];
