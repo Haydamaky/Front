@@ -14,6 +14,7 @@ export interface Game {
   turnOfUserId: string;
   playersCapacity: number;
   dices: string;
+  chatId: string;
   turnEnds: string;
 }
 

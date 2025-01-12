@@ -6,6 +6,7 @@ import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
 import { useEffect, useRef, useState } from 'react';
+import Chat from './Chat/Chat';
 import HintBulb from './HintBulb';
 import DicesContainer from './Dice/DicesContainer';
 
@@ -186,6 +187,7 @@ const Center = () => {
           <DicesContainer />
         </div>
       </div>
+      <Chat chatId={game.chatId} gameId={game.id} />
     </div>
   );
 };
