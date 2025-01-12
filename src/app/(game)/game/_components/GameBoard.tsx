@@ -4,7 +4,6 @@ import { Field } from '@/types/field';
 import { Fragment, useEffect } from 'react';
 import Center from './Center';
 import FieldComponent from './FieldComponent';
-import PlayersChips from './players/PlayersChips';
 import PlayerChipsContainer from './players/PlayerChipsContainer';
 
 const GameBoard = () => {

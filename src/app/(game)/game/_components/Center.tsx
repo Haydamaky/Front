@@ -187,7 +187,7 @@ const Center = () => {
           <DicesContainer />
         </div>
       </div>
-      <Chat chatId={game.chatId} gameId={game.id} />
+      <Chat chatId={game.chatId} gameId={game.id} players={game.players} />
     </div>
   );
 };
