@@ -7,6 +7,7 @@ import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
 import { useEffect, useState } from 'react';
 import HintBulb from './HintBulb';
+import Dice from './Dice/Dice';
 
 type Action = 'rollDice' | 'auction' | 'buy' | '';
 
@@ -61,6 +62,14 @@ const Center = () => {
     socket.emit('buyField');
   };
   const turnOfUser = game.turnOfUserId === user?.id;
+  let dicesArrStr: string[];
+  if (game.dices) {
+    dicesArrStr = game.dices.split(':');
+  } else {
+    dicesArrStr = [];
+  }
+  const diceNumbArr = dicesArrStr.map(Number);
+  console.log({ firstNum: diceNumbArr[0], secondNum: diceNumbArr[1] });
   return (
     <div className="flex h-full flex-col justify-between">
       {(turnOfUser || action === 'auction') &&
@@ -170,8 +179,16 @@ const Center = () => {
             )}
           </div>
         )}
-
-      <div>Chat</div>
+      <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
+        <div className="flex gap-5">
+          {diceNumbArr[0] && (
+            <Dice diceNumber={diceNumbArr[0]} rollindId={'first'} />
+          )}
+          {diceNumbArr[1] && (
+            <Dice diceNumber={diceNumbArr[1]} rollindId={'second'} />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
