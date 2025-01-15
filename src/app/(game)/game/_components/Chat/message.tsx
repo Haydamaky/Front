@@ -10,7 +10,7 @@ interface MessageProps {
 const Message = forwardRef<HTMLLIElement, MessageProps>(
   ({ name, text, color }, ref) => {
     return (
-      <li className="flex flex-row gap-[0.2rem] text-black" ref={ref}>
+      <li className="flex flex-row gap-[0.2rem] text-white" ref={ref}>
         <div
           className="w-fit rounded-sm px-2 py-1"
           style={{
