@@ -5,33 +5,24 @@ import {
   withinMonopolyLineRange,
   findClosest,
 } from '../../_utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PlayerChip from './PlayerChip';
 import { Game } from '@/types';
 import { socket } from '@/socket';
+import { useAppSelector } from '@/hooks/store';
 
-const PlayersChips = () => {
-  const [gameAfterDiceRoll, setGameAfterDiceRoll] = useState<null | Game>(null);
-  useEffect(() => {
-    const handleRollDiced = (data: any) => {
-      setGameAfterDiceRoll(data.game);
-    };
-    const handleGetGameData = (data: any) => {
-      setGameAfterDiceRoll(data.game);
-    };
-    socket.emit('getGameData', handleGetGameData);
-    socket.on('rolledDice', handleRollDiced);
-    return () => {
-      socket.off('rolledDice', handleRollDiced);
-    };
-  }, []);
+interface PlayersChipsProps {
+  game: Game | null;
+}
+
+const PlayersChips = ({ game }: PlayersChipsProps) => {
   return (
     <>
-      {gameAfterDiceRoll &&
-        gameAfterDiceRoll.players.map((player: any, index: number) => {
+      {game?.players &&
+        game.players.map((player: any, index: number) => {
           const colorOfPlayer = colorVariats500[player.color];
           const colorOfPlayerDarker = colorVariats700[player.color];
-          const playersOnSameField = gameAfterDiceRoll?.players.filter(
+          const playersOnSameField = game?.players.filter(
             (checkingPlayer: any) =>
               checkingPlayer.currentFieldIndex === player.currentFieldIndex &&
               checkingPlayer.userId !== player.userId,
@@ -40,7 +31,7 @@ const PlayersChips = () => {
           const isHorizonatlField =
             player.currentFieldIndex < 11 ||
             (player.currentFieldIndex > 20 && player.currentFieldIndex < 31);
-          const dicesStringsArr = gameAfterDiceRoll?.dices.split(':');
+          const dicesStringsArr = game?.dices.split(':');
           const dicesNumArr = dicesStringsArr.map(Number);
           let indexBefore =
             player.currentFieldIndex - dicesNumArr[0] - dicesNumArr[1];
@@ -53,8 +44,7 @@ const PlayersChips = () => {
             indexBefore,
             player.currentFieldIndex,
           );
-          const currentPlayersTurn =
-            player.userId === gameAfterDiceRoll?.turnOfUserId;
+          const currentPlayersTurn = player.userId === game?.turnOfUserId;
           const indexInPositionsArray = player.currentFieldIndex - 1;
           let closestCornerOnWay = (indexBefore + player.currentFieldIndex) / 2;
           if (indexBefore >= 31) closestCornerOnWay = 40;
@@ -68,26 +58,24 @@ const PlayersChips = () => {
           const beforeToPositions = beforeToIndexes.map(
             (beforeToIndex: number) => positionCoors[beforeToIndex],
           );
-          const userIdsInOrderToTurn = gameAfterDiceRoll?.players.map(
+          const userIdsInOrderToTurn = game?.players.map(
             player => player.userId,
           );
           let indexOfPlayerToTurn =
-            userIdsInOrderToTurn.indexOf(gameAfterDiceRoll?.turnOfUserId) + 1;
+            userIdsInOrderToTurn.indexOf(game?.turnOfUserId) + 1;
           indexOfPlayerToTurn =
-            indexOfPlayerToTurn >= gameAfterDiceRoll.players.length
+            indexOfPlayerToTurn >= game.players.length
               ? 0
               : indexOfPlayerToTurn;
           const numberOfPlayersToTurnBefore =
-            (index - indexOfPlayerToTurn + gameAfterDiceRoll?.players.length) %
-            gameAfterDiceRoll?.players.length;
+            (index - indexOfPlayerToTurn + game?.players.length) %
+            game?.players.length;
           const playersToTurnBefore: any = [];
           let indexOfPlayerToTurnTemp = indexOfPlayerToTurn;
           for (let i = 0; i < numberOfPlayersToTurnBefore; i++) {
-            playersToTurnBefore.push(
-              gameAfterDiceRoll?.players[indexOfPlayerToTurnTemp],
-            );
+            playersToTurnBefore.push(game?.players[indexOfPlayerToTurnTemp]);
             indexOfPlayerToTurnTemp++;
-            if (indexOfPlayerToTurnTemp >= gameAfterDiceRoll?.players.length) {
+            if (indexOfPlayerToTurnTemp >= game?.players.length) {
               indexOfPlayerToTurnTemp = 0;
             }
           }

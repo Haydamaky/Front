@@ -13,28 +13,33 @@ const PlayersList = () => {
   const dispatch = useAppDispatch();
   const game = useAppSelector(state => state.game.game);
   const [turnTime, setTurnTime] = useState(0);
+  const rolledDice = useRef(false);
+  const startCountdown = (timeToEnd: any) => {
+    let countDown = timeToEnd;
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      if (countDown <= 0) {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        return;
+      }
+      countDown--;
+      setTurnTime(prev => prev - 1);
+    }, 1000);
+  };
+  const calculateTimeToEndAndSetStates = ({ game }: DataWithGame) => {
+    const now = Date.now();
+    const timeToEnd = Math.floor((+game.turnEnds - now) / 1000);
+    setTurnTime(timeToEnd);
+    startCountdown(timeToEnd);
+  };
+  useEffect(() => {
+    if (rolledDice.current) {
+      calculateTimeToEndAndSetStates({ game });
+      rolledDice.current = false;
+    }
+  }, [game]);
   const intervalRef = useRef<null | NodeJS.Timeout>(null);
   useEffect(() => {
-    const startCountdown = (timeToEnd: any) => {
-      let countDown = timeToEnd;
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      intervalRef.current = setInterval(() => {
-        if (countDown <= 0) {
-          if (intervalRef.current) clearInterval(intervalRef.current);
-          return;
-        }
-        countDown--;
-        setTurnTime(prev => prev - 1);
-      }, 1000);
-    };
-
-    const calculateTimeToEndAndSetStates = ({ game }: DataWithGame) => {
-      const now = Date.now();
-      const timeToEnd = Math.floor((+game.turnEnds - now) / 1000);
-      setTurnTime(timeToEnd);
-      startCountdown(timeToEnd);
-    };
-
     const dispatchSetGame = (data: DataWithGame) => {
       dispatch(setGame(data.game));
     };
@@ -44,7 +49,6 @@ const PlayersList = () => {
         dispatch(setFields(data.fields));
       }
     };
-
     const getGameDataAndSetStates = () => {
       socket.emitWithCallbacks(
         'getGameData',
@@ -55,9 +59,12 @@ const PlayersList = () => {
     };
     getGameDataAndSetStates();
     socket.on('rejoin', getGameDataAndSetStates);
-
+    const setRolledDiceSocket = () => {
+      rolledDice.current = true;
+    };
+    socket.on('rolledDice', setRolledDiceSocket);
     socket.on(
-      ['hasPutUpForAuction', 'passTurnToNext', 'rolledDice'],
+      ['hasPutUpForAuction', 'passTurnToNext'],
       calculateTimeToEndAndSetStates,
     );
 
@@ -70,7 +77,7 @@ const PlayersList = () => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       socket.off(
-        ['hasPutUpForAuction', 'getGameData', 'passTurnToNext', 'rolledDice'],
+        ['hasPutUpForAuction', 'getGameData', 'passTurnToNext'],
         calculateTimeToEndAndSetStates,
       );
       socket.off(['passTurnToNext'], dispatchSetGame);
@@ -80,6 +87,7 @@ const PlayersList = () => {
         dispatchSetGame,
       );
       socket.off('rejoin', getGameDataAndSetStates);
+      socket.off('rolledDice', setRolledDiceSocket);
     };
   }, []);
 

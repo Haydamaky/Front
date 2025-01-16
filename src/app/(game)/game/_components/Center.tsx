@@ -5,7 +5,7 @@ import { socket } from '@/socket';
 import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import HintBulb from './HintBulb';
 import Dice from './Dice/Dice';
 
@@ -25,9 +25,17 @@ const Center = () => {
   const [currentField] = fields.filter(
     field => field.index === player?.currentFieldIndex,
   );
+  const rolledDice = useRef(false);
+  useEffect(() => {
+    if (rolledDice.current) {
+      setAction('buy');
+      rolledDice.current = false;
+    }
+  }, [game]);
   useEffect(() => {
     const handleRolledDice = (data: any) => {
-      setAction('buy');
+      rolledDice.current = true;
+      setAction('');
     };
     const handleHasPutUpForAuction = (data: any) => {
       setAction('auction');
@@ -62,19 +70,13 @@ const Center = () => {
     socket.emit('buyField');
   };
   const turnOfUser = game.turnOfUserId === user?.id;
-  let dicesArrStr: string[];
-  if (game.dices) {
-    dicesArrStr = game.dices.split(':');
-  } else {
-    dicesArrStr = [];
-  }
-  const diceNumbArr = dicesArrStr.map(Number);
-  console.log({ firstNum: diceNumbArr[0], secondNum: diceNumbArr[1] });
+
   return (
     <div className="flex h-full flex-col justify-between">
       {(turnOfUser || action === 'auction') &&
         (!currentField?.specialField || action === 'rollDice') &&
-        !chipTransition && (
+        !chipTransition &&
+        action && (
           <div className="mx-6 mt-6 flex h-[26%] flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
             <div className="text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
               {action === 'rollDice'
@@ -181,12 +183,8 @@ const Center = () => {
         )}
       <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex gap-5">
-          {diceNumbArr[0] && (
-            <Dice diceNumber={diceNumbArr[0]} rollindId={'first'} />
-          )}
-          {diceNumbArr[1] && (
-            <Dice diceNumber={diceNumbArr[1]} rollindId={'second'} />
-          )}
+          <Dice />
+          <Dice />
         </div>
       </div>
     </div>
