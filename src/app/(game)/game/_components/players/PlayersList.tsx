@@ -12,6 +12,9 @@ import PlayerCard from '../playerCard/PlayerCard';
 const PlayersList = () => {
   const dispatch = useAppDispatch();
   const game = useAppSelector(state => state.game.game);
+  const { data: chipTransition } = useAppSelector(
+    state => state.chipTransition,
+  );
   const [turnTime, setTurnTime] = useState(0);
   const rolledDice = useRef(false);
   const startCountdown = (timeToEnd: any) => {
@@ -33,11 +36,11 @@ const PlayersList = () => {
     startCountdown(timeToEnd);
   };
   useEffect(() => {
-    if (rolledDice.current) {
+    if (rolledDice.current && chipTransition) {
       calculateTimeToEndAndSetStates({ game });
       rolledDice.current = false;
     }
-  }, [game]);
+  }, [game, chipTransition]);
   const intervalRef = useRef<null | NodeJS.Timeout>(null);
   useEffect(() => {
     const dispatchSetGame = (data: DataWithGame) => {
