@@ -8,41 +8,19 @@ import { setGame } from '@/store/slices/game';
 import { Field } from '@/types/field';
 import { setFields } from '@/store/slices/fields';
 
-const Dice = () => {
-  const dispatch = useAppDispatch();
+interface DiceProps {
+  diceNum: number;
+  afterAnimation?: null | (() => void);
+  id: number;
+}
 
-  const [localGameAfterDiceRoll, setLocalGameAfterDiceRoll] =
-    useState<null | Game>(null);
-  const [localFields, setLocalFields] = useState<Field[]>([]);
-  useEffect(() => {
-    const handleRollDiced = (data: any) => {
-      setLocalGameAfterDiceRoll(data.game);
-      setLocalFields(data.fields);
-    };
-    const handlePassTurnToNext = (data: any) => {
-      setLocalGameAfterDiceRoll(null);
-    };
-    socket.on('passTurnToNext', handlePassTurnToNext);
-    socket.on('rolledDice', handleRollDiced);
-    return () => {
-      socket.off('rolledDice', handleRollDiced);
-      socket.off('passTurnToNext', handlePassTurnToNext);
-    };
-  }, []);
-  let dicesArrStr: string[];
-  if (localGameAfterDiceRoll?.dices) {
-    dicesArrStr = localGameAfterDiceRoll.dices.split(':');
-  } else {
-    dicesArrStr = [];
-  }
-  const diceNumbArr = dicesArrStr.map(Number);
+const Dice = ({ afterAnimation, diceNum, id }: DiceProps) => {
   const diceRef = useRef<HTMLDivElement>(null);
-  const indexOfTransform = diceNumbArr[1] - 1;
+  const indexOfTransform = diceNum - 1;
   const spinningTransform = spinTransform[indexOfTransform];
   const finalTransform = defaultTransform[indexOfTransform];
-  const id = Math.random();
   const animationStyles = `
-    @keyframes rolling-${'1'} {
+    @keyframes rolling-${id} {
       100% {
         transform: ${spinningTransform};
       }
@@ -52,20 +30,16 @@ const Dice = () => {
     if (diceRef.current) {
       diceRef.current.style.animation = '';
       diceRef.current.style.transform = finalTransform;
-      if (localGameAfterDiceRoll) {
-        dispatch(setGame(localGameAfterDiceRoll));
-        dispatch(setFields(localFields));
-      }
+      if (afterAnimation) afterAnimation();
     }
   };
-  if (!localGameAfterDiceRoll) return;
-  console.log({ localGameAfterDiceRoll, id });
+
   return (
     <div className="flex flex-col items-center">
       <style>{animationStyles}</style>
       <div
         className={styles.dice}
-        style={{ animation: `rolling-${'1'} 4000ms ease-out` }}
+        style={{ animation: `rolling-${id} 800ms ease-out` }}
         ref={diceRef}
         onAnimationEnd={handleAnimationEnd}
       >

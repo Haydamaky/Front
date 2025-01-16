@@ -7,7 +7,7 @@ import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
 import { useEffect, useRef, useState } from 'react';
 import HintBulb from './HintBulb';
-import Dice from './Dice/Dice';
+import DicesContainer from './Dice/DicesContainer';
 
 type Action = 'rollDice' | 'auction' | 'buy' | '';
 
@@ -183,8 +183,7 @@ const Center = () => {
         )}
       <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex gap-5">
-          <Dice />
-          <Dice />
+          <DicesContainer />
         </div>
       </div>
     </div>
