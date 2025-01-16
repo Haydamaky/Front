@@ -1,5 +1,6 @@
-import { useAppSelector } from '@/hooks/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { socket } from '@/socket';
+import { setChipTransition } from '@/store/slices/chipTransition';
 import { useEffect, useRef } from 'react';
 import PlayersChips from './PlayersChips';
 
@@ -7,10 +8,12 @@ const PlayerChipsContainer = () => {
   const game = useAppSelector(state => state.game.game);
   const prevGameAfterRolledDices = useRef(null);
   const shouldUpdate = useRef(false);
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const handleRollDiced = (data: any) => {
       prevGameAfterRolledDices.current = data.game;
       shouldUpdate.current = true;
+      dispatch(setChipTransition(true));
     };
     const handleGetGameData = (data: any) => {
       prevGameAfterRolledDices.current = data.game;
