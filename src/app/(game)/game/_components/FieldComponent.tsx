@@ -7,9 +7,10 @@ import {
 
 interface FieldProps {
   field: Field;
+  onClick: (field: Field) => void;
 }
 
-const FieldComponent = ({ field }: FieldProps) => {
+const FieldComponent = ({ field, onClick }: FieldProps) => {
   const game = useAppSelector(state => state.game.game);
   const { data: user } = useAppSelector(state => state.user);
   const fieldColorPosVariants: Record<string, string> = {
@@ -51,6 +52,7 @@ const FieldComponent = ({ field }: FieldProps) => {
     <div
       className={`relative h-full w-full text-wrap`}
       style={{ background: bg }}
+      onClick={() => onClick(field)}
     >
       <div
         className="w-ful relative h-full"
