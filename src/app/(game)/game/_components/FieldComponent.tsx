@@ -66,7 +66,7 @@ const FieldComponent = ({ field }: FieldProps) => {
         <div
           className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-sm text-gray-100`}
         >
-          <p className={`${textPos}`}>{field.price}mm</p>
+          <p className={`${textPos}`}>{field.price}m</p>
         </div>
       )}
     </div>
