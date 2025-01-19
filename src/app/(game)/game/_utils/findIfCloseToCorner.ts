@@ -14,7 +14,7 @@ export function findIfCloseToCorner(index: number) {
   const cornerEntries = Array.from(corners.entries());
   for (const [cornerIndex, cornerName] of cornerEntries) {
     if ((index >= 1 && index <= 11) || (index >= 21 && index <= 31)) {
-      if (Math.abs(index - cornerIndex) <= 1) {
+      if (Math.abs(index - cornerIndex) <= 2) {
         return cornerName;
       }
     } else {
