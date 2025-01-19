@@ -55,7 +55,7 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
       onClick={() => onClick(field)}
     >
       <div
-        className="w-ful relative h-full"
+        className="h-full w-full"
         style={{
           backgroundImage: `url(${field.imageUrl})`,
           backgroundSize: 'contain',

@@ -3,7 +3,7 @@ export interface Field {
   index: number;
   name: string;
   price: number;
-  incomeWithoutBranches?: number;
+  income: number[];
   group: string;
   specialField: boolean;
   line:
@@ -16,4 +16,7 @@ export interface Field {
   large: boolean;
   imageUrl: string;
   color: string;
+  pledgePrice: number;
+  branchPrice: number;
+  redemptionPrice: number;
 }
