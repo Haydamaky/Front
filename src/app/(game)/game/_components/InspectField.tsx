@@ -60,14 +60,14 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
           >
             <p>{field.group}</p>
           </div>
-          <p className="translate-y-[-45%] text-[10px]">
+          <p className="translate-y-[-45%] text-sm">
             Інвестуйте у філії, щоб примножити свої прибутки.
           </p>
           {field?.income?.length && (
             <>
               <div className="flex items-center justify-between">
-                <p className="text-[10px]">Базовий прибуток</p>
-                <p className="text-[13px]">{field.income[0]}m</p>
+                <p className="text-sm">Базовий прибуток</p>
+                <p className="text-base">{field.income[0]}m</p>
               </div>
 
               <div className="flex items-center justify-between">

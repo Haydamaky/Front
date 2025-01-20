@@ -3,7 +3,6 @@ import { socket } from '@/socket';
 import { MessageObjType } from '@/types';
 import { Button } from '@nextui-org/react';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import message from './message';
 import Message from './message';
 import { Player, PlayerColor } from '@/types/player';
 import { gradientColorVariants } from '../../_utils';
@@ -67,10 +66,10 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
   return (
     <div className="grid h-[-webkit-fill-available] grid-rows-[90%_10%] p-2">
       <div
-        className="scrollbar flex-1 flex-col gap-2 overflow-y-scroll"
+        className="scrollbar flex-1 flex-col gap-2 overflow-y-scroll pb-2"
         ref={divRef}
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex h-full flex-col justify-end gap-2">
           {messages.map((message, index) => {
             const player = players.find(
               ({ userId }) => message.senderId === userId,
