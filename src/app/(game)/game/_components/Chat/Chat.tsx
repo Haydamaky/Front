@@ -14,7 +14,6 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
 }) => {
   const [text, setText] = useState('');
   const [messages, setMessages] = useState<MessageObjType[]>([]);
-
   useEffect(() => {
     socket.on('gameChatMessage', onChatMessage);
     if (chatId) getChatData();
