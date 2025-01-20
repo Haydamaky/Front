@@ -12,6 +12,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
   gameId,
   players,
 }) => {
+  const isInitialRender = useRef<boolean>(true);
   const [text, setText] = useState('');
   const [messages, setMessages] = useState<MessageObjType[]>([]);
   useEffect(() => {
@@ -43,9 +44,13 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (isInitialRender.current && messages.length)
+      isInitialRender.current = false;
+  }, [messages]);
+
   const refMessage = useCallback(
     (node: HTMLLIElement) => {
-      console.log('Initial load', divRef, node);
       if (divRef.current && node) {
         const isAllowedToScroll =
           Math.ceil(
@@ -56,7 +61,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
                 6,
           ) >= divRef.current.scrollHeight;
 
-        if (isAllowedToScroll) node.scrollIntoView();
+        if (isAllowedToScroll || isInitialRender.current) node.scrollIntoView();
       }
     },
     [divRef.current],
@@ -64,11 +69,8 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
 
   return (
     <div className="grid h-[-webkit-fill-available] grid-rows-[90%_10%] p-2">
-      <div
-        className="scrollbar flex-1 flex-col gap-2 overflow-y-scroll pb-2"
-        ref={divRef}
-      >
-        <div className="flex h-full flex-col justify-end gap-2">
+      <div className="scrollbar block overflow-y-scroll" ref={divRef}>
+        <div className="flex min-h-full flex-col justify-end gap-2">
           {messages.map((message, index) => {
             const player = players.find(
               ({ userId }) => message.senderId === userId,
@@ -93,7 +95,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
       <div className="flex flex-row items-center justify-center gap-2">
         <Input
           type="text"
-          className="h-8"
+          className="h-8 border-white"
           value={text}
           onChange={e => setText(e.target.value)}
           placeholder="Написати повідомлення"

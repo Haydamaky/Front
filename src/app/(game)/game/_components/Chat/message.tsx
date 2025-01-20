@@ -12,7 +12,7 @@ const Message = forwardRef<HTMLLIElement, MessageProps>(
     return (
       <li className="flex flex-row gap-[0.2rem] text-white" ref={ref}>
         <div
-          className="w-fit rounded-sm px-2 py-1"
+          className="w-fit rounded-sm px-1 py-[0.1rem]"
           style={{
             background: color,
           }}
