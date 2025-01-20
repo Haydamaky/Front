@@ -73,14 +73,14 @@ const Center = () => {
   const turnOfUser = game.turnOfUserId === user?.id;
 
   return (
-    <div className="grid h-full grid-rows-[20%_80%] justify-items-stretch">
+    <div className="grid h-full grid-rows-[30%_70%] justify-items-stretch">
       <div>
         {(turnOfUser || action === 'auction') &&
           (!currentField?.specialField || action === 'rollDice') &&
           !chipTransition &&
           action && (
-            <div className="mx-6 mt-6 flex h-[26%] flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
-              <div className="text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
+            <div className="mx-6 mt-6 flex flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
+              <div className="mb-3 text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
                 {action === 'rollDice'
                   ? 'Ваш хід'
                   : action === 'buy'
@@ -91,7 +91,7 @@ const Center = () => {
               </div>
               {action === 'rollDice' && (
                 <>
-                  <div className="flex w-full items-center gap-2 font-fixelDisplay">
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <div className="flex h-6 items-center justify-center gap-1 rounded-md bg-gradient-to-r from-[#FBD07C] to-[#F7F779] px-2 text-[#19376D]">
                       <div className="h-5 w-5">
                         <HintBulb />
@@ -115,7 +115,7 @@ const Center = () => {
               )}
               {action === 'buy' && (
                 <>
-                  <div className="flex w-full items-center gap-2 font-fixelDisplay">
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <div className="flex h-6 items-center justify-center gap-1 rounded-md bg-gradient-to-r from-[#FBD07C] to-[#F7F779] px-1 text-[#19376D]">
                       <div className="h-5 w-5">
                         <HintBulb />
@@ -153,7 +153,7 @@ const Center = () => {
               )}
               {action === 'auction' && (
                 <>
-                  <div className="flex w-full items-center gap-2 font-fixelDisplay">
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <div className="flex h-6 items-center justify-center gap-1 rounded-md bg-gradient-to-r from-[#FBD07C] to-[#F7F779] px-1 text-[#19376D]">
                       <div className="h-5 w-5">
                         <HintBulb />

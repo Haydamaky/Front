@@ -1,15 +1,12 @@
+import { Game } from '@/types';
 import {
   colorVariats500,
   colorVariats700,
+  findClosest,
   positionCoors,
   withinMonopolyLineRange,
-  findClosest,
 } from '../../_utils';
-import { useEffect, useRef, useState } from 'react';
 import PlayerChip from './PlayerChip';
-import { Game } from '@/types';
-import { socket } from '@/socket';
-import { useAppSelector } from '@/hooks/store';
 
 interface PlayersChipsProps {
   game: Game | null;

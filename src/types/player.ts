@@ -6,7 +6,7 @@ export interface Player {
   userId: string;
   currentFieldIndex: number;
   customFields?: any;
-  color: string;
+  color: 'green' | 'yellow' | 'blue' | 'purple';
   user: any;
   gameId: string;
   game: Game;

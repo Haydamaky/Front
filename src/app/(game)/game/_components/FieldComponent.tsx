@@ -7,9 +7,10 @@ import {
 
 interface FieldProps {
   field: Field;
+  onClick: (field: Field) => void;
 }
 
-const FieldComponent = ({ field }: FieldProps) => {
+const FieldComponent = ({ field, onClick }: FieldProps) => {
   const game = useAppSelector(state => state.game.game);
   const { data: user } = useAppSelector(state => state.user);
   const fieldColorPosVariants: Record<string, string> = {
@@ -51,9 +52,10 @@ const FieldComponent = ({ field }: FieldProps) => {
     <div
       className={`relative h-full w-full text-wrap`}
       style={{ background: bg }}
+      onClick={() => onClick(field)}
     >
       <div
-        className="w-ful relative h-full"
+        className="h-full w-full"
         style={{
           backgroundImage: `url(${field.imageUrl})`,
           backgroundSize: 'contain',
@@ -66,7 +68,7 @@ const FieldComponent = ({ field }: FieldProps) => {
         <div
           className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-sm text-gray-100`}
         >
-          <p className={`${textPos}`}>{field.price}mm</p>
+          <p className={`${textPos}`}>{field.price}m</p>
         </div>
       )}
     </div>
