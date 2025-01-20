@@ -65,10 +65,10 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
   return (
     <div className="grid h-[-webkit-fill-available] grid-rows-[90%_10%] p-2">
       <div
-        className="scrollbar flex-1 flex-col gap-2 overflow-y-scroll pb-2"
+        className="scrollbar block flex-col gap-2 overflow-y-scroll"
         ref={divRef}
       >
-        <div className="flex h-full flex-col justify-end gap-2">
+        <div className="flex min-h-full flex-col justify-end gap-2">
           {messages.map((message, index) => {
             const player = players.find(
               ({ userId }) => message.senderId === userId,
