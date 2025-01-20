@@ -57,6 +57,9 @@ const config: Config = {
           'linear-gradient(171.61deg, rgba(0, 3, 40, 0.3) 9.18%, rgba(0, 69, 142, 0.3) 93.58%)',
         buttonBlueGradient:
           'linear-gradient(184.39deg, #5AB2F7 4.38%, #12CFF3 97.25%)',
+        redGradient: 'linear-gradient(180deg, #F83D5C 0%, #DA0C1C 100%);',
+        greedGradient: 'linear-gradient(180deg, #6EEE87 0%, #43B692 100%)',
+        darkBlueGradient: 'linear-gradient(180deg, #36A4FB 0%, #0058CC 100%)',
       },
       boxShadow: {
         gameCenterModaShadowCombined:

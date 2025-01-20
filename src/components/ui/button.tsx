@@ -19,9 +19,11 @@ const buttonVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
         tertiary: 'bg-primary text-base font-custom',
+        forGradient:
+          'flex w-full font-normal cursor-pointer items-center bg-[#002147] justify-center',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        blueGame: 'bg-buttonBlueGradient text-white shadow hover:bg-primary/90',
+        blueGame: 'bg-darkBlueGradient text-white shadow hover:bg-primary/90',
         gameDarkBlue:
           'bg-gameCenterModal shadow-none hover:bg-buttonBlueGradient/90',
         playerOption:
@@ -33,6 +35,7 @@ const buttonVariants = cva(
         xs: 'h-5 rounded-sm w-15',
         sm: 'h-6 rounded-md w-18',
         default: 'h-9 w-full',
+        inspectField: 'h-5 w-full rounded-[3px] text-xs',
         lg: 'h-10 rounded-md w-30',
         icon: 'h-9 w-9',
         widthFull: 'w-full h-6',

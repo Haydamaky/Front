@@ -19,4 +19,6 @@ export interface Field {
   pledgePrice: number;
   branchPrice: number;
   redemptionPrice: number;
+  isPledged: boolean;
+  amountOfBranches: number;
 }

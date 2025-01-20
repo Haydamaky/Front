@@ -6,9 +6,11 @@ import Center from './Center';
 import FieldComponent from './FieldComponent';
 import PlayerChipsContainer from './players/PlayerChipsContainer';
 import InspectField from './InspectField';
+import { Button } from '@/components/ui/button';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
+  const { data: user } = useAppSelector(state => state.user);
   const [fieldClicked, setFieldClicked] = useState<null | Field>(null);
   const inspectFieldRef = useRef<HTMLDivElement | null>(null);
 
@@ -42,7 +44,60 @@ const GameBoard = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [fieldClicked]);
+  const groupOfField = fields.filter(
+    field => field.group === fieldClicked?.group,
+  );
+  const userHasAllGroup = groupOfField.every(
+    field => field.ownedBy === user?.id,
+  );
+  const handlePledgeField = () => {
+    socket.emit('pledgeField', { index: fieldClicked?.index });
+  };
+  let buttons: JSX.Element | null = null;
 
+  if (fieldClicked?.ownedBy === user?.id && !userHasAllGroup) {
+    buttons = fieldClicked?.isPledged ? (
+      <div className="bg-greedGradient mt-2 w-[90%] rounded-[3px] p-[1px] font-custom">
+        <Button variant="forGradient" size="inspectField">
+          Викупити
+        </Button>
+      </div>
+    ) : (
+      <div
+        onClick={handlePledgeField}
+        className="bg-redGradient mt-2 w-[90%] rounded-[3px] p-[1px] font-custom"
+      >
+        <Button variant="forGradient" size="inspectField">
+          Застава
+        </Button>
+      </div>
+    );
+  }
+
+  if (fieldClicked?.ownedBy === user?.id && userHasAllGroup) {
+    const isInvestable = fieldClicked?.amountOfBranches === 0;
+
+    buttons = (
+      <div className="mt-2 flex w-[90%] items-center justify-center gap-2 font-custom">
+        <Button variant="blueGame" size="inspectField">
+          Інвест
+        </Button>
+        <div
+          onClick={handlePledgeField}
+          className="bg-redGradient w-full rounded-[3px] p-[1px]"
+        >
+          <Button variant="forGradient" size="inspectField">
+            {isInvestable ? 'Застава' : 'Продаж'}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (fieldClicked?.ownedBy !== user?.id) {
+    buttons = null;
+  }
+  console.log({ fieldClicked });
   return (
     <div className="relative grid h-[100vh] w-[calc(100vh-3rem)] grid-cols-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] grid-rows-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] gap-[1px] py-10 text-black">
       {fields.map((field: Field, index: number) => {
@@ -69,7 +124,7 @@ const GameBoard = () => {
         <InspectField
           field={fieldClicked}
           ref={inspectFieldRef}
-          buttons={<button>BUttons</button>}
+          buttons={buttons}
         />
       )}
     </div>
