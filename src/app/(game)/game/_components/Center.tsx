@@ -190,7 +190,7 @@ const Center = () => {
           </div>
         </div>
       </div>
-      <Chat chatId={game?.chat.id} gameId={game.id} players={game.players} />
+      <Chat chatId={game?.chat?.id} gameId={game.id} players={game.players} />
     </div>
   );
 };
