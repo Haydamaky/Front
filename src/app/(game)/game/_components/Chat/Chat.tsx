@@ -95,7 +95,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
       <div className="flex flex-row items-center justify-center gap-2">
         <Input
           type="text"
-          className="h-8"
+          className="h-8 border-white"
           value={text}
           onChange={e => setText(e.target.value)}
           placeholder="Написати повідомлення"
