@@ -18,6 +18,7 @@ const Center = () => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector(state => state.fields.fields);
   const game = useAppSelector(state => state.game.game);
+  console.log({ gameCenter: game });
   const { data: user } = useAppSelector(state => state.user);
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
@@ -189,7 +190,7 @@ const Center = () => {
           </div>
         </div>
       </div>
-      <Chat chatId={game.chatId} gameId={game.id} players={game.players} />
+      <Chat chatId={game?.chat.id} gameId={game.id} players={game.players} />
     </div>
   );
 };
