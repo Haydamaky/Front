@@ -13,11 +13,14 @@ const cornersPositions = {
 
 interface InspectFieldProps {
   field: Field;
+  buttons?: React.ReactNode;
 }
 
 const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
-  ({ field }, ref) => {
-    const corner = findIfCloseToCorner(field.index);
+  ({ field, buttons }, ref) => {
+    const corner = buttons
+      ? findIfCloseToCorner(field.index, 4)
+      : findIfCloseToCorner(field.index, 3);
     let position = '';
     const indexInFieldPositionsArray = field.index - 1;
     position = fieldPositionCoors[indexInFieldPositionsArray];
@@ -38,7 +41,7 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
     return (
       <div
         ref={ref}
-        className={`absolute flex flex-col items-center ${position} h-[41.5%] w-[22%] ${translate} rounded-xl border border-[#001125] bg-primaryGame text-white shadow-[0px_0px_4px_2px_#ffffff40]`}
+        className={`absolute flex flex-col items-center pb-2 ${position} w-[24%] ${translate} rounded-xl border border-[#001125] bg-primaryGame text-white shadow-[0px_0px_4px_2px_#ffffff40]`}
       >
         <div className="w-[90%]">
           <div className="relative mx-auto mt-[5%] flex h-[9vh] w-full items-center justify-center rounded-[10px] bg-white">
@@ -178,6 +181,7 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
             </>
           )}
         </div>
+        {buttons && buttons}
       </div>
     );
   },

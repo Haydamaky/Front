@@ -66,7 +66,11 @@ const GameBoard = () => {
       })}
       <PlayerChipsContainer />
       {fieldClicked && (
-        <InspectField field={fieldClicked} ref={inspectFieldRef} />
+        <InspectField
+          field={fieldClicked}
+          ref={inspectFieldRef}
+          buttons={<button>BUttons</button>}
+        />
       )}
     </div>
   );
