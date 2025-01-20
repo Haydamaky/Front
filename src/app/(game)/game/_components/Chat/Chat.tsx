@@ -12,6 +12,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
   gameId,
   players,
 }) => {
+  const isInitialRender = useRef<boolean>(true);
   const [text, setText] = useState('');
   const [messages, setMessages] = useState<MessageObjType[]>([]);
   useEffect(() => {
@@ -43,9 +44,13 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (isInitialRender.current && messages.length)
+      isInitialRender.current = false;
+  }, [messages]);
+
   const refMessage = useCallback(
     (node: HTMLLIElement) => {
-      console.log('Initial load', divRef, node);
       if (divRef.current && node) {
         const isAllowedToScroll =
           Math.ceil(
@@ -56,7 +61,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
                 6,
           ) >= divRef.current.scrollHeight;
 
-        if (isAllowedToScroll) node.scrollIntoView();
+        if (isAllowedToScroll || isInitialRender.current) node.scrollIntoView();
       }
     },
     [divRef.current],
