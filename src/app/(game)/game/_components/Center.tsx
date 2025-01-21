@@ -75,7 +75,7 @@ const Center = () => {
 
   return (
     <div className="relative h-full p-3">
-      <div className="absolute w-[calc(100%-32px)]">
+      <div className="absolute left-[50%] top-[2%] w-[calc(100%-16px)] translate-x-[-50%]">
         {(turnOfUser || action === 'auction') &&
           (!currentField?.specialField || action === 'rollDice') &&
           !chipTransition &&
