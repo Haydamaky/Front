@@ -74,13 +74,13 @@ const Center = () => {
   const turnOfUser = game.turnOfUserId === user?.id;
 
   return (
-    <div className="grid h-full grid-rows-[30%_70%] justify-items-stretch">
-      <div>
+    <div className="relative h-full p-3">
+      <div className="absolute w-[calc(100%-32px)]">
         {(turnOfUser || action === 'auction') &&
           (!currentField?.specialField || action === 'rollDice') &&
           !chipTransition &&
           action && (
-            <div className="mx-6 mt-6 flex flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
+            <div className="flex flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
               <div className="mb-3 text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
                 {action === 'rollDice'
                   ? 'Ваш хід'
@@ -184,10 +184,10 @@ const Center = () => {
               )}
             </div>
           )}
-        <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
-          <div className="flex gap-5">
-            <DicesContainer />
-          </div>
+      </div>
+      <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
+        <div className="flex gap-5">
+          <DicesContainer />
         </div>
       </div>
       <Chat chatId={game?.chat?.id} gameId={game.id} players={game.players} />
