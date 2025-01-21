@@ -39,14 +39,15 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
     : field.line.includes('vertical-left')
       ? 'rotate-[-90deg]'
       : '';
-  const [player] = game.players.filter(player => player.userId === user?.id);
-  const bg =
-    field.ownedBy === player?.userId
-      ? field.line.includes('vertical-right') ||
-        field.line.includes('vertical-left')
-        ? gradientColorVariantsFields[player.color]
-        : gradientColorVariantsFields0Deg[player.color]
-      : 'white';
+  const [player] = game.players.filter(
+    player => player.userId === field.ownedBy,
+  );
+  const bg = player
+    ? field.line.includes('vertical-right') ||
+      field.line.includes('vertical-left')
+      ? gradientColorVariantsFields[player.color]
+      : gradientColorVariantsFields0Deg[player.color]
+    : 'white';
 
   return (
     <div
