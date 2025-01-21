@@ -16,13 +16,14 @@
 
   .scrollbar::-webkit-scrollbar-track {
     border-radius: 100vh;
-    background: #ffffff;
+    background: rgba(0, 33, 71, 1);
+
     margin-top: 20px;
     margin-bottom: 10px;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
-    background: #7371fc;
+    background: #ffffff;
     border-radius: 100vh;
     border: none;
   }

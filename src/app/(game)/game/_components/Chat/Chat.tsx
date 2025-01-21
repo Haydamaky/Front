@@ -68,8 +68,8 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
   );
 
   return (
-    <div className="grid h-[-webkit-fill-available] grid-rows-[90%_10%] p-2">
-      <div className="scrollbar block overflow-y-scroll" ref={divRef}>
+    <div className="grid h-[-webkit-fill-available] grid-rows-[92%_8%]">
+      <div className="scrollbar mt-2 block overflow-y-scroll" ref={divRef}>
         <div className="flex min-h-full flex-col justify-end gap-2">
           {messages.map((message, index) => {
             const player = players.find(
@@ -92,7 +92,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
           })}
         </div>
       </div>
-      <div className="flex flex-row items-center justify-center gap-2">
+      <div className="mt-auto flex flex-row items-center justify-center gap-2">
         <Input
           type="text"
           className="h-8 border-white"

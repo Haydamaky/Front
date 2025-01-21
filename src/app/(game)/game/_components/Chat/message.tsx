@@ -1,4 +1,4 @@
-import { FC, forwardRef, RefCallback } from 'react';
+import { FC, forwardRef } from 'react';
 
 interface MessageProps {
   name: string;
@@ -10,15 +10,18 @@ interface MessageProps {
 const Message = forwardRef<HTMLLIElement, MessageProps>(
   ({ name, text, color }, ref) => {
     return (
-      <li className="flex flex-row gap-[0.2rem] text-white" ref={ref}>
-        <div
-          className="w-fit rounded-sm px-1 py-[0.1rem]"
+      <li
+        className="inline-flex items-center gap-[0.2rem] leading-none text-white"
+        ref={ref}
+      >
+        <p
+          className="flex items-center rounded-sm px-1 pb-[2px] text-lg"
           style={{
             background: color,
           }}
         >
-          <span>{name}</span>
-        </div>
+          {name}
+        </p>
         <div className="flex flex-row items-center">
           <span>
             {' : '}
