@@ -55,6 +55,9 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
       style={{ background: bg }}
       onClick={() => onClick(field)}
     >
+      {field.isPledged && (
+        <div className="absolute h-full w-full bg-[#0b1117] bg-opacity-80"></div>
+      )}
       <div
         className="h-full w-full"
         style={{

@@ -37,7 +37,6 @@ const PlayersList = () => {
   };
   useEffect(() => {
     if (rolledDice.current && !chipTransition) {
-      console.log({ chipTransition });
       calculateTimeToEndAndSetStates({ game });
       rolledDice.current = false;
     }

@@ -39,7 +39,6 @@ const DicesContainer = () => {
   const diceNumbArr = dicesArrStr.map(Number);
 
   if (!localGameAfterDiceRoll) return;
-  console.log({ diceNumbArr });
   return (
     <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
       <div className="flex gap-5">

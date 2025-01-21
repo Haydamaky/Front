@@ -1,4 +1,4 @@
-import { useAppSelector } from '@/hooks/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { socket } from '@/socket';
 import { Field } from '@/types/field';
 import { Fragment, useEffect, useState, useRef } from 'react';
@@ -7,15 +7,22 @@ import FieldComponent from './FieldComponent';
 import PlayerChipsContainer from './players/PlayerChipsContainer';
 import InspectField from './InspectField';
 import { Button } from '@/components/ui/button';
+import { setFields } from '@/store/slices/fields';
+import { setGame } from '@/store/slices/game';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
   const { data: user } = useAppSelector(state => state.user);
   const [fieldClicked, setFieldClicked] = useState<null | Field>(null);
   const inspectFieldRef = useRef<HTMLDivElement | null>(null);
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     socket.on('error', (err: any) => console.log(err));
+    socket.on('updateGameData', data => {
+      console.log('updateGameData');
+      dispatch(setFields(data.fields));
+      dispatch(setGame(data.game));
+    });
     return () => {
       socket.off('error');
     };
@@ -123,7 +130,6 @@ const GameBoard = () => {
   if (fieldClicked?.ownedBy !== user?.id) {
     buttons = null;
   }
-  console.log({ fieldClicked });
   return (
     <div className="relative grid h-[100vh] w-[calc(100vh-3rem)] grid-cols-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] grid-rows-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] gap-[1px] py-10 text-black">
       {fields.map((field: Field, index: number) => {

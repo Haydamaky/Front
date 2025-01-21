@@ -37,7 +37,6 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
       ? 'h-[13vh] w-[8vh] rotate-90'
       : 'h-[8vh] w-[13vh]';
     const bgGroup = colorVariats500[field.color];
-    console.log({ field });
     return (
       <div
         ref={ref}
