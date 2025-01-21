@@ -34,19 +34,19 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
       translate = '';
     }
     const rotateImg = isHorizonatlField
-      ? 'h-[12vh] w-[6vh] rotate-90'
-      : 'h-[6vh] w-[12vh]';
+      ? 'h-[13vh] w-[8vh] rotate-90'
+      : 'h-[8vh] w-[13vh]';
     const bgGroup = colorVariats500[field.color];
     console.log({ field });
     return (
       <div
         ref={ref}
-        className={`absolute flex flex-col items-center pb-2 ${position} w-[24%] ${translate} rounded-xl border border-[#001125] bg-primaryGame text-white shadow-[0px_0px_4px_2px_#ffffff40]`}
+        className={`absolute flex flex-col items-center pb-2 ${position} w-[27%] ${translate} rounded-xl border border-[#001125] bg-primaryGame text-white shadow-[0px_0px_4px_2px_#ffffff40]`}
       >
         <div className="w-[90%]">
-          <div className="relative mx-auto mt-[5%] flex h-[9vh] w-full items-center justify-center rounded-[10px] bg-white">
+          <div className="relative mx-auto mt-[5%] flex h-[10vh] w-full items-center justify-center rounded-[10px] bg-white">
             <div
-              className={`mb-[15%] ${rotateImg}`}
+              className={`mb-[10%] ${rotateImg}`}
               style={{
                 backgroundImage: `url(${field.imageUrl})`,
                 backgroundSize: 'contain',
@@ -58,9 +58,9 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
           <div
             className={`flex h-[2.6vh] w-full translate-y-[-96%] items-center justify-center rounded-b-[10px] ${bgGroup}`}
           >
-            <p>{field.group}</p>
+            <p className="text-base">{field.group}</p>
           </div>
-          <p className="translate-y-[-45%] text-sm">
+          <p className="translate-y-[-45%] text-xs">
             Інвестуйте у філії, щоб примножити свої прибутки.
           </p>
           {field?.income?.length && (
@@ -75,80 +75,80 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                 </div>
-                <p className="text-[13px]">{field.income[1]}m</p>
+                <p className="text-base">{field.income[1]}m</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex gap-1">
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                 </div>
-                <p className="text-[13px]">{field.income[2]}m</p>
+                <p className="text-base">{field.income[2]}m</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex gap-1">
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                 </div>
-                <p className="text-[13px]">{field.income[3]}m</p>
+                <p className="text-base">{field.income[3]}m</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex gap-1">
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                   <Image
                     src="/images/BuildSilver.svg"
                     alt="silver-building"
-                    width={10}
-                    height={10}
+                    width={14}
+                    height={14}
                   />
                 </div>
-                <p className="text-[13px]">{field.income[4]}m</p>
+                <p className="text-base">{field.income[4]}m</p>
               </div>
               <div className="mt-1 flex items-center justify-between">
                 <div>
@@ -159,24 +159,24 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
                     height={20}
                   />
                 </div>
-                <p className="text-[13px]">{field.income[5]}m</p>
+                <p className="text-base">{field.income[5]}m</p>
               </div>
               <div className="my-3 h-[1px] w-full bg-white"></div>
               <div className="flex items-center justify-between">
-                <p className="text-[10px]">Вартість поля</p>
-                <p className="text-[13px]">{field.price}m</p>
+                <p className="text-sm">Вартість поля</p>
+                <p className="text-base">{field.price}m</p>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-[10px]">Застава поля</p>
-                <p className="text-[13px]">{field.pledgePrice}m</p>
+                <p className="text-sm">Застава поля</p>
+                <p className="text-base">{field.pledgePrice}m</p>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-[10px]">Викуп поля</p>
-                <p className="text-[13px]">{field.redemptionPrice}m</p>
+                <p className="text-sm">Викуп поля</p>
+                <p className="text-base">{field.redemptionPrice}m</p>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-[10px]">Купівля філії</p>
-                <p className="text-[13px]">{field.branchPrice}m</p>
+                <p className="text-sm">Купівля філії</p>
+                <p className="text-base">{field.branchPrice}m</p>
               </div>
             </>
           )}
