@@ -53,11 +53,23 @@ const GameBoard = () => {
   const handlePledgeField = () => {
     socket.emit('pledgeField', { index: fieldClicked?.index });
   };
+  const handlePayRedeptionField = () => {
+    socket.emit('payRedemptionForField', { index: fieldClicked?.index });
+  };
+  const handleBuyBranch = () => {
+    socket.emit('buyBranch', { index: fieldClicked?.index });
+  };
+  const handleSellBranch = () => {
+    socket.emit('sellBranch', { index: fieldClicked?.index });
+  };
   let buttons: JSX.Element | null = null;
 
   if (fieldClicked?.ownedBy === user?.id && !userHasAllGroup) {
     buttons = fieldClicked?.isPledged ? (
-      <div className="bg-greedGradient mt-2 w-[90%] rounded-[3px] p-[1px] font-custom">
+      <div
+        onClick={handlePayRedeptionField}
+        className="mt-2 w-[90%] rounded-[3px] bg-greedGradient p-[1px] font-custom"
+      >
         <Button variant="forGradient" size="inspectField">
           Викупити
         </Button>
@@ -65,7 +77,7 @@ const GameBoard = () => {
     ) : (
       <div
         onClick={handlePledgeField}
-        className="bg-redGradient mt-2 w-[90%] rounded-[3px] p-[1px] font-custom"
+        className="mt-2 w-[90%] rounded-[3px] bg-redGradient p-[1px] font-custom"
       >
         <Button variant="forGradient" size="inspectField">
           Застава
@@ -78,18 +90,32 @@ const GameBoard = () => {
     const isInvestable = fieldClicked?.amountOfBranches === 0;
 
     buttons = (
-      <div className="mt-2 flex w-[90%] items-center justify-center gap-2 font-custom">
+      <div
+        onClick={handleBuyBranch}
+        className="mt-2 flex w-[90%] items-center justify-center gap-2 font-custom"
+      >
         <Button variant="blueGame" size="inspectField">
           Інвест
         </Button>
-        <div
-          onClick={handlePledgeField}
-          className="bg-redGradient w-full rounded-[3px] p-[1px]"
-        >
-          <Button variant="forGradient" size="inspectField">
-            {isInvestable ? 'Застава' : 'Продаж'}
-          </Button>
-        </div>
+        {isInvestable ? (
+          <div
+            onClick={handlePledgeField}
+            className="w-full rounded-[3px] bg-redGradient p-[1px]"
+          >
+            <Button variant="forGradient" size="inspectField">
+              Застава
+            </Button>
+          </div>
+        ) : (
+          <div
+            onClick={handleSellBranch}
+            className="w-full rounded-[3px] bg-redGradient p-[1px]"
+          >
+            <Button variant="forGradient" size="inspectField">
+              Продаж
+            </Button>
+          </div>
+        )}
       </div>
     );
   }
