@@ -13,13 +13,13 @@ import { setGame } from '@/store/slices/game';
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
   const { data: user } = useAppSelector(state => state.user);
+  const { game } = useAppSelector(state => state.game);
   const [fieldClicked, setFieldClicked] = useState<null | Field>(null);
   const inspectFieldRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
   useEffect(() => {
     socket.on('error', (err: any) => console.log(err));
     socket.on('updateGameData', data => {
-      console.log('updateGameData');
       dispatch(setFields(data.fields));
       dispatch(setGame(data.game));
     });
@@ -59,9 +59,11 @@ const GameBoard = () => {
   );
   const handlePledgeField = () => {
     socket.emit('pledgeField', { index: fieldClicked?.index });
+    setFieldClicked(null);
   };
   const handlePayRedeptionField = () => {
     socket.emit('payRedemptionForField', { index: fieldClicked?.index });
+    setFieldClicked(null);
   };
   const handleBuyBranch = () => {
     socket.emit('buyBranch', { index: fieldClicked?.index });
@@ -70,41 +72,18 @@ const GameBoard = () => {
     socket.emit('sellBranch', { index: fieldClicked?.index });
   };
   let buttons: JSX.Element | null = null;
-
-  if (fieldClicked?.ownedBy === user?.id && !userHasAllGroup) {
-    buttons = fieldClicked?.isPledged ? (
-      <div
-        onClick={handlePayRedeptionField}
-        className="mt-2 w-[90%] rounded-[3px] bg-greedGradient p-[1px] font-custom"
-      >
-        <Button variant="forGradient" size="inspectField">
-          Викупити
-        </Button>
-      </div>
-    ) : (
-      <div
-        onClick={handlePledgeField}
-        className="mt-2 w-[90%] rounded-[3px] bg-redGradient p-[1px] font-custom"
-      >
-        <Button variant="forGradient" size="inspectField">
-          Застава
-        </Button>
-      </div>
-    );
-  }
-
+  const noBranches = fieldClicked?.amountOfBranches === 0;
   if (fieldClicked?.ownedBy === user?.id && userHasAllGroup) {
-    const isInvestable = fieldClicked?.amountOfBranches === 0;
-
     buttons = (
-      <div
-        onClick={handleBuyBranch}
-        className="mt-2 flex w-[90%] items-center justify-center gap-2 font-custom"
-      >
-        <Button variant="blueGame" size="inspectField">
+      <div className="mt-2 flex w-[90%] items-center justify-center gap-2 font-custom">
+        <Button
+          onClick={handleBuyBranch}
+          variant="blueGame"
+          size="inspectField"
+        >
           Інвест
         </Button>
-        {isInvestable ? (
+        {!noBranches ? (
           <div
             onClick={handlePledgeField}
             className="w-full rounded-[3px] bg-redGradient p-[1px]"
@@ -127,6 +106,28 @@ const GameBoard = () => {
     );
   }
 
+  if (fieldClicked?.ownedBy === user?.id && !userHasAllGroup) {
+    buttons = fieldClicked?.isPledged ? (
+      <div
+        onClick={handlePayRedeptionField}
+        className="mt-2 w-[90%] rounded-[3px] bg-greedGradient p-[1px] font-custom"
+      >
+        <Button variant="forGradient" size="inspectField">
+          Викупити
+        </Button>
+      </div>
+    ) : (
+      <div
+        onClick={handlePledgeField}
+        className="mt-2 w-[90%] rounded-[3px] bg-redGradient p-[1px] font-custom"
+      >
+        <Button variant="forGradient" size="inspectField">
+          Застава
+        </Button>
+      </div>
+    );
+  }
+  // || user?.id !== game.turnOfUserId
   if (fieldClicked?.ownedBy !== user?.id) {
     buttons = null;
   }

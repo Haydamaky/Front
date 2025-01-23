@@ -4,6 +4,7 @@ import {
   gradientColorVariantsFields,
   gradientColorVariantsFields0Deg,
 } from '../_utils';
+import Image from 'next/image';
 
 interface FieldProps {
   field: Field;
@@ -32,8 +33,16 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
     black: 'bg-black',
     tortoise: 'bg-teal-300',
   };
+  const branchesPositions: Record<string, string> = {
+    'vertical-left': 'bottom-[40%] right-[-22%] -rotate-90',
+    'vertical-right': 'bottom-[40%] left-[-22%] rotate-90',
+    'horizontal-top': 'bottom-[-7%] left-[50%] translate-x-[-50%]',
+    'horizontal-bottom': 'top-[-7%] left-[50%] translate-x-[-50%]',
+  };
+  const isHorizontal = field.line.includes('horizontal');
   const priceColor = colorVariants[field.color];
   const fieldColorPos = fieldColorPosVariants[field.line];
+  const branchesPos = branchesPositions[field.line];
   const textPos = field.line.includes('vertical-right')
     ? 'rotate-90'
     : field.line.includes('vertical-left')
@@ -48,10 +57,10 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
       ? gradientColorVariantsFields[player.color]
       : gradientColorVariantsFields0Deg[player.color]
     : 'white';
-
+  const widthOfBranches = isHorizontal ? 'w-[100%]' : 'w-[45%]';
   return (
     <div
-      className={`relative h-full w-full text-wrap`}
+      className={`relative h-full w-full cursor-pointer text-wrap`}
       style={{ background: bg }}
       onClick={() => onClick(field)}
     >
@@ -73,6 +82,33 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
           className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-sm text-gray-100`}
         >
           <p className={`${textPos}`}>{field.price}m</p>
+        </div>
+      )}
+      {field.amountOfBranches > 0 && field.amountOfBranches < 5 && (
+        <div
+          className={`absolute z-10 flex ${widthOfBranches} justify-center gap-1 ${branchesPos}`}
+        >
+          {Array.from({ length: field.amountOfBranches }).map((_, index) => (
+            <Image
+              key={field.id + index}
+              src="/images/BuildSilver.svg"
+              alt="silver-building"
+              width={13}
+              height={13}
+            />
+          ))}
+        </div>
+      )}
+      {field.amountOfBranches === 5 && (
+        <div
+          className={`absolute z-10 flex w-[45%] ${branchesPos} justify-center gap-1`}
+        >
+          <Image
+            src="/images/BuildGold.svg"
+            alt="silver-building"
+            width={22}
+            height={22}
+          />
         </div>
       )}
     </div>

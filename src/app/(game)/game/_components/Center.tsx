@@ -18,7 +18,6 @@ const Center = () => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector(state => state.fields.fields);
   const game = useAppSelector(state => state.game.game);
-  console.log({ gameCenter: game });
   const { data: user } = useAppSelector(state => state.user);
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
@@ -75,7 +74,7 @@ const Center = () => {
 
   return (
     <div className="relative h-full p-3">
-      <div className="absolute left-[50%] top-[2%] w-[calc(100%-16px)] translate-x-[-50%]">
+      <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
         {(turnOfUser || action === 'auction') &&
           (!currentField?.specialField || action === 'rollDice') &&
           !chipTransition &&
