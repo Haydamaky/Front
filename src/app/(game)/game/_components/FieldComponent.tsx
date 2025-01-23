@@ -81,7 +81,12 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
         <div
           className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-sm text-gray-100`}
         >
-          <p className={`${textPos}`}>{field.price}m</p>
+          <p className={`${textPos}`}>
+            {field.amountOfBranches
+              ? field.income[field.amountOfBranches]
+              : field.price}
+            m
+          </p>
         </div>
       )}
       {field.amountOfBranches > 0 && field.amountOfBranches < 5 && (
