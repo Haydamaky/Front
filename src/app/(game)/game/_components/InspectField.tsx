@@ -27,7 +27,7 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
     const isHorizonatlField =
       field.index < 11 || (field.index > 20 && field.index < 31);
     let translate = isHorizonatlField
-      ? 'translate-x-[-40%]'
+      ? 'translate-x-[-45%]'
       : 'translate-y-[-40%]';
     if (corner) {
       position = cornersPositions[corner];

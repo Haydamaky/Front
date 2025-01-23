@@ -67,23 +67,28 @@ const GameBoard = () => {
   };
   const handleBuyBranch = () => {
     socket.emit('buyBranch', { index: fieldClicked?.index });
+    setFieldClicked(null);
   };
   const handleSellBranch = () => {
     socket.emit('sellBranch', { index: fieldClicked?.index });
+    setFieldClicked(null);
   };
   let buttons: JSX.Element | null = null;
   const noBranches = fieldClicked?.amountOfBranches === 0;
+  const maxBranches = fieldClicked?.amountOfBranches === 5;
   if (fieldClicked?.ownedBy === user?.id && userHasAllGroup) {
     buttons = (
       <div className="mt-2 flex w-[90%] items-center justify-center gap-2 font-custom">
-        <Button
-          onClick={handleBuyBranch}
-          variant="blueGame"
-          size="inspectField"
-        >
-          Інвест
-        </Button>
-        {!noBranches ? (
+        {!maxBranches && (
+          <Button
+            onClick={handleBuyBranch}
+            variant="blueGame"
+            size="inspectField"
+          >
+            Інвест
+          </Button>
+        )}
+        {noBranches ? (
           <div
             onClick={handlePledgeField}
             className="w-full rounded-[3px] bg-redGradient p-[1px]"
