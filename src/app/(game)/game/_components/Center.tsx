@@ -9,6 +9,10 @@ import { useEffect, useRef, useState } from 'react';
 import Chat from './Chat/Chat';
 import HintBulb from './HintBulb';
 import DicesContainer from './Dice/DicesContainer';
+import Image from 'next/image';
+import { Avatar } from '@nextui-org/react';
+import { Player } from '@/types/player';
+import Link from 'next/link';
 
 type Action = 'rollDice' | 'auction' | 'buy' | '';
 
@@ -22,6 +26,7 @@ const Center = () => {
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
   );
+  const [playerWon, setPlayerWon] = useState<undefined | Player>(undefined);
   const [player] = game.players.filter(player => player.userId === user?.id);
   const [currentField] = fields.filter(
     field => field.index === player?.currentFieldIndex,
@@ -52,7 +57,16 @@ const Center = () => {
       dispatch(setFields(data.fields));
       dispatch(setGame(data.game));
     };
+    const onPlayerWon = (data: any) => {
+      const playerWon = data.game.players.find(
+        (player: Player) => player.lost,
+      ) as Player | undefined;
 
+      if (playerWon) {
+        setPlayerWon(playerWon);
+      }
+    };
+    socket.on('playerWon', onPlayerWon);
     socket.on('rolledDice', handleRolledDice);
     socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
     socket.on('passTurnToNext', handlePassTurnToNext);
@@ -62,6 +76,7 @@ const Center = () => {
       socket.off('hasPutUpForAuction', handleHasPutUpForAuction);
       socket.off('passTurnToNext', handlePassTurnToNext);
       socket.off('boughtField', handleBoughtField);
+      socket.off('playerWon', onPlayerWon);
     };
   }, [user]);
   const rollDice = () => {
@@ -71,7 +86,7 @@ const Center = () => {
     socket.emit('buyField');
   };
   const turnOfUser = game.turnOfUserId === user?.id;
-
+  console.log({ chipTransition, playerWon });
   return (
     <div className="relative h-full p-3">
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
@@ -190,6 +205,47 @@ const Center = () => {
         </div>
       </div>
       <Chat chatId={game?.chat?.id} gameId={game.id} players={game.players} />
+      {playerWon && !chipTransition && (
+        <div className="fixed left-0 top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-[#060606F2]">
+          <h1 className="bg-[linear-gradient(268.72deg,#F6BE19_20.14%,#FBFBFA_125.62%)] bg-clip-text text-7xl font-bold text-transparent">
+            Переможець
+          </h1>
+
+          <div className="pb-[9%]">
+            <div className="relative mt-[60%] h-[9rem] w-[9rem]">
+              <Image
+                className="pointer-events-none absolute right-[-15%] top-[-38%] z-10 select-none"
+                src="/images/Crown.svg"
+                alt="back-button"
+                width={100}
+                height={100}
+              />
+              <Avatar
+                className="pointer-events-none h-full w-full select-none"
+                src="https://i.pravatar.cc/150?u=a04258114e29026302d"
+              />
+            </div>
+            <p className="mt-[15%] text-center text-4xl text-white">
+              {playerWon?.user.nickname}
+            </p>
+          </div>
+
+          <Link href="/rooms" className="block">
+            <div className="absolute bottom-[5%] left-[5%] flex cursor-pointer">
+              <Image
+                className="pointer-events-none select-none"
+                src="/images/BackButton.svg"
+                alt="back-button"
+                width={32}
+                height={32}
+              />
+              <p className="mb-[10%] ml-[14%] font-custom text-2xl text-white">
+                Вийти
+              </p>
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
