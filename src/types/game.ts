@@ -16,6 +16,8 @@ export interface Game {
   dices: string;
   chat: { id: string };
   turnEnds: string;
+  housesQty: number;
+  hotelsQty: number;
 }
 
 export interface DataWithGame {

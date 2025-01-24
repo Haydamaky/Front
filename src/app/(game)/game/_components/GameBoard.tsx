@@ -165,6 +165,10 @@ const GameBoard = () => {
           buttons={buttons}
         />
       )}
+      <div className="absolute right-[-20%] top-0 flex text-white">
+        <div>Houses: {game.housesQty}</div>
+        <div>Hotels: {game.hotelsQty}</div>
+      </div>
     </div>
   );
 };

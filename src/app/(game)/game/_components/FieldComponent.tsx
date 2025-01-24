@@ -82,9 +82,7 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
           className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-sm text-gray-100`}
         >
           <p className={`${textPos}`}>
-            {field.amountOfBranches
-              ? field.income[field.amountOfBranches]
-              : field.price}
+            {field.ownedBy ? field.income[field.amountOfBranches] : field.price}
             <span className="font-namu">m</span>
           </p>
         </div>

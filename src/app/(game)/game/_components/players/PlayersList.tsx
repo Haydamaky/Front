@@ -21,7 +21,7 @@ const PlayersList = () => {
     let countDown = timeToEnd;
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
-      if (countDown <= 0) {
+      if (countDown <= -1) {
         if (intervalRef.current) clearInterval(intervalRef.current);
         return;
       }
