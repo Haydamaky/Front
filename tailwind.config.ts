@@ -34,6 +34,7 @@ const config: Config = {
         custom: ['var(--font-titleFont)'],
         fixelDisplay: ['var(--font-genFont)'],
         ermilov: ['var(--font-ermilovFont)'],
+        namu: ['var(--font-namuFont)'],
       },
       fontSize: {
         smallMob: '8px',

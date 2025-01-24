@@ -85,7 +85,7 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
             {field.amountOfBranches
               ? field.income[field.amountOfBranches]
               : field.price}
-            m
+            <span className="font-namu">m</span>
           </p>
         </div>
       )}

@@ -15,3 +15,9 @@ export const ermilovFont = localFont({
   variable: '--font-ermilovFont',
   weight: '100 400 700 900',
 });
+
+export const namuFont = localFont({
+  src: '../../public/fonts/NAMU-1910.ttf',
+  variable: '--font-namuFont',
+  weight: '100 300 500 700',
+});
