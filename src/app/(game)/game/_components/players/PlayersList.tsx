@@ -31,7 +31,7 @@ const PlayersList = () => {
   };
   const calculateTimeToEndAndSetStates = ({ game }: DataWithGame) => {
     const now = Date.now();
-    const timeToEnd = Math.floor((+game.turnEnds - now) / 1000);
+    const timeToEnd = Math.ceil((+game.turnEnds - now) / 1000);
     setTurnTime(timeToEnd);
     startCountdown(timeToEnd);
   };

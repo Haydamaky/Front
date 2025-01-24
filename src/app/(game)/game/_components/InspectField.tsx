@@ -18,9 +18,8 @@ interface InspectFieldProps {
 
 const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
   ({ field, buttons }, ref) => {
-    const corner = buttons
-      ? findIfCloseToCorner(field.index, 4)
-      : findIfCloseToCorner(field.index, 3);
+    const corner = findIfCloseToCorner(field.index, 4);
+
     let position = '';
     const indexInFieldPositionsArray = field.index - 1;
     position = fieldPositionCoors[indexInFieldPositionsArray];
