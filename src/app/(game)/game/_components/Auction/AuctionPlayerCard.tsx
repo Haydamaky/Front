@@ -41,7 +41,7 @@ const AuctionPlayerCard: FC<{ player: Player; index: number }> = ({
         <X absoluteStrokeWidth={true} height={64} width={64} />
       )}
       <div className="mt-2 flex flex-col items-center gap-1">
-        <p className="text-lg uppercase">{player.user.nickname}</p>
+        <p className="text-lg capitalize">{player.user.nickname}</p>
         {!isDismissed ? (
           <p className="text-custom">{player.money} mm</p>
         ) : (

@@ -14,11 +14,13 @@ const cornersPositions = {
 interface InspectFieldProps {
   field: Field;
   buttons?: React.ReactNode;
+  isAuction?: boolean;
+  classNames?: string;
 }
 
 const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
-  ({ field, buttons }, ref) => {
-    const corner = buttons
+  ({ field, buttons, isAuction, classNames }, ref) => {
+    let corner = buttons
       ? findIfCloseToCorner(field.index, 4)
       : findIfCloseToCorner(field.index, 3);
     let position = '';
@@ -33,15 +35,19 @@ const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
       position = cornersPositions[corner];
       translate = '';
     }
-    const rotateImg = isHorizonatlField
+    let rotateImg = isHorizonatlField
       ? 'h-[12vh] w-[6vh] rotate-90'
       : 'h-[6vh] w-[12vh]';
     const bgGroup = colorVariats500[field.color];
-    console.log({ field });
+
+    if (isAuction) {
+      corner = position = translate = '';
+      rotateImg = 'h-[6vh] w-[12vh] rotate-90';
+    }
     return (
       <div
         ref={ref}
-        className={`absolute flex flex-col items-center pb-2 ${position} w-[24%] ${translate} rounded-xl border border-[#001125] bg-primaryGame text-white shadow-[0px_0px_4px_2px_#ffffff40]`}
+        className={`${!isAuction ? 'absolute' : ''} flex flex-col items-center pb-2 ${position} w-[24%] ${translate} rounded-xl border border-[#001125] bg-primaryGame text-white shadow-[0px_0px_4px_2px_#ffffff40] ${classNames}`}
       >
         <div className="w-[90%]">
           <div className="relative mx-auto mt-[5%] flex h-[9vh] w-full items-center justify-center rounded-[10px] bg-white">

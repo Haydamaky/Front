@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroui/modal": "^2.2.8",
+    "@heroui/progress": "^2.2.7",
     "@heroui/system": "^2.4.7",
     "@heroui/theme": "^2.4.6",
     "@hookform/resolvers": "^3.9.1",

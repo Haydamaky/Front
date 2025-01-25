@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
+
   const { data: user } = useAppSelector(state => state.user);
   const [fieldClicked, setFieldClicked] = useState<null | Field>(null);
   const inspectFieldRef = useRef<HTMLDivElement | null>(null);
@@ -57,7 +58,7 @@ const GameBoard = () => {
 
   if (fieldClicked?.ownedBy === user?.id && !userHasAllGroup) {
     buttons = fieldClicked?.isPledged ? (
-      <div className="bg-greedGradient mt-2 w-[90%] rounded-[3px] p-[1px] font-custom">
+      <div className="mt-2 w-[90%] rounded-[3px] bg-greedGradient p-[1px] font-custom">
         <Button variant="forGradient" size="inspectField">
           Викупити
         </Button>
@@ -65,7 +66,7 @@ const GameBoard = () => {
     ) : (
       <div
         onClick={handlePledgeField}
-        className="bg-redGradient mt-2 w-[90%] rounded-[3px] p-[1px] font-custom"
+        className="mt-2 w-[90%] rounded-[3px] bg-redGradient p-[1px] font-custom"
       >
         <Button variant="forGradient" size="inspectField">
           Застава
@@ -84,7 +85,7 @@ const GameBoard = () => {
         </Button>
         <div
           onClick={handlePledgeField}
-          className="bg-redGradient w-full rounded-[3px] p-[1px]"
+          className="w-full rounded-[3px] bg-redGradient p-[1px]"
         >
           <Button variant="forGradient" size="inspectField">
             {isInvestable ? 'Застава' : 'Продаж'}
