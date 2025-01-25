@@ -79,6 +79,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
             );
             return (
               <Message
+                haveSeparator={true}
                 key={message.id}
                 name={message.sender?.nickname as string}
                 text={message.text}

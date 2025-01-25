@@ -4,11 +4,12 @@ interface MessageProps {
   name: string;
   text: string;
   color: string;
-  time: string;
+  time?: string;
+  haveSeparator?: boolean;
 }
 
 const Message = forwardRef<HTMLLIElement, MessageProps>(
-  ({ name, text, color }, ref) => {
+  ({ name, text, color, haveSeparator }, ref) => {
     return (
       <li
         className="inline-flex items-center gap-[0.2rem] leading-none text-white"
@@ -24,7 +25,7 @@ const Message = forwardRef<HTMLLIElement, MessageProps>(
         </p>
         <div className="flex flex-row items-center">
           <span>
-            {' : '}
+            {haveSeparator && ' : '}
             {text}
           </span>
         </div>

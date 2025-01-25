@@ -11,11 +11,16 @@ import { Button } from '@nextui-org/react';
 import bgImage from '@/../public/images/AuctionBG.svg';
 import Image from 'next/image';
 import Players from './Players';
+import InspectField from '../InspectField';
+import { useAppSelector } from '@/hooks/store';
+import { Progress } from '@heroui/progress';
+import ProgressBar from './ProgressBar';
+import Message from '../Chat/message';
 
 const Auction: FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  console.log(isOpen);
+  const fields = useAppSelector(state => state.fields.fields);
+  const players = useAppSelector(state => state.game.game.players);
 
   return (
     <>
@@ -26,7 +31,6 @@ const Auction: FC = () => {
         isDismissable={false}
         hideCloseButton
         backdrop="blur"
-        className="h-1/2 w-1/2"
         size="5xl"
       >
         <ModalContent className="bg-bgDark relative flex h-[81%] flex-col p-2">
@@ -47,9 +51,33 @@ const Auction: FC = () => {
                   Аукціон
                 </h1>
               </ModalHeader>
-              <ModalBody className="z-50 mt-6 flex flex-row">
-                <div className="w-[12%]">
+              <ModalBody className="mt-6 grid w-full grid-cols-[18%_54%_28%] flex-row justify-between overflow-hidden">
+                <div className="w-fit">
                   <Players />
+                </div>
+                <div className="z-50 flex w-full flex-col items-center gap-4">
+                  <ProgressBar />
+                  <div className="scrollbar h-[50%] w-full overflow-y-auto">
+                    <div className="flex flex-col gap-4 px-4">
+                      {players.map(({ user, color }) => (
+                        <Message
+                          name={user?.nickname}
+                          color={color}
+                          text="готовий придбати поле за 3500 mm"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="z-50 flex min-w-fit flex-col items-center gap-4">
+                  <span className="w-[80%] rounded-lg border-2 border-white bg-primaryGame p-2 px-2 text-center font-custom">
+                    3 500 mm
+                  </span>
+                  <InspectField
+                    field={fields[1] as any}
+                    isAuction={true}
+                    classNames=" w-[80%] h-fit"
+                  />
                 </div>
               </ModalBody>
               <ModalFooter className="z-50">

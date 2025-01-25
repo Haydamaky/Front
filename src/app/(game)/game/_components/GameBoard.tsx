@@ -13,6 +13,7 @@ import Image from 'next/image';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
+
   const { data: user } = useAppSelector(state => state.user);
   const { game } = useAppSelector(state => state.game);
   const [fieldClicked, setFieldClicked] = useState<null | Field>(null);

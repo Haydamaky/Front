@@ -14,6 +14,8 @@ const cornersPositions = {
 interface InspectFieldProps {
   field: Field;
   buttons?: React.ReactNode;
+  isAuction?: boolean;
+  classNames?: string;
 }
 
 const InspectField = forwardRef<HTMLDivElement, InspectFieldProps>(
