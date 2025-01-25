@@ -11,6 +11,9 @@ const nextConfig = {
         hostname: 'dfwunfrhdvqnydwwytsw.supabase.co',
         port: '',
       },
+      {
+        hostname: 'i.pravatar.cc',
+      },
     ],
   },
 };

@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import Chat from './Chat/Chat';
 import HintBulb from './HintBulb';
 import DicesContainer from './Dice/DicesContainer';
+import Auction from './Auction/Auction';
 
 type Action = 'rollDice' | 'auction' | 'buy' | '';
 
@@ -190,6 +191,7 @@ const Center = () => {
           <DicesContainer />
         </div>
       </div>
+      <Auction />
       <Chat chatId={game?.chat?.id} gameId={game.id} players={game.players} />
     </div>
   );
