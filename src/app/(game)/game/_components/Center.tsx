@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import Chat from './Chat/Chat';
 import HintBulb from './HintBulb';
 import DicesContainer from './Dice/DicesContainer';
+import Auction from './Auction/Auction';
 import Image from 'next/image';
 import { Avatar } from '@nextui-org/react';
 import { Player } from '@/types/player';
@@ -402,6 +403,7 @@ const Center = () => {
           <DicesContainer />
         </div>
       </div>
+      <Auction />
       <Chat chatId={game?.chat?.id} gameId={game.id} players={game.players} />
       {playerWon && !chipTransition && (
         <div className="fixed left-0 top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-[#060606F2]">

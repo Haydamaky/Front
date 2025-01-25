@@ -9,9 +9,9 @@ const inter = Inter({ subsets: ['latin'] });
 interface InnerPlayerCard {
   player: Player;
   playerBg: string;
-  turnOfUserId: string;
-  turnTime: number;
-  buttons: React.ReactNode;
+  turnOfUserId?: string;
+  turnTime?: number;
+  buttons?: React.ReactNode;
 }
 
 const InnerPlayerCard = ({

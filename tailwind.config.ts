@@ -1,3 +1,4 @@
+import { heroui } from '@heroui/theme';
 import {
   colorVariats500,
   colorVariats700,
@@ -12,6 +13,7 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@heroui/theme/dist/components/modal.js',
   ],
   safelist: [
     ...Object.values(colorVariats500),
@@ -41,6 +43,7 @@ const config: Config = {
         standardMob: '10px',
         standard: '13px',
         lg: '16px',
+        '5xl': '48px',
       },
       colors: {
         primary: 'rgb(115, 113, 252)',
@@ -52,6 +55,7 @@ const config: Config = {
         gameWhite: 'rgba(251, 251, 250, 1)',
         gameCenterModal: 'rgba(25, 55, 109, 1)',
         primaryGame: 'rgba(0, 33, 71, 1)',
+        bgDark: '#003595',
       },
       backgroundImage: {
         playerGradient:
@@ -62,6 +66,7 @@ const config: Config = {
         greedGradient: 'linear-gradient(180deg, #6EEE87 0%, #43B692 100%)',
         darkBlueGradient: 'linear-gradient(180deg, #36A4FB 0%, #0058CC 100%)',
       },
+
       boxShadow: {
         gameCenterModaShadowCombined:
           '0px 4px 22.3px 5px rgba(0, 0, 0, 0.25) inset, 0px 0px 4px 2px rgba(251, 251, 250, 1)',
@@ -70,6 +75,6 @@ const config: Config = {
     },
   },
   darkMode: ['class', 'class'],
-  plugins: [nextui(), require('tailwindcss-animate')],
+  plugins: [nextui(), require('tailwindcss-animate'), heroui()],
 };
 export default config;
