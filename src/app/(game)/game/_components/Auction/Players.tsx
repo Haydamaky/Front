@@ -7,9 +7,9 @@ const Players: FC = () => {
   const players = useAppSelector(state => state.game.game.players);
 
   return (
-    <div className="grid h-full w-full grid-rows-[20%_20%_20%_20%] gap-4">
-      {players.map(player => (
-        <AuctionPlayerCard player={player} />
+    <div className="grid h-[95%] w-full grid-rows-[auto] gap-3">
+      {players.map((player, index) => (
+        <AuctionPlayerCard player={player} index={index} />
       ))}
     </div>
   );
