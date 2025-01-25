@@ -132,8 +132,24 @@ const GameBoard = () => {
       </div>
     );
   }
-  // || user?.id !== game.turnOfUserId
+  if (
+    fieldClicked?.ownedBy === user?.id &&
+    userHasAllGroup &&
+    fieldClicked?.isPledged
+  ) {
+    buttons = (
+      <div
+        onClick={handlePayRedeptionField}
+        className="mt-2 w-[90%] rounded-[3px] bg-greedGradient p-[1px] font-custom"
+      >
+        <Button variant="forGradient" size="inspectField">
+          Викупити
+        </Button>
+      </div>
+    );
+  }
   if (fieldClicked?.ownedBy !== user?.id) {
+    // || user?.id !== game.turnOfUserId
     buttons = null;
   }
   return (

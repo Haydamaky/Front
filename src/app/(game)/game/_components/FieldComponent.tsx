@@ -39,6 +39,18 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
     'horizontal-top': 'bottom-[-7%] left-[50%] translate-x-[-50%]',
     'horizontal-bottom': 'top-[-7%] left-[50%] translate-x-[-50%]',
   };
+  const pledgedPositions: Record<string, string> = {
+    'vertical-left': 'right-0',
+    'vertical-right': 'left-0',
+    'horizontal-top': 'bottom-0',
+    'horizontal-bottom': 'top-0',
+  };
+  const pledgedSizes: Record<string, string> = {
+    'vertical-left': 'h-full w-0',
+    'vertical-right': 'h-full w-0',
+    'horizontal-top': 'h-0 w-full',
+    'horizontal-bottom': 'h-0 w-full',
+  };
   const isHorizontal = field.line.includes('horizontal');
   const priceColor = colorVariants[field.color];
   const fieldColorPos = fieldColorPosVariants[field.line];
@@ -58,15 +70,20 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
       : gradientColorVariantsFields0Deg[player.color]
     : 'white';
   const widthOfBranches = isHorizontal ? 'w-[100%]' : 'w-[45%]';
+  const pledgedSize = field.isPledged
+    ? 'h-full w-full'
+    : pledgedSizes[field.line];
+  const pledgedPosition = pledgedPositions[field.line];
   return (
     <div
       className={`relative h-full w-full cursor-pointer text-wrap`}
       style={{ background: bg }}
       onClick={() => onClick(field)}
     >
-      {field.isPledged && (
-        <div className="absolute h-full w-full bg-[#0b1117] bg-opacity-80"></div>
-      )}
+      <div
+        className={`absolute ${pledgedPosition} ${pledgedSize} bg-[#0b1117] bg-opacity-80 transition-all duration-300 ease-in-out`}
+      ></div>
+
       <div
         className="h-full w-full"
         style={{
