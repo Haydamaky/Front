@@ -28,7 +28,6 @@ const Auction: FC = () => {
         backdrop="blur"
         className="h-1/2 w-1/2"
         size="5xl"
-        shouldBlockScroll={true}
       >
         <ModalContent className="bg-bgDark relative flex h-[81%] flex-col p-2">
           {onClose => (
@@ -49,7 +48,7 @@ const Auction: FC = () => {
                 </h1>
               </ModalHeader>
               <ModalBody className="z-50 mt-6 flex flex-row">
-                <div className="w-[15%]">
+                <div className="w-[12%]">
                   <Players />
                 </div>
               </ModalBody>
