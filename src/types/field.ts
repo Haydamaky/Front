@@ -21,4 +21,5 @@ export interface Field {
   redemptionPrice: number;
   isPledged: boolean;
   amountOfBranches: number;
+  turnsToUnpledge: null | number;
 }

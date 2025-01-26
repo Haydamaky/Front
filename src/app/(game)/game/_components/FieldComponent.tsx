@@ -5,6 +5,9 @@ import {
   gradientColorVariantsFields0Deg,
 } from '../_utils';
 import Image from 'next/image';
+import Locker from './Locker/Locker';
+import PledgeCounter from './PledgeCounter/PledgeCounter';
+import { useState } from 'react';
 
 interface FieldProps {
   field: Field;
@@ -13,7 +16,8 @@ interface FieldProps {
 
 const FieldComponent = ({ field, onClick }: FieldProps) => {
   const game = useAppSelector(state => state.game.game);
-  const { data: user } = useAppSelector(state => state.user);
+  const [open, setOpen] = useState(false);
+  const handleOpen = (toOpen: boolean) => setOpen(toOpen);
   const fieldColorPosVariants: Record<string, string> = {
     'vertical-left': 'left-0 top-0 h-[100%] w-[18%] translate-x-[-100%]',
     'vertical-right': 'right-0 top-0 h-[100%] w-[18%] translate-x-[100%]',
@@ -34,16 +38,16 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
     tortoise: 'bg-teal-300',
   };
   const branchesPositions: Record<string, string> = {
-    'vertical-left': 'bottom-[40%] right-[-22%] -rotate-90',
-    'vertical-right': 'bottom-[40%] left-[-22%] rotate-90',
+    'vertical-left': 'top-[50%] right-[-22%] -rotate-90 translate-y-[-50%]',
+    'vertical-right': 'top-[50%] left-[-22%] rotate-90 translate-y-[-50%]',
     'horizontal-top': 'bottom-[-7%] left-[50%] translate-x-[-50%]',
     'horizontal-bottom': 'top-[-7%] left-[50%] translate-x-[-50%]',
   };
   const pledgedPositions: Record<string, string> = {
-    'vertical-left': 'right-0',
-    'vertical-right': 'left-0',
-    'horizontal-top': 'bottom-0',
-    'horizontal-bottom': 'top-0',
+    'vertical-left': 'left-0',
+    'vertical-right': 'right-0',
+    'horizontal-top': 'top-0',
+    'horizontal-bottom': 'bottom-0',
   };
   const pledgedSizes: Record<string, string> = {
     'vertical-left': 'h-full w-0',
@@ -81,9 +85,16 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
       onClick={() => onClick(field)}
     >
       <div
-        className={`absolute ${pledgedPosition} ${pledgedSize} bg-[#0b1117] bg-opacity-80 transition-all duration-300 ease-in-out`}
+        className={`absolute ${pledgedPosition} ${pledgedSize} bg-[#0b1117] bg-opacity-80 transition-all duration-700 ease-in-out`}
       ></div>
-
+      {(field.isPledged || open) && (
+        <PledgeCounter
+          toOpen={field.isPledged}
+          count={field.turnsToUnpledge}
+          line={field.line}
+          handleOpen={handleOpen}
+        />
+      )}
       <div
         className="h-full w-full"
         style={{
@@ -96,11 +107,11 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
 
       {field.hasOwnProperty('price') && (
         <div
-          className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-sm text-gray-100`}
+          className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-[13px] text-gray-100`}
         >
-          <p className={`${textPos}`}>
+          <p className={`${textPos} flex items-center`}>
             {field.ownedBy ? field.income[field.amountOfBranches] : field.price}
-            <span className="font-namu">m</span>
+            <span className="font-namu">mm</span>
           </p>
         </div>
       )}
