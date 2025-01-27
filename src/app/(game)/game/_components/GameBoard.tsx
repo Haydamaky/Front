@@ -149,7 +149,6 @@ const GameBoard = () => {
     );
   }
   if (fieldClicked?.ownedBy !== user?.id) {
-    // || user?.id !== game.turnOfUserId
     buttons = null;
   }
   return (

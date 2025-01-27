@@ -53,10 +53,6 @@ const Center = () => {
         setAction('');
       }
     };
-    const handleBoughtField = (data: any) => {
-      dispatch(setFields(data.fields));
-      dispatch(setGame(data.game));
-    };
     const onPlayerWon = (data: any) => {
       const playerWon = data.game.players.find(
         (player: Player) => player.lost,
@@ -70,12 +66,10 @@ const Center = () => {
     socket.on('rolledDice', handleRolledDice);
     socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
     socket.on('passTurnToNext', handlePassTurnToNext);
-    socket.on('boughtField', handleBoughtField);
     return () => {
       socket.off('rolledDice', handleRolledDice);
       socket.off('hasPutUpForAuction', handleHasPutUpForAuction);
       socket.off('passTurnToNext', handlePassTurnToNext);
-      socket.off('boughtField', handleBoughtField);
       socket.off('playerWon', onPlayerWon);
     };
   }, [user]);
@@ -85,6 +79,9 @@ const Center = () => {
   const buyField = () => {
     socket.emit('buyField');
   };
+  const payForField = () => {
+    socket.emit('payForField');
+  };
   const turnOfUser = game.turnOfUserId === user?.id;
   console.log({ chipTransition, playerWon });
   return (
@@ -93,16 +90,21 @@ const Center = () => {
         {(turnOfUser || action === 'auction') &&
           (!currentField?.specialField || action === 'rollDice') &&
           !chipTransition &&
-          action && (
+          action &&
+          (currentField.ownedBy !== game.turnOfUserId || !game.dices) && (
             <div className="flex flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
               <div className="mb-3 text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
                 {action === 'rollDice'
                   ? 'Ваш хід'
-                  : action === 'buy'
+                  : action === 'buy' && !currentField.ownedBy
                     ? 'Придбати поле?'
-                    : action === 'auction'
-                      ? 'Аукціон'
-                      : ''}
+                    : action === 'buy' &&
+                        currentField.ownedBy &&
+                        currentField.ownedBy !== user?.id
+                      ? 'Платити орендну плату?'
+                      : action === 'auction'
+                        ? 'Аукціон'
+                        : ''}
               </div>
               {action === 'rollDice' && (
                 <>
@@ -128,7 +130,7 @@ const Center = () => {
                   </Button>
                 </>
               )}
-              {action === 'buy' && (
+              {action === 'buy' && !currentField.ownedBy && (
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <div className="flex h-6 items-center justify-center gap-1 rounded-md bg-gradient-to-r from-[#FBD07C] to-[#F7F779] px-1 text-[#19376D]">
@@ -166,6 +168,29 @@ const Center = () => {
                   </div>
                 </>
               )}
+              {action === 'buy' &&
+                currentField.ownedBy &&
+                currentField.ownedBy !== user?.id && (
+                  <>
+                    <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                      <div className="flex h-6 items-center justify-center gap-1 rounded-md bg-gradient-to-r from-[#FBD07C] to-[#F7F779] px-2 text-[#19376D]">
+                        <div className="h-5 w-5">
+                          <HintBulb />
+                        </div>
+                        <p className="text-xs">Порада</p>
+                      </div>
+                      <p className="text-[10px]">Треба башляти або програш</p>
+                    </div>
+                    <Button
+                      variant={'blueGame'}
+                      size={screenSize.width > 1200 ? 'default' : 'xs'}
+                      className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                      onClick={payForField}
+                    >
+                      Заплатити орендну плату
+                    </Button>
+                  </>
+                )}
               {action === 'auction' && (
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">

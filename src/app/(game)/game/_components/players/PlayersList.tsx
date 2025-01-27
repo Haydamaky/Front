@@ -12,6 +12,7 @@ import PlayerCard from '../playerCard/PlayerCard';
 const PlayersList = () => {
   const dispatch = useAppDispatch();
   const game = useAppSelector(state => state.game.game);
+  const fields = useAppSelector(state => state.fields.fields);
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
   );
@@ -38,6 +39,14 @@ const PlayersList = () => {
   useEffect(() => {
     if (rolledDice.current && !chipTransition) {
       calculateTimeToEndAndSetStates({ game });
+      const currentPlayer = game.players.find(
+        player => player.userId === game.turnOfUserId,
+      );
+      const currentField = fields.find(
+        fields => fields.index === currentPlayer?.currentFieldIndex,
+      );
+      if (currentField?.ownedBy === game.turnOfUserId) socket.emit('passTurn');
+
       rolledDice.current = false;
     }
   }, [game, chipTransition]);
@@ -71,7 +80,7 @@ const PlayersList = () => {
       calculateTimeToEndAndSetStates,
     );
 
-    socket.on('passTurnToNext', dispatchSetGame);
+    socket.on('passTurnToNext', dispatchSetGame, dispatchSetFields);
     socket.on(
       ['payedForField', 'playerSurrendered'],
       dispatchSetGame,
