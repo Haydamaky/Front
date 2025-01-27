@@ -9,6 +9,7 @@ import InspectField from './InspectField';
 import { Button } from '@/components/ui/button';
 import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
+import Image from 'next/image';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
@@ -180,9 +181,28 @@ const GameBoard = () => {
           buttons={buttons}
         />
       )}
-      <div className="absolute right-[-20%] top-0 flex text-white">
-        <div>Houses: {game.housesQty}</div>
-        <div>Hotels: {game.hotelsQty}</div>
+      <div className="absolute right-[-40%] top-[6%] flex w-[27%] flex-col text-white">
+        <h2>К-сть будинків та готелів :</h2>
+        <div className="mt-4 flex w-full justify-between">
+          <div className="flex items-center gap-4">
+            <p className="text-2xl">x{game.housesQty}</p>
+            <Image
+              src="/images/BuildSilver.svg"
+              alt="silver-building"
+              width={30}
+              height={38}
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <p className="text-2xl">x{game.hotelsQty}</p>
+            <Image
+              src="/images/BuildGold.svg"
+              alt="silver-building"
+              width={42}
+              height={42}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
