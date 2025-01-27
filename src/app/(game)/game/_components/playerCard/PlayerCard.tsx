@@ -53,11 +53,10 @@ const PlayerCard = ({
   }, []);
 
   let playerButtons = mainPlayer ? (
-    <GiveUpButton opacity={opacity} />
+    <GiveUpButton opacity={opacity} lost={player.lost} />
   ) : (
-    <OtherPlayerButtons opacity={opacityOtherPlayer} />
+    <OtherPlayerButtons opacity={opacityOtherPlayer} lost={player.lost} />
   );
-  if (player.lost && mainPlayer) playerButtons = <></>;
 
   const playerHTML = (
     <InnerPlayerCard
@@ -69,9 +68,13 @@ const PlayerCard = ({
     />
   );
 
-  const height =
-    isPlayerClicked && !player.lost ? (mainPlayer ? '25%' : '31%') : '';
-  const cursor = player.lost ? '' : 'cursor-pointer';
+  let height = isPlayerClicked ? (mainPlayer ? '25%' : '31%') : '';
+  if (!mainPlayer && player.lost && isPlayerClicked) {
+    height = '27.8%';
+  }
+  if (mainPlayer && isPlayerClicked && player.lost) {
+    height = '';
+  }
   return (
     <div
       ref={cardRef}
@@ -81,7 +84,7 @@ const PlayerCard = ({
         zIndex: isPlayerClicked ? '1000' : '',
         height,
       }}
-      className={`${fromTop} trasnsition-all ${cursor} absolute flex h-[24%] w-full flex-col items-center justify-center overflow-hidden rounded-[6%] font-ermilov font-thin duration-300 ease-in-out`}
+      className={`${fromTop} trasnsition-all absolute flex h-[24%] w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-[6%] font-ermilov font-thin duration-300 ease-in-out`}
     >
       {player.userId === turnOfUserId ? (
         <div className="h-[98%] w-[97%] rounded-[6%] bg-transparent">
