@@ -11,6 +11,7 @@ import PlayerCard from '../playerCard/PlayerCard';
 
 const PlayersList = () => {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user);
   const game = useAppSelector(state => state.game.game);
   const fields = useAppSelector(state => state.fields.fields);
   const { data: chipTransition } = useAppSelector(
@@ -45,7 +46,10 @@ const PlayersList = () => {
       const currentField = fields.find(
         fields => fields.index === currentPlayer?.currentFieldIndex,
       );
-      if (currentField?.ownedBy === game.turnOfUserId) socket.emit('passTurn');
+      if (currentField?.ownedBy === user.data?.id) {
+        console.log('PassTurn');
+        socket.emit('passTurn');
+      }
 
       rolledDice.current = false;
     }

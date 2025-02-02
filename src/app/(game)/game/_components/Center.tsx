@@ -83,7 +83,6 @@ const Center = () => {
     socket.emit('payForField');
   };
   const turnOfUser = game.turnOfUserId === user?.id;
-  console.log({ chipTransition, playerWon });
   return (
     <div className="relative h-full p-3">
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
