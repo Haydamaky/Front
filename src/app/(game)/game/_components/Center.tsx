@@ -14,7 +14,7 @@ import { Avatar } from '@nextui-org/react';
 import { Player } from '@/types/player';
 import Link from 'next/link';
 
-type Action = 'rollDice' | 'auction' | 'buy' | '';
+type Action = 'rollDice' | 'auction' | 'buy' | 'payForField' | 'secretPay' | '';
 
 const Center = () => {
   const screenSize = useScreenSize();
@@ -31,10 +31,56 @@ const Center = () => {
   const [currentField] = fields.filter(
     field => field.index === player?.currentFieldIndex,
   );
+  const [secretInfo, setSecretInfo] = useState<{
+    users: string[];
+    amounts: number[];
+  }>({
+    users: [],
+    amounts: [],
+  });
+  const [amountToPay, setAmountToPay] = useState(0);
   const rolledDice = useRef(false);
   useEffect(() => {
     if (rolledDice.current) {
-      setAction('buy');
+      if (!currentField.ownedBy && !currentField.specialField) {
+        setAction('buy');
+      }
+      if (currentField.ownedBy && currentField.ownedBy !== user?.id) {
+        setAction('payForField');
+      }
+      if (currentField.secret) {
+        if (secretInfo.users.length === 1) {
+          if (secretInfo.amounts[0] < 0) {
+            setAction('secretPay');
+            setAmountToPay(secretInfo.amounts[0]);
+          }
+        } else if (secretInfo.users.length === 2) {
+          const index = secretInfo.users.findIndex(
+            userId => userId === user?.id,
+          );
+          if (secretInfo.amounts[index] < 0) {
+            setAction('secretPay');
+            setAmountToPay(secretInfo.amounts[index]);
+          }
+        } else if (
+          secretInfo.users.length > 2 &&
+          user?.id !== secretInfo.users[0]
+        ) {
+          if (secretInfo.amounts.length === 2) {
+            if (secretInfo.amounts[1] < 0) {
+              setAction('secretPay');
+              setAmountToPay(secretInfo.amounts[1]);
+            }
+          }
+
+          if (secretInfo.amounts.length === 1) {
+            if (secretInfo.amounts[0] < 0) {
+              setAction('secretPay');
+              setAmountToPay(secretInfo.amounts[0]);
+            }
+          }
+        }
+      }
       rolledDice.current = false;
     }
   }, [game]);
@@ -45,6 +91,10 @@ const Center = () => {
     };
     const handleHasPutUpForAuction = (data: any) => {
       setAction('auction');
+    };
+    const handleSecret = (data: any) => {
+      setAction('secretPay');
+      setSecretInfo(data);
     };
     const handlePassTurnToNext = (data: DataWithGame) => {
       if (data.game.turnOfUserId === user?.id) {
@@ -66,11 +116,13 @@ const Center = () => {
     socket.on('rolledDice', handleRolledDice);
     socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
     socket.on('passTurnToNext', handlePassTurnToNext);
+    socket.on('secret', handleSecret);
     return () => {
       socket.off('rolledDice', handleRolledDice);
       socket.off('hasPutUpForAuction', handleHasPutUpForAuction);
       socket.off('passTurnToNext', handlePassTurnToNext);
       socket.off('playerWon', onPlayerWon);
+      socket.off('secret', handleSecret);
     };
   }, [user]);
   const rollDice = () => {
@@ -83,11 +135,11 @@ const Center = () => {
     socket.emit('payForField');
   };
   const turnOfUser = game.turnOfUserId === user?.id;
+  console.log({ action, secretInfo, currentField });
   return (
     <div className="relative h-full p-3">
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
-        {(turnOfUser || action === 'auction') &&
-          (!currentField?.specialField || action === 'rollDice') &&
+        {(turnOfUser || action === 'auction' || action === 'secretPay') &&
           !chipTransition &&
           action &&
           (currentField.ownedBy !== game.turnOfUserId || !game.dices) && (
@@ -95,15 +147,15 @@ const Center = () => {
               <div className="mb-3 text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
                 {action === 'rollDice'
                   ? 'Ваш хід'
-                  : action === 'buy' && !currentField.ownedBy
+                  : action === 'buy'
                     ? 'Придбати поле?'
-                    : action === 'buy' &&
-                        currentField.ownedBy &&
-                        currentField.ownedBy !== user?.id
-                      ? 'Платити орендну плату?'
-                      : action === 'auction'
-                        ? 'Аукціон'
-                        : ''}
+                    : action === 'payForField'
+                      ? 'Оплата оренди'
+                      : action === 'secretPay'
+                        ? 'Неочікувані витрати'
+                        : action === 'auction'
+                          ? 'Аукціон'
+                          : ''}
               </div>
               {action === 'rollDice' && (
                 <>
@@ -167,18 +219,54 @@ const Center = () => {
                   </div>
                 </>
               )}
+              {action === 'payForField' && (
+                <>
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                    <p className="text-[10px]">
+                      Попадаючи на чуже поле, ви зобов'язані сплатити власнику
+                      орендну плату відповідно до вартості цього поля.
+                    </p>
+                  </div>
+                  <Button
+                    variant={'blueGame'}
+                    size={screenSize.width > 1200 ? 'default' : 'xs'}
+                    className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                    onClick={payForField}
+                  >
+                    Оплатити оренду{' '}
+                    {currentField.income[currentField.amountOfBranches]}
+                  </Button>
+                </>
+              )}
+              {action === 'secretPay' && (
+                <>
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                    <p className="text-[10px]">
+                      {secretInfo.users.length === 1
+                        ? `Невідомість вимагає жертв! Ти потрапив(ла) на секретне
+                      поле і маєш здійснити платіж.`
+                        : `Гравець ${game.players.find(player => player.userId === secretInfo.users[0])?.user.nickname} активував(ла) секретне поле, і це призвело до події, яка зачепила вас.`}
+                    </p>
+                  </div>
+                  <Button
+                    variant={'blueGame'}
+                    size={screenSize.width > 1200 ? 'default' : 'xs'}
+                    className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                    onClick={payForField}
+                  >
+                    Сплатити {Math.abs(amountToPay)}
+                  </Button>
+                </>
+              )}
               {action === 'buy' &&
                 currentField.ownedBy &&
                 currentField.ownedBy !== user?.id && (
                   <>
                     <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
-                      <div className="flex h-6 items-center justify-center gap-1 rounded-md bg-gradient-to-r from-[#FBD07C] to-[#F7F779] px-2 text-[#19376D]">
-                        <div className="h-5 w-5">
-                          <HintBulb />
-                        </div>
-                        <p className="text-xs">Порада</p>
-                      </div>
-                      <p className="text-[10px]">Треба башляти або програш</p>
+                      <p className="text-[10px]">
+                        Попадаючи на чуже поле, ви зобов'язані сплатити власнику
+                        орендну плату відповідно до вартості цього поля.
+                      </p>
                     </div>
                     <Button
                       variant={'blueGame'}
@@ -186,7 +274,8 @@ const Center = () => {
                       className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                       onClick={payForField}
                     >
-                      Заплатити орендну плату
+                      Оплатити оренду{' '}
+                      {currentField.income[currentField.amountOfBranches]}
                     </Button>
                   </>
                 )}
