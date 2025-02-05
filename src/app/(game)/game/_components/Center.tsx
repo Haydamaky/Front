@@ -14,7 +14,16 @@ import { Avatar } from '@nextui-org/react';
 import { Player } from '@/types/player';
 import Link from 'next/link';
 
-type Action = 'rollDice' | 'auction' | 'buy' | 'payForField' | 'secretPay' | '';
+type Action =
+  | 'rollDice'
+  | 'auction'
+  | 'buy'
+  | 'payForField'
+  | 'secretPay'
+  | 'toPay'
+  | 'VDNH'
+  | 'COIN'
+  | '';
 
 const Center = () => {
   const screenSize = useScreenSize();
@@ -28,8 +37,11 @@ const Center = () => {
   );
   const [playerWon, setPlayerWon] = useState<undefined | Player>(undefined);
   const [player] = game.players.filter(player => player.userId === user?.id);
+  const [playerWithTurn] = game.players.filter(
+    player => player.userId === game.turnOfUserId,
+  );
   const [currentField] = fields.filter(
-    field => field.index === player?.currentFieldIndex,
+    field => field.index === playerWithTurn?.currentFieldIndex,
   );
   const [secretInfo, setSecretInfo] = useState<{
     users: string[];
@@ -48,17 +60,30 @@ const Center = () => {
       if (currentField.ownedBy && currentField.ownedBy !== user?.id) {
         setAction('payForField');
       }
-      if (currentField.secret) {
+      if (currentField.toPay && currentField.name === 'ВДНХ') {
+        setAction('VDNH');
+      }
+      if (currentField.toPay && currentField.name === 'COIN') {
+        setAction('COIN');
+      }
+      console.log({ currentField, amountToPay, user });
+
+      if (currentField.secret && secretInfo) {
+        console.log('secret');
         if (secretInfo.users.length === 1) {
+          console.log('users length 1');
           if (secretInfo.amounts[0] < 0) {
             setAction('secretPay');
+            console.log('users 1 amount[0] < 0');
             setAmountToPay(secretInfo.amounts[0]);
           }
         } else if (secretInfo.users.length === 2) {
+          console.log('users length 2');
           const index = secretInfo.users.findIndex(
             userId => userId === user?.id,
           );
           if (secretInfo.amounts[index] < 0) {
+            console.log('users 2 amount[', index);
             setAction('secretPay');
             setAmountToPay(secretInfo.amounts[index]);
           }
@@ -66,8 +91,10 @@ const Center = () => {
           secretInfo.users.length > 2 &&
           user?.id !== secretInfo.users[0]
         ) {
+          console.log('Users length > 2');
           if (secretInfo.amounts.length === 2) {
             if (secretInfo.amounts[1] < 0) {
+              console.log('2');
               setAction('secretPay');
               setAmountToPay(secretInfo.amounts[1]);
             }
@@ -75,6 +102,7 @@ const Center = () => {
 
           if (secretInfo.amounts.length === 1) {
             if (secretInfo.amounts[0] < 0) {
+              console.log('1');
               setAction('secretPay');
               setAmountToPay(secretInfo.amounts[0]);
             }
@@ -93,8 +121,12 @@ const Center = () => {
       setAction('auction');
     };
     const handleSecret = (data: any) => {
-      setAction('secretPay');
       setSecretInfo(data);
+    };
+    const handleUpdatePlayers = (data: any) => {
+      setSecretInfo(data.secretInfo);
+      if (!secretInfo.users.includes(user?.id || 'notIncluded')) setAction('');
+      dispatch(setGame(data.game));
     };
     const handlePassTurnToNext = (data: DataWithGame) => {
       if (data.game.turnOfUserId === user?.id) {
@@ -117,12 +149,14 @@ const Center = () => {
     socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
     socket.on('passTurnToNext', handlePassTurnToNext);
     socket.on('secret', handleSecret);
+    socket.on('updatePlayers', handleUpdatePlayers);
     return () => {
       socket.off('rolledDice', handleRolledDice);
       socket.off('hasPutUpForAuction', handleHasPutUpForAuction);
       socket.off('passTurnToNext', handlePassTurnToNext);
       socket.off('playerWon', onPlayerWon);
       socket.off('secret', handleSecret);
+      socket.off('updatePlayers', handleUpdatePlayers);
     };
   }, [user]);
   const rollDice = () => {
@@ -134,8 +168,18 @@ const Center = () => {
   const payForField = () => {
     socket.emit('payForField');
   };
+  const payToBank = () => {
+    socket.emit('payToBank');
+  };
+  const payForSecret = () => {
+    if (secretInfo.users.length > 2 && secretInfo.amounts[0] === null) {
+      socket.emit('payToUser');
+    } else {
+      socket.emit('payToBank');
+    }
+  };
   const turnOfUser = game.turnOfUserId === user?.id;
-  console.log({ action, secretInfo, currentField });
+  console.log({ action, secretInfo });
   return (
     <div className="relative h-full p-3">
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
@@ -153,9 +197,13 @@ const Center = () => {
                       ? 'Оплата оренди'
                       : action === 'secretPay'
                         ? 'Неочікувані витрати'
-                        : action === 'auction'
-                          ? 'Аукціон'
-                          : ''}
+                        : action === 'COIN'
+                          ? 'Податок на розкіш'
+                          : action === 'VDNH'
+                            ? 'ВДНГ – час для розваг!'
+                            : action === 'auction'
+                              ? 'Аукціон'
+                              : ''}
               </div>
               {action === 'rollDice' && (
                 <>
@@ -238,21 +286,58 @@ const Center = () => {
                   </Button>
                 </>
               )}
-              {action === 'secretPay' && (
+              {action === 'VDNH' && (
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <p className="text-[10px]">
-                      {secretInfo.users.length === 1
-                        ? `Невідомість вимагає жертв! Ти потрапив(ла) на секретне
-                      поле і маєш здійснити платіж.`
-                        : `Гравець ${game.players.find(player => player.userId === secretInfo.users[0])?.user.nickname} активував(ла) секретне поле, і це призвело до події, яка зачепила вас.`}
+                      Ти потрапив(ла) на фестиваль у ВДНГ! Ярмарки, атракціони
+                      та смачна їжа — незабутні враження гарантовано!
                     </p>
                   </div>
                   <Button
                     variant={'blueGame'}
                     size={screenSize.width > 1200 ? 'default' : 'xs'}
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
-                    onClick={payForField}
+                    onClick={payToBank}
+                  >
+                    Оплатити {Math.abs(currentField.toPay)}
+                  </Button>
+                </>
+              )}
+              {action === 'COIN' && (
+                <>
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                    <p className="text-[10px]">
+                      Держава вирішила, що ти живеш занадто розкішно! Сплати
+                      податок та підтримай баланс у грі.
+                    </p>
+                  </div>
+                  <Button
+                    variant={'blueGame'}
+                    size={screenSize.width > 1200 ? 'default' : 'xs'}
+                    className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                    onClick={payToBank}
+                  >
+                    Оплатити {Math.abs(currentField.toPay)}
+                  </Button>
+                </>
+              )}
+              {action === 'secretPay' && (
+                <>
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                    <p className="text-[10px]">
+                      {secretInfo &&
+                        (secretInfo.users.length === 1
+                          ? `Невідомість вимагає жертв! Ти потрапив(ла) на секретне
+                      поле і маєш здійснити платіж.`
+                          : `Гравець ${game.players.find(player => player.userId === secretInfo?.users[0])?.user.nickname} активував(ла) секретне поле, і це призвело до події, яка зачепила вас.`)}
+                    </p>
+                  </div>
+                  <Button
+                    variant={'blueGame'}
+                    size={screenSize.width > 1200 ? 'default' : 'xs'}
+                    className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                    onClick={payForSecret}
                   >
                     Сплатити {Math.abs(amountToPay)}
                   </Button>
