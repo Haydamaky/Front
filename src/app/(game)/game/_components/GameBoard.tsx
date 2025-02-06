@@ -178,7 +178,7 @@ const GameBoard = () => {
       {fieldClicked && (
         <InspectField
           field={fieldClicked}
-          ref={inspectFieldRef}
+          infoFieldRef={inspectFieldRef}
           buttons={buttons}
         />
       )}
