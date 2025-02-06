@@ -9,8 +9,21 @@ import { useEffect, useRef, useState } from 'react';
 import Chat from './Chat/Chat';
 import HintBulb from './HintBulb';
 import DicesContainer from './Dice/DicesContainer';
+import Image from 'next/image';
+import { Avatar } from '@nextui-org/react';
+import { Player } from '@/types/player';
+import Link from 'next/link';
 
-type Action = 'rollDice' | 'auction' | 'buy' | '';
+type Action =
+  | 'rollDice'
+  | 'auction'
+  | 'buy'
+  | 'payForField'
+  | 'secretPay'
+  | 'toPay'
+  | 'VDNH'
+  | 'COIN'
+  | '';
 
 const Center = () => {
   const screenSize = useScreenSize();
@@ -18,19 +31,84 @@ const Center = () => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector(state => state.fields.fields);
   const game = useAppSelector(state => state.game.game);
-  console.log({ gameCenter: game });
   const { data: user } = useAppSelector(state => state.user);
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
   );
+  const [playerWon, setPlayerWon] = useState<undefined | Player>(undefined);
   const [player] = game.players.filter(player => player.userId === user?.id);
-  const [currentField] = fields.filter(
-    field => field.index === player?.currentFieldIndex,
+  const [playerWithTurn] = game.players.filter(
+    player => player.userId === game.turnOfUserId,
   );
+  const [currentField] = fields.filter(
+    field => field.index === playerWithTurn?.currentFieldIndex,
+  );
+  const [secretInfo, setSecretInfo] = useState<{
+    users: string[];
+    amounts: number[];
+  }>({
+    users: [],
+    amounts: [],
+  });
+  const [amountToPay, setAmountToPay] = useState(0);
   const rolledDice = useRef(false);
   useEffect(() => {
     if (rolledDice.current) {
-      setAction('buy');
+      if (!currentField.ownedBy && !currentField.specialField) {
+        setAction('buy');
+      }
+      if (currentField.ownedBy && currentField.ownedBy !== user?.id) {
+        setAction('payForField');
+      }
+      if (currentField.toPay && currentField.name === 'ВДНХ') {
+        setAction('VDNH');
+      }
+      if (currentField.toPay && currentField.name === 'COIN') {
+        setAction('COIN');
+      }
+      console.log({ currentField, amountToPay, user });
+
+      if (currentField.secret && secretInfo) {
+        console.log('secret');
+        if (secretInfo.users.length === 1) {
+          console.log('users length 1');
+          if (secretInfo.amounts[0] < 0) {
+            setAction('secretPay');
+            console.log('users 1 amount[0] < 0');
+            setAmountToPay(secretInfo.amounts[0]);
+          }
+        } else if (secretInfo.users.length === 2) {
+          console.log('users length 2');
+          const index = secretInfo.users.findIndex(
+            userId => userId === user?.id,
+          );
+          if (secretInfo.amounts[index] < 0) {
+            console.log('users 2 amount[', index);
+            setAction('secretPay');
+            setAmountToPay(secretInfo.amounts[index]);
+          }
+        } else if (
+          secretInfo.users.length > 2 &&
+          user?.id !== secretInfo.users[0]
+        ) {
+          console.log('Users length > 2');
+          if (secretInfo.amounts.length === 2) {
+            if (secretInfo.amounts[1] < 0) {
+              console.log('2');
+              setAction('secretPay');
+              setAmountToPay(secretInfo.amounts[1]);
+            }
+          }
+
+          if (secretInfo.amounts.length === 1) {
+            if (secretInfo.amounts[0] < 0) {
+              console.log('1');
+              setAction('secretPay');
+              setAmountToPay(secretInfo.amounts[0]);
+            }
+          }
+        }
+      }
       rolledDice.current = false;
     }
   }, [game]);
@@ -42,6 +120,14 @@ const Center = () => {
     const handleHasPutUpForAuction = (data: any) => {
       setAction('auction');
     };
+    const handleSecret = (data: any) => {
+      setSecretInfo(data);
+    };
+    const handleUpdatePlayers = (data: any) => {
+      setSecretInfo(data.secretInfo);
+      if (!secretInfo.users.includes(user?.id || 'notIncluded')) setAction('');
+      dispatch(setGame(data.game));
+    };
     const handlePassTurnToNext = (data: DataWithGame) => {
       if (data.game.turnOfUserId === user?.id) {
         setAction('rollDice');
@@ -49,20 +135,28 @@ const Center = () => {
         setAction('');
       }
     };
-    const handleBoughtField = (data: any) => {
-      dispatch(setFields(data.fields));
-      dispatch(setGame(data.game));
-    };
+    const onPlayerWon = (data: any) => {
+      const playerWon = data.game.players.find(
+        (player: Player) => player.lost,
+      ) as Player | undefined;
 
+      if (playerWon) {
+        setPlayerWon(playerWon);
+      }
+    };
+    socket.on('playerWon', onPlayerWon);
     socket.on('rolledDice', handleRolledDice);
     socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
     socket.on('passTurnToNext', handlePassTurnToNext);
-    socket.on('boughtField', handleBoughtField);
+    socket.on('secret', handleSecret);
+    socket.on('updatePlayers', handleUpdatePlayers);
     return () => {
       socket.off('rolledDice', handleRolledDice);
       socket.off('hasPutUpForAuction', handleHasPutUpForAuction);
       socket.off('passTurnToNext', handlePassTurnToNext);
-      socket.off('boughtField', handleBoughtField);
+      socket.off('playerWon', onPlayerWon);
+      socket.off('secret', handleSecret);
+      socket.off('updatePlayers', handleUpdatePlayers);
     };
   }, [user]);
   const rollDice = () => {
@@ -71,24 +165,45 @@ const Center = () => {
   const buyField = () => {
     socket.emit('buyField');
   };
+  const payForField = () => {
+    socket.emit('payForField');
+  };
+  const payToBank = () => {
+    socket.emit('payToBank');
+  };
+  const payForSecret = () => {
+    if (secretInfo.users.length > 2 && secretInfo.amounts[0] === null) {
+      socket.emit('payToUser');
+    } else {
+      socket.emit('payToBank');
+    }
+  };
   const turnOfUser = game.turnOfUserId === user?.id;
-
+  console.log({ action, secretInfo });
   return (
     <div className="relative h-full p-3">
-      <div className="absolute w-[calc(100%-32px)]">
-        {(turnOfUser || action === 'auction') &&
-          (!currentField?.specialField || action === 'rollDice') &&
+      <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
+        {(turnOfUser || action === 'auction' || action === 'secretPay') &&
           !chipTransition &&
-          action && (
+          action &&
+          (currentField.ownedBy !== game.turnOfUserId || !game.dices) && (
             <div className="flex flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
               <div className="mb-3 text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
                 {action === 'rollDice'
                   ? 'Ваш хід'
                   : action === 'buy'
                     ? 'Придбати поле?'
-                    : action === 'auction'
-                      ? 'Аукціон'
-                      : ''}
+                    : action === 'payForField'
+                      ? 'Оплата оренди'
+                      : action === 'secretPay'
+                        ? 'Неочікувані витрати'
+                        : action === 'COIN'
+                          ? 'Податок на розкіш'
+                          : action === 'VDNH'
+                            ? 'ВДНГ – час для розваг!'
+                            : action === 'auction'
+                              ? 'Аукціон'
+                              : ''}
               </div>
               {action === 'rollDice' && (
                 <>
@@ -114,7 +229,7 @@ const Center = () => {
                   </Button>
                 </>
               )}
-              {action === 'buy' && (
+              {action === 'buy' && !currentField.ownedBy && (
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <div className="flex h-6 items-center justify-center gap-1 rounded-md bg-gradient-to-r from-[#FBD07C] to-[#F7F779] px-1 text-[#19376D]">
@@ -152,6 +267,103 @@ const Center = () => {
                   </div>
                 </>
               )}
+              {action === 'payForField' && (
+                <>
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                    <p className="text-[10px]">
+                      Попадаючи на чуже поле, ви зобов'язані сплатити власнику
+                      орендну плату відповідно до вартості цього поля.
+                    </p>
+                  </div>
+                  <Button
+                    variant={'blueGame'}
+                    size={screenSize.width > 1200 ? 'default' : 'xs'}
+                    className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                    onClick={payForField}
+                  >
+                    Оплатити оренду{' '}
+                    {currentField.income[currentField.amountOfBranches]}
+                  </Button>
+                </>
+              )}
+              {action === 'VDNH' && (
+                <>
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                    <p className="text-[10px]">
+                      Ти потрапив(ла) на фестиваль у ВДНГ! Ярмарки, атракціони
+                      та смачна їжа — незабутні враження гарантовано!
+                    </p>
+                  </div>
+                  <Button
+                    variant={'blueGame'}
+                    size={screenSize.width > 1200 ? 'default' : 'xs'}
+                    className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                    onClick={payToBank}
+                  >
+                    Оплатити {Math.abs(currentField.toPay)}
+                  </Button>
+                </>
+              )}
+              {action === 'COIN' && (
+                <>
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                    <p className="text-[10px]">
+                      Держава вирішила, що ти живеш занадто розкішно! Сплати
+                      податок та підтримай баланс у грі.
+                    </p>
+                  </div>
+                  <Button
+                    variant={'blueGame'}
+                    size={screenSize.width > 1200 ? 'default' : 'xs'}
+                    className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                    onClick={payToBank}
+                  >
+                    Оплатити {Math.abs(currentField.toPay)}
+                  </Button>
+                </>
+              )}
+              {action === 'secretPay' && (
+                <>
+                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                    <p className="text-[10px]">
+                      {secretInfo &&
+                        (secretInfo.users.length === 1
+                          ? `Невідомість вимагає жертв! Ти потрапив(ла) на секретне
+                      поле і маєш здійснити платіж.`
+                          : `Гравець ${game.players.find(player => player.userId === secretInfo?.users[0])?.user.nickname} активував(ла) секретне поле, і це призвело до події, яка зачепила вас.`)}
+                    </p>
+                  </div>
+                  <Button
+                    variant={'blueGame'}
+                    size={screenSize.width > 1200 ? 'default' : 'xs'}
+                    className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                    onClick={payForSecret}
+                  >
+                    Сплатити {Math.abs(amountToPay)}
+                  </Button>
+                </>
+              )}
+              {action === 'buy' &&
+                currentField.ownedBy &&
+                currentField.ownedBy !== user?.id && (
+                  <>
+                    <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
+                      <p className="text-[10px]">
+                        Попадаючи на чуже поле, ви зобов'язані сплатити власнику
+                        орендну плату відповідно до вартості цього поля.
+                      </p>
+                    </div>
+                    <Button
+                      variant={'blueGame'}
+                      size={screenSize.width > 1200 ? 'default' : 'xs'}
+                      className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                      onClick={payForField}
+                    >
+                      Оплатити оренду{' '}
+                      {currentField.income[currentField.amountOfBranches]}
+                    </Button>
+                  </>
+                )}
               {action === 'auction' && (
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
@@ -191,6 +403,47 @@ const Center = () => {
         </div>
       </div>
       <Chat chatId={game?.chat?.id} gameId={game.id} players={game.players} />
+      {playerWon && !chipTransition && (
+        <div className="fixed left-0 top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-[#060606F2]">
+          <h1 className="bg-[linear-gradient(268.72deg,#F6BE19_20.14%,#FBFBFA_125.62%)] bg-clip-text text-7xl font-bold text-transparent">
+            Переможець
+          </h1>
+
+          <div className="pb-[9%]">
+            <div className="relative mt-[60%] h-[9rem] w-[9rem]">
+              <Image
+                className="pointer-events-none absolute right-[-15%] top-[-38%] z-10 select-none"
+                src="/images/Crown.svg"
+                alt="back-button"
+                width={100}
+                height={100}
+              />
+              <Avatar
+                className="pointer-events-none h-full w-full select-none"
+                src="https://i.pravatar.cc/150?u=a04258114e29026302d"
+              />
+            </div>
+            <p className="mt-[15%] text-center text-4xl text-white">
+              {playerWon?.user.nickname}
+            </p>
+          </div>
+
+          <Link href="/rooms" className="block">
+            <div className="absolute bottom-[5%] left-[5%] flex cursor-pointer">
+              <Image
+                className="pointer-events-none select-none"
+                src="/images/BackButton.svg"
+                alt="back-button"
+                width={32}
+                height={32}
+              />
+              <p className="mb-[10%] ml-[14%] font-custom text-2xl text-white">
+                Вийти
+              </p>
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

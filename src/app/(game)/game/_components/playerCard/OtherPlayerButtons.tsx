@@ -6,13 +6,17 @@ import BellIcon from '../playerButtonsIcons/BellIcon';
 
 interface OtherPlayerButtonsProps {
   opacity: string;
+  lost: boolean;
 }
 const getGradientClass = (isHovered: boolean) =>
   isHovered
     ? 'bg-[linear-gradient(268.72deg,#F6BE19_20.14%,#FBFBFA_125.62%)] bg-clip-text text-transparent'
     : 'text-white';
 
-export const OtherPlayerButtons = ({ opacity }: OtherPlayerButtonsProps) => {
+export const OtherPlayerButtons = ({
+  opacity,
+  lost,
+}: OtherPlayerButtonsProps) => {
   const [hoveredStates, setHoveredStates] = useState({
     profile: false,
     exchange: false,
@@ -29,7 +33,7 @@ export const OtherPlayerButtons = ({ opacity }: OtherPlayerButtonsProps) => {
 
   return (
     <div
-      className={`font-fixelDisplay mt-auto w-full bg-transparent text-center text-[#FBFBFA] transition-all duration-300 ease-out ${opacity}`}
+      className={`mt-auto w-full bg-transparent text-center font-fixelDisplay text-[#FBFBFA] transition-all duration-300 ease-out ${opacity}`}
     >
       <Button
         variant="playerOption"
@@ -46,20 +50,22 @@ export const OtherPlayerButtons = ({ opacity }: OtherPlayerButtonsProps) => {
         </p>
       </Button>
 
-      <Button
-        variant="playerOption"
-        className="pl-[26%]"
-        onMouseEnter={() => handleMouseEnter('exchange')}
-        onMouseLeave={() => handleMouseLeave('exchange')}
-        size="widthFull"
-      >
-        <DocumentIcon isHovered={hoveredStates.exchange} />
-        <p
-          className={`${getGradientClass(hoveredStates.exchange)} text-[14px] transition-all duration-300 ease-out`}
+      {!lost && (
+        <Button
+          variant="playerOption"
+          className="pl-[26%]"
+          onMouseEnter={() => handleMouseEnter('exchange')}
+          onMouseLeave={() => handleMouseLeave('exchange')}
+          size="widthFull"
         >
-          Обмін
-        </p>
-      </Button>
+          <DocumentIcon isHovered={hoveredStates.exchange} />
+          <p
+            className={`${getGradientClass(hoveredStates.exchange)} text-[14px] transition-all duration-300 ease-out`}
+          >
+            Обмін
+          </p>
+        </Button>
+      )}
 
       <Button
         variant="playerOption"

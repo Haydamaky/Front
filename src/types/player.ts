@@ -7,7 +7,10 @@ export interface Player {
   currentFieldIndex: number;
   customFields?: any;
   color: 'green' | 'yellow' | 'blue' | 'purple';
-  user: any;
+  user: {
+    id: string;
+    nickname: string;
+  };
   gameId: string;
   game: Game;
   createdAt: Date;

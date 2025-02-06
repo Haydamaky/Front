@@ -62,7 +62,7 @@ const PlayerChip = ({
     <div
       ref={elementRef}
       style={{ transform: `${translate}`, transitionDuration: '1000ms' }}
-      className={`${colorOfPlayerDarker} absolute shadow-combined ${posToGo} flex h-[3.3%] w-[3.3%] items-center justify-center rounded-full transition-all`}
+      className={`${colorOfPlayerDarker} pointer-events-none absolute shadow-combined ${posToGo} flex h-[3.3%] w-[3.3%] items-center justify-center rounded-full transition-all`}
     >
       <div
         className={`${colorOfPlayer} z-20 h-[78%] w-[78%] rounded-full border border-[#FBFBFA]`}

@@ -11,7 +11,9 @@ import PlayerCard from '../playerCard/PlayerCard';
 
 const PlayersList = () => {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user);
   const game = useAppSelector(state => state.game.game);
+  const fields = useAppSelector(state => state.fields.fields);
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
   );
@@ -21,7 +23,7 @@ const PlayersList = () => {
     let countDown = timeToEnd;
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
-      if (countDown <= 0) {
+      if (countDown <= -1) {
         if (intervalRef.current) clearInterval(intervalRef.current);
         return;
       }
@@ -31,14 +33,24 @@ const PlayersList = () => {
   };
   const calculateTimeToEndAndSetStates = ({ game }: DataWithGame) => {
     const now = Date.now();
-    const timeToEnd = Math.floor((+game.turnEnds - now) / 1000);
+    const timeToEnd = Math.ceil((+game.turnEnds - now) / 1000);
     setTurnTime(timeToEnd);
     startCountdown(timeToEnd);
   };
   useEffect(() => {
     if (rolledDice.current && !chipTransition) {
-      console.log({ chipTransition });
       calculateTimeToEndAndSetStates({ game });
+      const currentPlayer = game.players.find(
+        player => player.userId === game.turnOfUserId,
+      );
+      const currentField = fields.find(
+        fields => fields.index === currentPlayer?.currentFieldIndex,
+      );
+      if (currentField?.ownedBy === user.data?.id) {
+        console.log('PassTurn');
+        socket.emit('passTurn');
+      }
+
       rolledDice.current = false;
     }
   }, [game, chipTransition]);
@@ -72,7 +84,7 @@ const PlayersList = () => {
       calculateTimeToEndAndSetStates,
     );
 
-    socket.on('passTurnToNext', dispatchSetGame);
+    socket.on('passTurnToNext', dispatchSetGame, dispatchSetFields);
     socket.on(
       ['payedForField', 'playerSurrendered'],
       dispatchSetGame,

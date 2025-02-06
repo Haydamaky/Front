@@ -4,6 +4,10 @@ import {
   gradientColorVariantsFields,
   gradientColorVariantsFields0Deg,
 } from '../_utils';
+import Image from 'next/image';
+import Locker from './Locker/Locker';
+import PledgeCounter from './PledgeCounter/PledgeCounter';
+import { useState } from 'react';
 
 interface FieldProps {
   field: Field;
@@ -12,7 +16,8 @@ interface FieldProps {
 
 const FieldComponent = ({ field, onClick }: FieldProps) => {
   const game = useAppSelector(state => state.game.game);
-  const { data: user } = useAppSelector(state => state.user);
+  const [open, setOpen] = useState(false);
+  const handleOpen = (toOpen: boolean) => setOpen(toOpen);
   const fieldColorPosVariants: Record<string, string> = {
     'vertical-left': 'left-0 top-0 h-[100%] w-[18%] translate-x-[-100%]',
     'vertical-right': 'right-0 top-0 h-[100%] w-[18%] translate-x-[100%]',
@@ -32,28 +37,64 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
     black: 'bg-black',
     tortoise: 'bg-teal-300',
   };
+  const branchesPositions: Record<string, string> = {
+    'vertical-left': 'top-[50%] right-[-22%] -rotate-90 translate-y-[-50%]',
+    'vertical-right': 'top-[50%] left-[-22%] rotate-90 translate-y-[-50%]',
+    'horizontal-top': 'bottom-[-7%] left-[50%] translate-x-[-50%]',
+    'horizontal-bottom': 'top-[-7%] left-[50%] translate-x-[-50%]',
+  };
+  const pledgedPositions: Record<string, string> = {
+    'vertical-left': 'left-0',
+    'vertical-right': 'right-0',
+    'horizontal-top': 'top-0',
+    'horizontal-bottom': 'bottom-0',
+  };
+  const pledgedSizes: Record<string, string> = {
+    'vertical-left': 'h-full w-0',
+    'vertical-right': 'h-full w-0',
+    'horizontal-top': 'h-0 w-full',
+    'horizontal-bottom': 'h-0 w-full',
+  };
+  const isHorizontal = field.line.includes('horizontal');
   const priceColor = colorVariants[field.color];
   const fieldColorPos = fieldColorPosVariants[field.line];
+  const branchesPos = branchesPositions[field.line];
   const textPos = field.line.includes('vertical-right')
     ? 'rotate-90'
     : field.line.includes('vertical-left')
       ? 'rotate-[-90deg]'
       : '';
-  const [player] = game.players.filter(player => player.userId === user?.id);
-  const bg =
-    field.ownedBy === player?.userId
-      ? field.line.includes('vertical-right') ||
-        field.line.includes('vertical-left')
-        ? gradientColorVariantsFields[player.color]
-        : gradientColorVariantsFields0Deg[player.color]
-      : 'white';
-
+  const [player] = game.players.filter(
+    player => player.userId === field.ownedBy,
+  );
+  const bg = player
+    ? field.line.includes('vertical-right') ||
+      field.line.includes('vertical-left')
+      ? gradientColorVariantsFields[player.color]
+      : gradientColorVariantsFields0Deg[player.color]
+    : 'white';
+  const widthOfBranches = isHorizontal ? 'w-[100%]' : 'w-[45%]';
+  const pledgedSize = field.isPledged
+    ? 'h-full w-full'
+    : pledgedSizes[field.line];
+  const pledgedPosition = pledgedPositions[field.line];
   return (
     <div
-      className={`relative h-full w-full text-wrap`}
+      className={`relative h-full w-full cursor-pointer text-wrap`}
       style={{ background: bg }}
       onClick={() => onClick(field)}
     >
+      <div
+        className={`absolute ${pledgedPosition} ${pledgedSize} bg-[#0b1117] bg-opacity-80 transition-all duration-700 ease-in-out`}
+      ></div>
+      {(field.isPledged || open) && (
+        <PledgeCounter
+          toOpen={field.isPledged}
+          count={field.turnsToUnpledge}
+          line={field.line}
+          handleOpen={handleOpen}
+        />
+      )}
       <div
         className="h-full w-full"
         style={{
@@ -66,9 +107,39 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
 
       {field.hasOwnProperty('price') && (
         <div
-          className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-sm text-gray-100`}
+          className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-[13px] text-gray-100`}
         >
-          <p className={`${textPos}`}>{field.price}m</p>
+          <p className={`${textPos} flex items-center`}>
+            {field.ownedBy ? field.income[field.amountOfBranches] : field.price}
+            <span className="font-namu">mm</span>
+          </p>
+        </div>
+      )}
+      {field.amountOfBranches > 0 && field.amountOfBranches < 5 && (
+        <div
+          className={`absolute z-10 flex ${widthOfBranches} justify-center gap-1 ${branchesPos}`}
+        >
+          {Array.from({ length: field.amountOfBranches }).map((_, index) => (
+            <Image
+              key={field.id + index}
+              src="/images/BuildSilver.svg"
+              alt="silver-building"
+              width={13}
+              height={13}
+            />
+          ))}
+        </div>
+      )}
+      {field.amountOfBranches === 5 && (
+        <div
+          className={`absolute z-10 flex w-[45%] ${branchesPos} justify-center gap-1`}
+        >
+          <Image
+            src="/images/BuildGold.svg"
+            alt="silver-building"
+            width={22}
+            height={22}
+          />
         </div>
       )}
     </div>

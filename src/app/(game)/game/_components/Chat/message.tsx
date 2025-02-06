@@ -15,7 +15,7 @@ const Message = forwardRef<HTMLLIElement, MessageProps>(
         ref={ref}
       >
         <p
-          className="flex items-center rounded-sm px-1 pb-[2px] text-lg"
+          className="mb-auto flex items-center rounded-sm px-1 pb-[2px] text-lg"
           style={{
             background: color,
           }}

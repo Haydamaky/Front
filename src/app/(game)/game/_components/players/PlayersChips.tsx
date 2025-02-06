@@ -17,6 +17,7 @@ const PlayersChips = ({ game }: PlayersChipsProps) => {
     <>
       {game?.players &&
         game.players.map((player: any, index: number) => {
+          if (player.lost) return null;
           const colorOfPlayer = colorVariats500[player.color];
           const colorOfPlayerDarker = colorVariats700[player.color];
           const playersOnSameField = game?.players.filter(
