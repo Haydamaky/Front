@@ -37,7 +37,6 @@ const Center = () => {
     state => state.chipTransition,
   );
   const [playerWon, setPlayerWon] = useState<undefined | Player>(undefined);
-  const [player] = game.players.filter(player => player.userId === user?.id);
   const [playerWithTurn] = game.players.filter(
     player => player.userId === game.turnOfUserId,
   );

@@ -13,7 +13,7 @@ const AuctionPlayerCard: FC<{ player: Player; index: number }> = ({
   const color = gradientColorVariants[player.color];
   return (
     <div
-      className={`relative flex h-full w-full flex-col items-center justify-center rounded-lg p-6`}
+      className={`relative flex h-full flex-col items-center justify-center rounded-lg`}
       style={{
         background: !isDismissed ? color : 'transparent',
       }}
@@ -35,17 +35,19 @@ const AuctionPlayerCard: FC<{ player: Player; index: number }> = ({
           src={'https://i.pravatar.cc/150?u=a04258114e29026302d'}
           ImgComponent={props => <Image {...props} fill={true} />}
           size="lg"
-          className="h-16 w-16"
         />
       ) : (
-        <X absoluteStrokeWidth={true} height={64} width={64} />
+        <div className="relative h-14 w-14 cursor-pointer" aria-label="Close">
+          <div className="absolute left-0 top-1/2 h-1 w-14 -translate-y-1/2 rotate-45 rounded-md bg-white" />
+          <div className="absolute left-0 top-1/2 h-1 w-14 -translate-y-1/2 -rotate-45 rounded-md bg-white" />
+        </div>
       )}
-      <div className="mt-2 flex flex-col items-center gap-1">
-        <p className="text-lg capitalize">{player.user.nickname}</p>
+      <div className="flex flex-col items-center">
+        <p className="text-xl capitalize">{player.user.nickname}</p>
         {!isDismissed ? (
-          <p className="text-custom">{player.money} mm</p>
+          <p className="text-custom text-nowrap text-sm">{player.money}mm</p>
         ) : (
-          <p className="font-custom text-sm uppercase">відмовився</p>
+          <p className="font-custom text-[10px] uppercase">відмовився</p>
         )}
       </div>
     </div>
