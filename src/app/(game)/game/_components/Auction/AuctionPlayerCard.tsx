@@ -4,33 +4,33 @@ import Image from 'next/image';
 import { FC } from 'react';
 import { X } from 'lucide-react';
 import { gradientColorVariants } from '../../_utils';
-const AuctionPlayerCard: FC<{ player: Player; index: number }> = ({
-  player,
-  index,
-}) => {
-  const isDismissed = index === 3;
 
+interface AuctionPlayerCardProps {
+  player: Player;
+}
+
+const AuctionPlayerCard = ({ player }: AuctionPlayerCardProps) => {
   const color = gradientColorVariants[player.color];
   return (
     <div
       className={`relative flex h-full flex-col items-center justify-center rounded-lg`}
       style={{
-        background: !isDismissed ? color : 'transparent',
+        background: !player.refusedFromAuction ? color : 'transparent',
       }}
     >
-      {isDismissed && (
+      {player.refusedFromAuction && (
         <div
           className="absolute inset-0 rounded-lg p-[0.15rem]"
           style={{
-            background: `linear-gradient(to bottom, #EBF4F5, #B5C6E0)`, // Your gradient colors
+            background: `linear-gradient(to bottom, #EBF4F5, #B5C6E0)`,
             WebkitMask:
-              'linear-gradient(#fff, #fff) content-box, linear-gradient(#fff, #fff)', // Inner mask
+              'linear-gradient(#fff, #fff) content-box, linear-gradient(#fff, #fff)',
             WebkitMaskComposite: 'destination-out',
             maskComposite: 'exclude',
           }}
         ></div>
       )}
-      {!isDismissed ? (
+      {!player.refusedFromAuction ? (
         <Avatar
           src={'https://i.pravatar.cc/150?u=a04258114e29026302d'}
           ImgComponent={props => <Image {...props} fill={true} />}
@@ -44,7 +44,7 @@ const AuctionPlayerCard: FC<{ player: Player; index: number }> = ({
       )}
       <div className="flex flex-col items-center">
         <p className="text-xl capitalize">{player.user.nickname}</p>
-        {!isDismissed ? (
+        {!player.refusedFromAuction ? (
           <p className="text-custom text-nowrap text-sm">{player.money}mm</p>
         ) : (
           <p className="font-custom text-[10px] uppercase">відмовився</p>

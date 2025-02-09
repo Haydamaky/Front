@@ -19,10 +19,11 @@ const PlayerChipsContainer = () => {
       prevGameAfterRolledDices.current = data.game;
       shouldUpdate.current = true;
     };
-    socket.emit('getGameData', handleGetGameData);
+    socket.on('gameData', handleGetGameData);
     socket.on('rolledDice', handleRollDiced);
     return () => {
       socket.off('rolledDice', handleRollDiced);
+      socket.off('gameData', handleGetGameData);
     };
   }, []);
   if (shouldUpdate.current) {

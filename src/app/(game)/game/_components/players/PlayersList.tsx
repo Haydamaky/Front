@@ -65,16 +65,17 @@ const PlayersList = () => {
         dispatch(setFields(data.fields));
       }
     };
-    const getGameDataAndSetStates = () => {
-      socket.emitWithCallbacks(
-        'getGameData',
-        dispatchSetGame,
-        dispatchSetFields,
-        calculateTimeToEndAndSetStates,
-      );
+    const getGameData = () => {
+      socket.emit('getGameData');
     };
-    getGameDataAndSetStates();
-    socket.on('rejoin', getGameDataAndSetStates);
+    getGameData();
+    socket.on('rejoin', getGameData);
+    socket.on(
+      'gameData',
+      dispatchSetGame,
+      dispatchSetFields,
+      calculateTimeToEndAndSetStates,
+    );
     const setRolledDiceSocket = () => {
       rolledDice.current = true;
     };
@@ -102,7 +103,7 @@ const PlayersList = () => {
         dispatchSetFields,
         dispatchSetGame,
       );
-      socket.off('rejoin', getGameDataAndSetStates);
+      socket.off('rejoin', getGameData);
       socket.off('rolledDice', setRolledDiceSocket);
     };
   }, []);

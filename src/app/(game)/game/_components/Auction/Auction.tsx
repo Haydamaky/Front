@@ -9,25 +9,37 @@ import {
   useDisclosure,
 } from '@heroui/modal';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Message from '../Chat/message';
 import InfoField from '../InfoField';
 import Players from './Players';
 import ProgressBar from './ProgressBar';
 import { Button } from '@/components/ui/button';
 import { gradientColorVariants } from '../../_utils';
+import { Field } from '@/types/field';
+import { AuctionType } from '@/types/auction';
+import { socket } from '@/socket';
 
-const Auction: FC = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const fields = useAppSelector(state => state.fields.fields);
+interface AuctionProps {
+  isOpen: boolean;
+  currentField: Field;
+  auction: AuctionType | null;
+  defaultOpen: boolean;
+}
+
+const Auction = ({
+  isOpen,
+  currentField,
+  auction,
+  defaultOpen,
+}: AuctionProps) => {
   const players = useAppSelector(state => state.game.game.players);
-
+  console.log({ auction });
   return (
     <>
-      <Button onClick={onOpen}>Open</Button>
       <Modal
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        defaultOpen={defaultOpen}
         isDismissable={false}
         hideCloseButton
         scrollBehavior={'inside'}
@@ -53,7 +65,7 @@ const Auction: FC = () => {
               </ModalHeader>
               <ModalBody className="h-full gap-0 overflow-hidden">
                 <div className="mt-6 grid h-full min-h-0 w-full min-w-0 grid-cols-[14%_58%_30%] gap-0 px-0 py-0">
-                  <Players />
+                  <Players refusedIds={auction?.usersRefused || []} />
                   <div className="z-50 mx-10 flex h-[61vh] flex-col items-center gap-4">
                     <ProgressBar />
                     <div className="scrollbar flex h-[45%] w-[80%] justify-center overflow-y-auto pt-4">
@@ -133,14 +145,13 @@ const Auction: FC = () => {
                       Фінальна ціна лоту
                     </h1>
                     <span className="my-2 min-w-0 rounded-lg border-2 border-white bg-primaryGame p-2 text-center font-namu text-2xl">
-                      3 500 mm
+                      {auction?.bidders[auction.bidders.length - 1].bid ||
+                        currentField.price}{' '}
+                      mm
                     </span>
 
-                    <InfoField field={fields[1] as any} />
-                    <div
-                      onClick={onClose}
-                      className="w-full translate-y-[200%] rounded-[3px] bg-redGradient p-[1px]"
-                    >
+                    <InfoField field={currentField} />
+                    <div className="w-full translate-y-[200%] rounded-[3px] bg-redGradient p-[1px]">
                       <Button
                         variant="forGradient"
                         size="inspectField"

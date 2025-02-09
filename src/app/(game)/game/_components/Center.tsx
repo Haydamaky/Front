@@ -14,6 +14,7 @@ import Image from 'next/image';
 import { Avatar } from '@nextui-org/react';
 import { Player } from '@/types/player';
 import Link from 'next/link';
+import { AuctionType } from '@/types/auction';
 
 type Action =
   | 'rollDice'
@@ -52,6 +53,7 @@ const Center = () => {
   });
   const [amountToPay, setAmountToPay] = useState(0);
   const rolledDice = useRef(false);
+  const [auction, setAuction] = useState<null | AuctionType>(null);
   useEffect(() => {
     if (rolledDice.current) {
       if (!currentField.ownedBy && !currentField.specialField) {
@@ -66,24 +68,18 @@ const Center = () => {
       if (currentField.toPay && currentField.name === 'COIN') {
         setAction('COIN');
       }
-      console.log({ currentField, amountToPay, user });
 
       if (currentField.secret && secretInfo) {
-        console.log('secret');
         if (secretInfo.users.length === 1) {
-          console.log('users length 1');
           if (secretInfo.amounts[0] < 0) {
             setAction('secretPay');
-            console.log('users 1 amount[0] < 0');
             setAmountToPay(secretInfo.amounts[0]);
           }
         } else if (secretInfo.users.length === 2) {
-          console.log('users length 2');
           const index = secretInfo.users.findIndex(
             userId => userId === user?.id,
           );
           if (secretInfo.amounts[index] < 0) {
-            console.log('users 2 amount[', index);
             setAction('secretPay');
             setAmountToPay(secretInfo.amounts[index]);
           }
@@ -91,10 +87,8 @@ const Center = () => {
           secretInfo.users.length > 2 &&
           user?.id !== secretInfo.users[0]
         ) {
-          console.log('Users length > 2');
           if (secretInfo.amounts.length === 2) {
             if (secretInfo.amounts[1] < 0) {
-              console.log('2');
               setAction('secretPay');
               setAmountToPay(secretInfo.amounts[1]);
             }
@@ -102,7 +96,6 @@ const Center = () => {
 
           if (secretInfo.amounts.length === 1) {
             if (secretInfo.amounts[0] < 0) {
-              console.log('1');
               setAction('secretPay');
               setAmountToPay(secretInfo.amounts[0]);
             }
@@ -119,6 +112,7 @@ const Center = () => {
     };
     const handleHasPutUpForAuction = (data: any) => {
       setAction('auction');
+      setAuction(data.auction);
     };
     const handleSecret = (data: any) => {
       setSecretInfo(data);
@@ -144,6 +138,16 @@ const Center = () => {
         setPlayerWon(playerWon);
       }
     };
+    const handleGameData = (data: any) => {
+      if (data.auction) {
+        setAction('auction');
+        setAuction(data.auction);
+      }
+      if (data.secretInfo) {
+        setSecretInfo(data);
+      }
+    };
+    socket.on('gameData', handleGameData);
     socket.on('playerWon', onPlayerWon);
     socket.on('rolledDice', handleRolledDice);
     socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
@@ -157,8 +161,10 @@ const Center = () => {
       socket.off('playerWon', onPlayerWon);
       socket.off('secret', handleSecret);
       socket.off('updatePlayers', handleUpdatePlayers);
+      socket.off('gameData', handleGameData);
     };
   }, [user]);
+  console.log({ auction, action, isOpen: action === 'auction' });
   const rollDice = () => {
     socket.emit('rollDice');
   };
@@ -179,11 +185,13 @@ const Center = () => {
     }
   };
   const turnOfUser = game.turnOfUserId === user?.id;
-  console.log({ action, secretInfo });
+  const handlePutUpForAuction = () => {
+    socket.emit('putUpForAuction');
+  };
   return (
     <div className="relative h-full p-3">
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
-        {(turnOfUser || action === 'auction' || action === 'secretPay') &&
+        {(turnOfUser || action === 'secretPay') &&
           !chipTransition &&
           action &&
           (currentField.ownedBy !== game.turnOfUserId || !game.dices) && (
@@ -201,9 +209,7 @@ const Center = () => {
                           ? 'Податок на розкіш'
                           : action === 'VDNH'
                             ? 'ВДНГ – час для розваг!'
-                            : action === 'auction'
-                              ? 'Аукціон'
-                              : ''}
+                            : ''}
               </div>
               {action === 'rollDice' && (
                 <>
@@ -256,6 +262,7 @@ const Center = () => {
                     >
                       <Button
                         variant={'gameDarkBlue'}
+                        onClick={handlePutUpForAuction}
                         size={screenSize.width > 1200 ? 'default' : 'xs'}
                         className="font-custom"
                       >
@@ -364,45 +371,21 @@ const Center = () => {
                     </Button>
                   </>
                 )}
-              {action === 'auction' && (
-                <>
-                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
-                    <div className="flex h-6 items-center justify-center gap-1 rounded-md bg-gradient-to-r from-[#FBD07C] to-[#F7F779] px-1 text-[#19376D]">
-                      <div className="h-5 w-5">
-                        <HintBulb />
-                      </div>
-                    </div>
-                    <p className="text-[10px]">
-                      Якщо ви відмовитесь від покупки, поле буде виставлено на
-                      аукціон.
-                    </p>
-                  </div>
-                  <div className="flex gap-1 lg:gap-4">
-                    <Button
-                      size={screenSize.width > 1200 ? 'default' : 'xs'}
-                      className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
-                    >
-                      Підняти на 100
-                    </Button>
-                    <Button
-                      variant={'white'}
-                      size={screenSize.width > 1200 ? 'default' : 'xs'}
-                      className="font-custom text-[9px] md:text-sm lg:text-lg"
-                    >
-                      Відмовитись
-                    </Button>
-                  </div>
-                </>
-              )}
             </div>
           )}
       </div>
+      <Auction
+        isOpen={action === 'auction'}
+        currentField={currentField}
+        auction={auction}
+        defaultOpen={!!auction && action === 'auction'}
+      />
+      {/* <Auction isOpen={true} currentField={currentField} /> */}
       <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex gap-5">
           <DicesContainer />
         </div>
       </div>
-      <Auction />
       <Chat chatId={game?.chat?.id} gameId={game.id} players={game.players} />
       {playerWon && !chipTransition && (
         <div className="fixed left-0 top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-[#060606F2]">
