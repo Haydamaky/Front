@@ -34,7 +34,9 @@ const Auction = ({
   defaultOpen,
 }: AuctionProps) => {
   const players = useAppSelector(state => state.game.game.players);
-  console.log({ auction });
+  const now = Date.now();
+  const timeToEnd = Math.ceil((+(auction?.turnEnds ?? now + 10) - now) / 1000);
+
   return (
     <>
       <Modal
@@ -46,7 +48,7 @@ const Auction = ({
         backdrop="blur"
       >
         <ModalContent className="relative flex h-[90vh] w-[100vh] max-w-none flex-col rounded-xl bg-bgDark p-2">
-          {onClose => (
+          {_ => (
             <>
               <Image
                 fill={true}
@@ -67,7 +69,7 @@ const Auction = ({
                 <div className="mt-6 grid h-full min-h-0 w-full min-w-0 grid-cols-[14%_58%_30%] gap-0 px-0 py-0">
                   <Players refusedIds={auction?.usersRefused || []} />
                   <div className="z-50 mx-10 flex h-[61vh] flex-col items-center gap-4">
-                    <ProgressBar />
+                    <ProgressBar initialValue={timeToEnd} />
                     <div className="scrollbar flex h-[45%] w-[80%] justify-center overflow-y-auto pt-4">
                       <div className="flex flex-col gap-4">
                         {players.map(player => {
