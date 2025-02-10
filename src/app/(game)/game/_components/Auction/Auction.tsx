@@ -34,9 +34,30 @@ const Auction = ({
   defaultOpen,
 }: AuctionProps) => {
   const players = useAppSelector(state => state.game.game.players);
-  const now = Date.now();
-  const timeToEnd = Math.ceil((+(auction?.turnEnds ?? now + 10) - now) / 1000);
+  const raiseBid = (raiseBy: number) => {
+    socket.emit('raisePrice', { raiseBy });
+  };
+  const [customBid, setCustomBid] = useState('');
+  const handleCustomBidChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+    if (/^\d*$/.test(value)) {
+      setCustomBid(value);
+    }
+  };
 
+  const submitCustomBid = () => {
+    const bidAmount = Number(customBid);
+    if (bidAmount > 0) {
+      socket.emit('raisePrice', { raiseBy: bidAmount });
+      setCustomBid('');
+    }
+  };
+
+  const onRefuseAuction = () => {
+    socket.emit('refuseAuction');
+  };
   return (
     <>
       <Modal
@@ -69,20 +90,68 @@ const Auction = ({
                 <div className="mt-6 grid h-full min-h-0 w-full min-w-0 grid-cols-[14%_58%_30%] gap-0 px-0 py-0">
                   <Players refusedIds={auction?.usersRefused || []} />
                   <div className="z-50 mx-10 flex h-[61vh] flex-col items-center gap-4">
-                    <ProgressBar initialValue={timeToEnd} />
+                    <ProgressBar auction={auction} />
                     <div className="scrollbar flex h-[45%] w-[80%] justify-center overflow-y-auto pt-4">
                       <div className="flex flex-col gap-4">
-                        {players.map(player => {
-                          return (
-                            <>
-                              <Message
-                                name={player.user?.nickname}
-                                color={gradientColorVariants[player?.color]}
-                                text="готовий придбати поле за 3500 mm"
-                              />
-                            </>
-                          );
-                        })}
+                        {auction?.bidders
+                          .map(bidder => {
+                            if (!bidder.userId) {
+                              const playerThatPutOnAuction = players.find(
+                                player =>
+                                  player.userId === auction.usersRefused[0],
+                              );
+                              return (
+                                <Message
+                                  name={
+                                    playerThatPutOnAuction?.user.nickname || ''
+                                  }
+                                  color={
+                                    gradientColorVariants[
+                                      playerThatPutOnAuction?.color || 'blue'
+                                    ]
+                                  }
+                                  text="Виставляє поле на аукціон"
+                                />
+                              );
+                            }
+                            if (bidder.userId && bidder.accepted) {
+                              const playerThatMadeBid = players.find(
+                                player => player.userId === bidder.userId,
+                              );
+                              return (
+                                <Message
+                                  name={playerThatMadeBid?.user.nickname || ''}
+                                  color={
+                                    gradientColorVariants[
+                                      playerThatMadeBid?.color || 'blue'
+                                    ]
+                                  }
+                                  text={`готовий придбати поле за ${bidder.bid}`}
+                                />
+                              );
+                            }
+                            if (
+                              bidder.userId &&
+                              !bidder.accepted &&
+                              bidder.bid === 0
+                            ) {
+                              const playerThatMadeBid = players.find(
+                                player => player.userId === bidder.userId,
+                              );
+                              return (
+                                <Message
+                                  name={playerThatMadeBid?.user.nickname || ''}
+                                  color={
+                                    gradientColorVariants[
+                                      playerThatMadeBid?.color || 'blue'
+                                    ]
+                                  }
+                                  text="відмовляється від участі у аукціоні"
+                                />
+                              );
+                            }
+                          })
+                          .reverse()}
                       </div>
                     </div>
                     <div className="mt-auto h-[20%] w-full">
@@ -91,6 +160,9 @@ const Auction = ({
                         <Button
                           variant={'blueGame'}
                           size={'default'}
+                          onClick={() => {
+                            raiseBid(100);
+                          }}
                           className="font-namu text-[9px] text-white md:text-sm lg:text-lg"
                         >
                           100 mm
@@ -98,6 +170,9 @@ const Auction = ({
                         <Button
                           variant={'blueGame'}
                           size={'default'}
+                          onClick={() => {
+                            raiseBid(200);
+                          }}
                           className="font-namu text-[9px] text-white md:text-sm lg:text-lg"
                         >
                           200 mm
@@ -105,6 +180,9 @@ const Auction = ({
                         <Button
                           variant={'blueGame'}
                           size={'default'}
+                          onClick={() => {
+                            raiseBid(500);
+                          }}
                           className="font-namu text-[9px] text-white md:text-sm lg:text-lg"
                         >
                           500 mm
@@ -112,6 +190,9 @@ const Auction = ({
                         <Button
                           variant={'blueGame'}
                           size={'default'}
+                          onClick={() => {
+                            raiseBid(1000);
+                          }}
                           className="font-namu text-[9px] text-white md:text-sm lg:text-lg"
                         >
                           1000 mm
@@ -121,6 +202,8 @@ const Auction = ({
                         <div className="h-8 w-[25%] rounded-[3px] bg-darkBlueGradient p-[1px]">
                           <input
                             placeholder="Ваша Сума"
+                            onChange={handleCustomBidChange}
+                            value={customBid}
                             type="text"
                             className="placeholder: placeholder: placeholder: h-[30px] w-full rounded-[3px] border-none bg-[#173b7c] placeholder:pl-2 placeholder:font-fixelDisplay placeholder:text-sm placeholder:font-bold placeholder:text-white"
                           />
@@ -129,6 +212,8 @@ const Auction = ({
                           <Button
                             variant={'blueGame'}
                             size={'widthFull'}
+                            onClick={submitCustomBid}
+                            disabled={!customBid || Number(customBid) <= 0}
                             className="h-8"
                           >
                             <Image
@@ -156,6 +241,7 @@ const Auction = ({
                     <div className="w-full translate-y-[200%] rounded-[3px] bg-redGradient p-[1px]">
                       <Button
                         variant="forGradient"
+                        onClick={onRefuseAuction}
                         size="inspectField"
                         className="py-3 font-custom text-sm uppercase"
                       >

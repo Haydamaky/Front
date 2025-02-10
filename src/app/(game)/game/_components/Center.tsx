@@ -114,6 +114,9 @@ const Center = () => {
       setAction('auction');
       setAuction(data.auction);
     };
+    const handleChangeAuction = (data: any) => {
+      setAuction(data.auction);
+    };
     const handleSecret = (data: any) => {
       setSecretInfo(data);
     };
@@ -149,6 +152,7 @@ const Center = () => {
     };
     socket.on('gameData', handleGameData);
     socket.on('playerWon', onPlayerWon);
+    socket.on(['raisedPrice', 'refusedFromAuction'], handleChangeAuction);
     socket.on('rolledDice', handleRolledDice);
     socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
     socket.on('passTurnToNext', handlePassTurnToNext);
@@ -156,7 +160,11 @@ const Center = () => {
     socket.on('updatePlayers', handleUpdatePlayers);
     return () => {
       socket.off('rolledDice', handleRolledDice);
-      socket.off('hasPutUpForAuction', handleHasPutUpForAuction);
+      socket.off(
+        ['raisedPrice', 'refusedFromAuction'],
+        handleHasPutUpForAuction,
+      );
+      socket.off('raisedPrice', handleChangeAuction);
       socket.off('passTurnToNext', handlePassTurnToNext);
       socket.off('playerWon', onPlayerWon);
       socket.off('secret', handleSecret);

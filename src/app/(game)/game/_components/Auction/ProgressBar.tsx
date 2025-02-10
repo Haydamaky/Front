@@ -1,35 +1,41 @@
 import { Progress } from '@heroui/progress';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import styles from './styles.module.css';
+import { AuctionType } from '@/types/auction';
 
 interface ProgressBarProps {
-  initialValue: number;
+  auction: AuctionType | null;
 }
 
-const ProgressBar: FC<ProgressBarProps> = ({ initialValue }) => {
-  const [value, setValue] = useState(initialValue);
-
+const ProgressBar: FC<ProgressBarProps> = ({ auction }) => {
+  const now = Date.now();
+  const timeToEnd = Math.ceil((+(auction?.turnEnds ?? now) - now) / 1000);
+  const [value, setValue] = useState(timeToEnd);
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  const animationId = useRef<number | null>(null);
   useEffect(() => {
-    let start: number | null = null;
-    let animationFrameId: number;
+    setValue(timeToEnd);
+    setStartTime(Date.now());
+    if (animationId.current) cancelAnimationFrame(animationId.current);
 
-    const updateProgress = (timestamp: number) => {
-      if (!start) start = timestamp;
-
-      const elapsed = (timestamp - start) / 1000; // Convert ms to seconds
-      const newValue = Math.max(initialValue - elapsed, 0); // Prevent negative values
+    const updateProgress = () => {
+      const currentTime = Date.now();
+      const elapsed = (currentTime - startTime) / 1000;
+      const newValue = Math.max(timeToEnd - elapsed, 0);
 
       setValue(newValue);
 
       if (newValue > 0) {
-        animationFrameId = requestAnimationFrame(updateProgress);
+        requestAnimationFrame(updateProgress);
       }
     };
 
-    animationFrameId = requestAnimationFrame(updateProgress);
+    animationId.current = requestAnimationFrame(updateProgress);
 
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [initialValue]);
+    return () => {
+      if (animationId.current) cancelAnimationFrame(animationId.current);
+    };
+  }, [auction, startTime]);
 
   return (
     <div className="flex w-[95%] flex-col items-center gap-2">
