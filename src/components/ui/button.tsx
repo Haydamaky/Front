@@ -21,6 +21,8 @@ const buttonVariants = cva(
         tertiary: 'bg-primary text-base font-custom',
         forGradient:
           'flex w-full font-normal cursor-pointer items-center bg-[#002147] justify-center',
+        forGradientWithText:
+          'flex w-full font-normal cursor-pointer items-center justify-center bg-greedGradient bg-clip-text text-transparent',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         blueGame: 'bg-darkBlueGradient text-white shadow hover:bg-primary/90',

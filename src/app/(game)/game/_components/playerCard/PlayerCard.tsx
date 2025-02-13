@@ -55,7 +55,11 @@ const PlayerCard = ({
   let playerButtons = mainPlayer ? (
     <GiveUpButton opacity={opacity} lost={player.lost} />
   ) : (
-    <OtherPlayerButtons opacity={opacityOtherPlayer} lost={player.lost} />
+    <OtherPlayerButtons
+      opacity={opacityOtherPlayer}
+      lost={player.lost}
+      player={player}
+    />
   );
 
   const playerHTML = (

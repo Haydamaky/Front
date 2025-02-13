@@ -3,10 +3,14 @@ import { Button } from '@/components/ui/button';
 import ProfileIcon from '../playerButtonsIcons/ProfileIcon';
 import DocumentIcon from '../playerButtonsIcons/DocumentIcon';
 import BellIcon from '../playerButtonsIcons/BellIcon';
+import { useAppDispatch } from '@/hooks/store';
+import { setTrade } from '@/store/slices/trade';
+import { Player } from '@/types/player';
 
 interface OtherPlayerButtonsProps {
   opacity: string;
   lost: boolean;
+  player: Player;
 }
 const getGradientClass = (isHovered: boolean) =>
   isHovered
@@ -16,6 +20,7 @@ const getGradientClass = (isHovered: boolean) =>
 export const OtherPlayerButtons = ({
   opacity,
   lost,
+  player,
 }: OtherPlayerButtonsProps) => {
   const [hoveredStates, setHoveredStates] = useState({
     profile: false,
@@ -23,12 +28,24 @@ export const OtherPlayerButtons = ({
     report: false,
   });
 
+  const dispatch = useAppDispatch();
+
   const handleMouseEnter = (button: keyof typeof hoveredStates) => {
     setHoveredStates(prev => ({ ...prev, [button]: true }));
   };
 
   const handleMouseLeave = (button: keyof typeof hoveredStates) => {
     setHoveredStates(prev => ({ ...prev, [button]: false }));
+  };
+
+  const handleTrade = () => {
+    dispatch(
+      setTrade({
+        offerFieldsIndexes: [],
+        wantedFieldsIndexes: [],
+        toUserId: player.userId,
+      }),
+    );
   };
 
   return (
@@ -56,6 +73,7 @@ export const OtherPlayerButtons = ({
           className="pl-[26%]"
           onMouseEnter={() => handleMouseEnter('exchange')}
           onMouseLeave={() => handleMouseLeave('exchange')}
+          onClick={handleTrade}
           size="widthFull"
         >
           <DocumentIcon isHovered={hoveredStates.exchange} />

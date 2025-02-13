@@ -15,7 +15,7 @@ import { Avatar } from '@nextui-org/react';
 import { Player } from '@/types/player';
 import Link from 'next/link';
 import { AuctionType } from '@/types/auction';
-
+import Trade from './Trade/Trade';
 type Action =
   | 'rollDice'
   | 'auction'
@@ -37,6 +37,7 @@ const Center = () => {
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
   );
+  const { data: trade } = useAppSelector(state => state.trade);
   const [playerWon, setPlayerWon] = useState<undefined | Player>(undefined);
   const [playerWithTurn] = game.players.filter(
     player => player.userId === game.turnOfUserId,
@@ -172,7 +173,6 @@ const Center = () => {
       socket.off('gameData', handleGameData);
     };
   }, [user]);
-  console.log({ auction, action, isOpen: action === 'auction' });
   const rollDice = () => {
     socket.emit('rollDice');
   };
@@ -198,6 +198,7 @@ const Center = () => {
   };
   return (
     <div className="relative h-full p-3">
+      {trade && <Trade />}
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
         {(turnOfUser || action === 'secretPay') &&
           !chipTransition &&
@@ -296,7 +297,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payForField}
                   >
-                    Оплатити оренду{' '}
+                    Оплатити оренду
                     {currentField.income[currentField.amountOfBranches]}
                   </Button>
                 </>
@@ -382,13 +383,12 @@ const Center = () => {
             </div>
           )}
       </div>
-      <Auction
+      {/* <Auction
         isOpen={action === 'auction'}
         currentField={currentField}
         auction={auction}
         defaultOpen={!!auction && action === 'auction'}
-      />
-      {/* <Auction isOpen={true} currentField={currentField} /> */}
+      /> */}
       <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex gap-5">
           <DicesContainer />

@@ -31,7 +31,7 @@ const InspectField = ({ field, buttons, infoFieldRef }: InspectFieldProps) => {
     position = cornersPositions[corner];
     translate = '';
   }
-  const classNames = `${position} ${translate} absolute w-[27%]`;
+  const classNames = `${position} ${translate} absolute w-[27%] z-50`;
   return (
     <InfoField
       classNames={classNames}

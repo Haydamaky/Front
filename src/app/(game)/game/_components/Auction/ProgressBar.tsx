@@ -9,7 +9,7 @@ interface ProgressBarProps {
 
 const ProgressBar: FC<ProgressBarProps> = ({ auction }) => {
   const now = Date.now();
-  const timeToEnd = Math.ceil((+(auction?.turnEnds ?? now) - now) / 1000);
+  const timeToEnd = Math.ceil((+(auction?.turnEnds ?? now) - now + 10) / 1000);
   const [value, setValue] = useState(timeToEnd);
   const [startTime, setStartTime] = useState<number>(Date.now());
   const animationId = useRef<number | null>(null);
@@ -45,7 +45,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ auction }) => {
       <Progress
         aria-label="Loading..."
         className={styles.bar}
-        maxValue={60}
+        maxValue={15}
         minValue={0}
         value={value}
       />

@@ -20,13 +20,13 @@ const GameBoard = () => {
   const inspectFieldRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    socket.on('error', (err: any) => console.log(err));
-    socket.on('updateGameData', data => {
+    const handleUpdateGameData = (data: any) => {
       dispatch(setFields(data.fields));
       dispatch(setGame(data.game));
-    });
+    };
+    socket.on('updateGameData', handleUpdateGameData);
     return () => {
-      socket.off('error');
+      socket.off('updateGameData', handleUpdateGameData);
     };
   }, []);
 

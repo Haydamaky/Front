@@ -14,6 +14,11 @@
     width: 5px;
   }
 
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
   .scrollbar::-webkit-scrollbar-track {
     border-radius: 100vh;
     background: rgba(0, 33, 71, 1);
