@@ -15,7 +15,9 @@ import { Avatar } from '@nextui-org/react';
 import { Player } from '@/types/player';
 import Link from 'next/link';
 import { AuctionType } from '@/types/auction';
-import Trade from './Trade/Trade';
+import TradeOffer from './Trade/TradeOffer';
+import TradeAcceptence from './Trade/TradeAcceptence';
+import { TradeData } from '@/types/trade';
 type Action =
   | 'rollDice'
   | 'auction'
@@ -38,6 +40,9 @@ const Center = () => {
     state => state.chipTransition,
   );
   const { data: trade } = useAppSelector(state => state.trade);
+  const [tradeAcceptance, setTradeAcceptance] = useState<null | TradeData>(
+    null,
+  );
   const [playerWon, setPlayerWon] = useState<undefined | Player>(undefined);
   const [playerWithTurn] = game.players.filter(
     player => player.userId === game.turnOfUserId,
@@ -55,6 +60,7 @@ const Center = () => {
   const [amountToPay, setAmountToPay] = useState(0);
   const rolledDice = useRef(false);
   const [auction, setAuction] = useState<null | AuctionType>(null);
+
   useEffect(() => {
     if (rolledDice.current) {
       if (!currentField.ownedBy && !currentField.specialField) {
@@ -151,6 +157,11 @@ const Center = () => {
         setSecretInfo(data);
       }
     };
+    const hadleTradeOffered = (data: any) => {
+      console.log('Trade Offered');
+      setTradeAcceptance(data.trade);
+    };
+    socket.on('tradeOffered', hadleTradeOffered);
     socket.on('gameData', handleGameData);
     socket.on('playerWon', onPlayerWon);
     socket.on(['raisedPrice', 'refusedFromAuction'], handleChangeAuction);
@@ -171,6 +182,7 @@ const Center = () => {
       socket.off('secret', handleSecret);
       socket.off('updatePlayers', handleUpdatePlayers);
       socket.off('gameData', handleGameData);
+      socket.off('tradeOffered', hadleTradeOffered);
     };
   }, [user]);
   const rollDice = () => {
@@ -196,13 +208,21 @@ const Center = () => {
   const handlePutUpForAuction = () => {
     socket.emit('putUpForAuction');
   };
+  console.log({ action });
   return (
     <div className="relative h-full p-3">
-      {trade && <Trade />}
+      {tradeAcceptance && (
+        <TradeAcceptence
+          trade={tradeAcceptance}
+          setTradeAcceptance={setTradeAcceptance}
+        />
+      )}
+      {trade && <TradeOffer />}
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
         {(turnOfUser || action === 'secretPay') &&
           !chipTransition &&
           action &&
+          action !== 'auction' &&
           (currentField.ownedBy !== game.turnOfUserId || !game.dices) && (
             <div className="flex flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
               <div className="mb-3 text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
@@ -297,7 +317,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payForField}
                   >
-                    Оплатити оренду
+                    Оплатити оренду{' '}
                     {currentField.income[currentField.amountOfBranches]}
                   </Button>
                 </>
@@ -383,12 +403,12 @@ const Center = () => {
             </div>
           )}
       </div>
-      {/* <Auction
+      <Auction
         isOpen={action === 'auction'}
         currentField={currentField}
         auction={auction}
         defaultOpen={!!auction && action === 'auction'}
-      /> */}
+      />
       <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex gap-5">
           <DicesContainer />

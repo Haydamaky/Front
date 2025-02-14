@@ -57,7 +57,9 @@ const PlayersList = () => {
   const intervalRef = useRef<null | NodeJS.Timeout>(null);
   useEffect(() => {
     const dispatchSetGame = (data: DataWithGame) => {
-      dispatch(setGame(data.game));
+      if (data.game) {
+        dispatch(setGame(data.game));
+      }
     };
 
     const dispatchSetFields = (data: DataWithGame) => {
@@ -76,35 +78,43 @@ const PlayersList = () => {
       dispatchSetFields,
       calculateTimeToEndAndSetStates,
     );
+    socket.on('tradeOffered', dispatchSetGame);
     const setRolledDiceSocket = () => {
       rolledDice.current = true;
     };
     socket.on('rolledDice', setRolledDiceSocket);
     socket.on(
-      ['hasPutUpForAuction', 'passTurnToNext'],
+      ['hasPutUpForAuction', 'getGameData', 'passTurnToNext', 'updateGameData'],
       calculateTimeToEndAndSetStates,
     );
 
     socket.on('passTurnToNext', dispatchSetGame, dispatchSetFields);
     socket.on(
-      ['payedForField', 'playerSurrendered'],
+      ['payedForField', 'playerSurrendered', 'updateGameData'],
       dispatchSetGame,
       dispatchSetFields,
     );
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       socket.off(
-        ['hasPutUpForAuction', 'getGameData', 'passTurnToNext'],
+        [
+          'hasPutUpForAuction',
+          'getGameData',
+          'passTurnToNext',
+          'tradeOffered',
+          'updateGameData',
+        ],
         calculateTimeToEndAndSetStates,
       );
       socket.off(['passTurnToNext'], dispatchSetGame);
       socket.off(
-        ['payedForField', 'playerSurrendered'],
+        ['payedForField', 'playerSurrendered', 'updateGameData'],
         dispatchSetFields,
         dispatchSetGame,
       );
       socket.off('rejoin', getGameData);
       socket.off('rolledDice', setRolledDiceSocket);
+      socket.off('tradeOffered', dispatchSetGame);
     };
   }, []);
 

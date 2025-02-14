@@ -18,17 +18,6 @@ const GameBoard = () => {
   const { game } = useAppSelector(state => state.game);
   const [fieldClicked, setFieldClicked] = useState<null | Field>(null);
   const inspectFieldRef = useRef<HTMLDivElement | null>(null);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    const handleUpdateGameData = (data: any) => {
-      dispatch(setFields(data.fields));
-      dispatch(setGame(data.game));
-    };
-    socket.on('updateGameData', handleUpdateGameData);
-    return () => {
-      socket.off('updateGameData', handleUpdateGameData);
-    };
-  }, []);
 
   const handleFieldClicked = (field: Field) => {
     setFieldClicked(field);

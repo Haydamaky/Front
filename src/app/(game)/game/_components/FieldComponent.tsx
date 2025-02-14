@@ -5,7 +5,6 @@ import {
   gradientColorVariantsFields0Deg,
 } from '../_utils';
 import Image from 'next/image';
-import Locker from './Locker/Locker';
 import PledgeCounter from './PledgeCounter/PledgeCounter';
 import { useState } from 'react';
 import { setTrade } from '@/store/slices/trade';

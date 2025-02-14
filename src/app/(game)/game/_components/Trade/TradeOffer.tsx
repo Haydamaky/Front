@@ -1,20 +1,20 @@
-import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { setTrade } from '@/store/slices/trade';
 import bgTradeImage from '@/../public/images/bgTrade.svg';
-import Image from 'next/image';
-import { PlayerColor } from '@/types/player';
-import { gradientColorVariants } from '../../_utils';
-import { useState } from 'react';
-import { TradeData } from '@/types/trade';
 import { Button } from '@/components/ui/button';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { socket } from '@/socket';
+import { setTrade } from '@/store/slices/trade';
+import { PlayerColor } from '@/types/player';
+import Image from 'next/image';
+import { useState } from 'react';
+import { gradientColorVariants } from '../../_utils';
 
-const Trade = () => {
+const TradeOffer = () => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector(state => state.fields.fields);
   const game = useAppSelector(state => state.game.game);
   const { data: trade } = useAppSelector(state => state.trade);
   const { data: user } = useAppSelector(state => state.user);
-  const handleTrade = () => {
+  const handleTradeClose = () => {
     dispatch(setTrade(null));
   };
   const [firstExtraPay, setFirstExtraPay] = useState<number | string>('');
@@ -39,6 +39,14 @@ const Trade = () => {
     const newValue = e.target.value;
     setSecondExtraPay(newValue === '' ? '' : Number(newValue));
   };
+  const handleSendOffer = () => {
+    socket.emit('offerTrade', {
+      ...trade,
+      offeredMoney: firstExtraPay || 0,
+      wantedMoney: secondExtraPay || 0,
+    });
+    handleTradeClose();
+  };
   return (
     <div className="absolute left-[1.5%] top-[1.5%] z-40 h-[97%] w-[97%] rounded-xl bg-primaryGame font-ermilov text-xs text-white shadow-gameCenterModaShadowCombined">
       <Image
@@ -56,7 +64,7 @@ const Trade = () => {
         <div
           className="absolute right-[4%] top-[2%] h-8 w-8 cursor-pointer"
           aria-label="Close"
-          onClick={handleTrade}
+          onClick={handleTradeClose}
         >
           <div className="absolute left-0 top-1/2 h-[2px] w-8 -translate-y-1/2 rotate-45 rounded-md bg-red-500" />
           <div className="absolute left-0 top-1/2 h-[2px] w-8 -translate-y-1/2 -rotate-45 rounded-md bg-red-500" />
@@ -65,7 +73,7 @@ const Trade = () => {
       <div className="mt-2 flex h-[65%] w-full px-6">
         <div className="flex h-full w-full">
           <div className="grid w-[49.7%] grid-cols-[57fr_43fr] gap-5">
-            <div className="flex flex-col justify-between overflow-y-auto">
+            <div className="flex flex-col justify-between overflow-hidden">
               <div
                 className="flex items-center justify-center rounded-sm text-center text-lg"
                 style={{
@@ -74,7 +82,6 @@ const Trade = () => {
               >
                 <h2 className="mb-[2px] py-1">{user?.nickname}</h2>
               </div>
-              {/* try to play around with gap */}
               <div className="flex h-[68%] flex-col gap-1 overflow-y-auto scrollbar-hide">
                 {trade?.offerFieldsIndexes.map(offeredFieldIndex => {
                   const offeredField = fields.find(
@@ -132,7 +139,7 @@ const Trade = () => {
           </div>
           <div className="mx-5 w-[0.6%] rounded-full bg-white"></div>
           <div className="grid w-[49.7%] grid-cols-[57fr_43fr] gap-5">
-            <div className="flex flex-col justify-between overflow-y-auto">
+            <div className="flex flex-col justify-between overflow-hidden">
               <div
                 className="flex items-center justify-center rounded-sm text-center text-lg"
                 style={{
@@ -235,10 +242,11 @@ const Trade = () => {
         </div>
       </div>
 
-      <div className="ml-auto mr-8 w-[30%] rounded-[3px] bg-greedGradient p-[1px] font-custom">
+      <div className="ml-auto mr-8 w-[33%] rounded-[3px] bg-greedGradient p-[1px] font-custom">
         <div className="h-full w-full rounded-[3px] bg-[#002147]">
           <Button
-            variant="forGradientWithText"
+            onClick={handleSendOffer}
+            variant="forGradientWithGreenText"
             size="inspectField"
             className="pb-[1px] text-lg"
           >
@@ -250,4 +258,4 @@ const Trade = () => {
   );
 };
 
-export default Trade;
+export default TradeOffer;

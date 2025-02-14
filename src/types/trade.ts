@@ -4,6 +4,7 @@ export interface TradeData {
   offeredMoney: number;
   wantedMoney: number;
   toUserId: string;
+  fromUserId: string;
 }
 
 export interface TradeDataLocal {
