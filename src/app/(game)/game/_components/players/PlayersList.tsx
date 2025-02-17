@@ -121,17 +121,18 @@ const PlayersList = () => {
 
   return (
     <div className="relative my-auto flex h-[88%] flex-col gap-[2.7%] overflow-visible text-xs md:text-sm lg:text-lg">
-      {game.players?.map((player: Player, index) => {
-        return (
-          <PlayerCard
-            player={player}
-            key={player.id}
-            turnOfUserId={game.turnOfUserId}
-            turnTime={turnTime}
-            index={index}
-          ></PlayerCard>
-        );
-      })}
+      {game?.players &&
+        game.players?.map((player: Player, index) => {
+          return (
+            <PlayerCard
+              player={player}
+              key={player.id}
+              turnOfUserId={game.turnOfUserId}
+              turnTime={turnTime}
+              index={index}
+            ></PlayerCard>
+          );
+        })}
     </div>
   );
 };
