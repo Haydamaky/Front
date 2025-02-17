@@ -63,6 +63,7 @@ const PlayersList = () => {
     };
 
     const dispatchSetFields = (data: DataWithGame) => {
+      console.log({ data });
       if (data.fields) {
         dispatch(setFields(data.fields));
       }

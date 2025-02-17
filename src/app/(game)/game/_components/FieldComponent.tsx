@@ -171,7 +171,7 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
         >
           {Array.from({ length: field.amountOfBranches }).map((_, index) => (
             <Image
-              key={field.id + index}
+              key={field._id + index}
               src="/images/BuildSilver.svg"
               alt="silver-building"
               width={13}

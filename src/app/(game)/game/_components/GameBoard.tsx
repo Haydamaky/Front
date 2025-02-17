@@ -147,7 +147,7 @@ const GameBoard = () => {
       {fields.map((field: Field, index: number) => {
         if (index === 13) {
           return (
-            <Fragment key={field.id}>
+            <Fragment key={field._id}>
               <div className="col-span-9 col-start-2 row-span-9 row-start-2 bg-primaryGame">
                 <Center />
               </div>
@@ -158,7 +158,7 @@ const GameBoard = () => {
         return (
           <FieldComponent
             field={field}
-            key={field.id}
+            key={field._id}
             onClick={handleFieldClicked}
           />
         );
