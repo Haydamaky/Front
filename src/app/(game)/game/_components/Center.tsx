@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import useScreenSize from '@/hooks/screenSize';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { socket } from '@/socket';
-import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
 import { useEffect, useRef, useState } from 'react';
@@ -234,17 +233,17 @@ const Center = () => {
             <div className="flex flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
               <div className="mb-3 text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
                 {action === 'rollDice'
-                  ? 'Ваш хід'
+                  ? 'Your turn'
                   : action === 'buy'
-                    ? 'Придбати поле?'
+                    ? 'Buy field?'
                     : action === 'payForField'
-                      ? 'Оплата оренди'
+                      ? 'Pay for rent'
                       : action === 'secretPay'
-                        ? 'Неочікувані витрати'
+                        ? 'Unexpected expenses'
                         : action === 'COIN'
-                          ? 'Податок на розкіш'
+                          ? 'Luxury tax'
                           : action === 'VDNH'
-                            ? 'ВДНГ – час для розваг!'
+                            ? 'VDNH is a time for fun!'
                             : ''}
               </div>
               {action === 'rollDice' && (
@@ -254,11 +253,11 @@ const Center = () => {
                       <div className="h-5 w-5">
                         <HintBulb />
                       </div>
-                      <p className="text-xs">Порада</p>
+                      <p className="text-xs">Tip</p>
                     </div>
                     <p className="text-[10px]">
-                      Пам'ятайте: інколи краще зберегти гроші, ніж витратити їх
-                      на все, що трапляється.
+                      Remember: sometimes it's better to save money than to
+                      spend it on everything that happens.
                     </p>
                   </div>
                   <Button
@@ -267,7 +266,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={rollDice}
                   >
-                    Кинути кубики
+                    Roll Dice
                   </Button>
                 </>
               )}
@@ -280,8 +279,8 @@ const Center = () => {
                       </div>
                     </div>
                     <p className="text-[10px]">
-                      Якщо ви відмовитесь від покупки, поле буде виставлено на
-                      аукціон.
+                      If you cancel the purchase, the field will be put up for
+                      auction.
                     </p>
                   </div>
                   <div className="flex w-full gap-1 lg:gap-4">
@@ -291,7 +290,7 @@ const Center = () => {
                       className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                       onClick={buyField}
                     >
-                      Придбати за {currentField.price}
+                      Buy for {currentField.price}
                     </Button>
                     <div
                       className={`flex h-[38px] w-full flex-col items-center justify-center overflow-hidden rounded-md bg-buttonBlueGradient px-[1px]`}
@@ -303,7 +302,7 @@ const Center = () => {
                         className="font-custom"
                       >
                         <p className="bg-[linear-gradient(184.39deg,#5AB2F7_4.38%,#12CFF3_97.25%)] bg-clip-text text-4xl text-[9px] font-bold text-transparent md:text-sm lg:text-lg">
-                          На аукціон
+                          Put up for auction
                         </p>
                       </Button>
                     </div>
@@ -314,8 +313,8 @@ const Center = () => {
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <p className="text-[10px]">
-                      Попадаючи на чуже поле, ви зобов'язані сплатити власнику
-                      орендну плату відповідно до вартості цього поля.
+                      When you enter someone else's field, you are obliged to
+                      pay the owner a rent according to the value of this field.
                     </p>
                   </div>
                   <Button
@@ -324,7 +323,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payForField}
                   >
-                    Оплатити оренду{' '}
+                    Pay for rent{' '}
                     {currentField.income[currentField.amountOfBranches]}
                   </Button>
                 </>
@@ -333,8 +332,8 @@ const Center = () => {
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <p className="text-[10px]">
-                      Ти потрапив(ла) на фестиваль у ВДНГ! Ярмарки, атракціони
-                      та смачна їжа — незабутні враження гарантовано!
+                      You've come to the festival at VDNH! Fairs, attractions
+                      and delicious food - unforgettable impressions guaranteed!
                     </p>
                   </div>
                   <Button
@@ -343,7 +342,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payToBank}
                   >
-                    Оплатити {Math.abs(currentField.toPay)}
+                    Pay {Math.abs(currentField.toPay)}
                   </Button>
                 </>
               )}
@@ -351,8 +350,8 @@ const Center = () => {
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <p className="text-[10px]">
-                      Держава вирішила, що ти живеш занадто розкішно! Сплати
-                      податок та підтримай баланс у грі.
+                      The state has decided that you live too luxuriously! Pay
+                      your taxes and maintain the balance in the game.
                     </p>
                   </div>
                   <Button
@@ -361,7 +360,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payToBank}
                   >
-                    Оплатити {Math.abs(currentField.toPay)}
+                    Pay {Math.abs(currentField.toPay)}
                   </Button>
                 </>
               )}
@@ -371,9 +370,8 @@ const Center = () => {
                     <p className="text-[10px]">
                       {secretInfo &&
                         (secretInfo.users.length === 1
-                          ? `Невідомість вимагає жертв! Ти потрапив(ла) на секретне
-                      поле і маєш здійснити платіж.`
-                          : `Гравець ${game.players.find(player => player.userId === secretInfo?.users[0])?.user.nickname} активував(ла) секретне поле, і це призвело до події, яка зачепила вас.`)}
+                          ? `The unknown demands sacrifices! You have entered a secret field and must make a payment.`
+                          : `Player ${game.players.find(player => player.userId === secretInfo?.users[0])?.user.nickname} activated a secret field, and this led to an event that affected you.`)}
                     </p>
                   </div>
                   <Button
@@ -382,7 +380,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payForSecret}
                   >
-                    Сплатити {Math.abs(amountToPay)}
+                    Pay {Math.abs(amountToPay)}
                   </Button>
                 </>
               )}
@@ -392,8 +390,9 @@ const Center = () => {
                   <>
                     <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                       <p className="text-[10px]">
-                        Попадаючи на чуже поле, ви зобов'язані сплатити власнику
-                        орендну плату відповідно до вартості цього поля.
+                        When you enter someone else's field, you are obliged to
+                        pay the owner a rent according to the value of this
+                        field.
                       </p>
                     </div>
                     <Button
@@ -402,7 +401,7 @@ const Center = () => {
                       className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                       onClick={payForField}
                     >
-                      Оплатити оренду{' '}
+                      Pay rent{' '}
                       {currentField.income[currentField.amountOfBranches]}
                     </Button>
                   </>
@@ -425,7 +424,7 @@ const Center = () => {
       {playerWon && !chipTransition && (
         <div className="fixed left-0 top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-[#060606F2]">
           <h1 className="bg-[linear-gradient(268.72deg,#F6BE19_20.14%,#FBFBFA_125.62%)] bg-clip-text text-7xl font-bold text-transparent">
-            Переможець
+            Winner
           </h1>
 
           <div className="pb-[9%]">
@@ -457,7 +456,7 @@ const Center = () => {
                 height={32}
               />
               <p className="mb-[10%] ml-[14%] font-custom text-2xl text-white">
-                Вийти
+                Exit
               </p>
             </div>
           </Link>

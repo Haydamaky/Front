@@ -74,7 +74,7 @@ const MutualChat = () => {
   return (
     <div className="flex h-[40vh] max-w-3xl flex-col rounded-lg border-2 border-solid px-2 md:sticky md:top-[10vh] md:h-[80vh]">
       <h1 className="mx-auto w-32 text-center font-custom text-sm">
-        Спільний чат
+        Group Chat
       </h1>
       <div className="scrollbar flex-1 overflow-y-scroll" ref={containerRef}>
         {messages.map((message, index: number) => {
@@ -107,7 +107,7 @@ const MutualChat = () => {
             input: ['bg-base', 'text-primary', 'placeholder:text-primary'],
             inputWrapper: ['divide-solid border-2'],
           }}
-          placeholder="Написати повідомлення..."
+          placeholder="Write a message..."
           radius="sm"
           onChange={e =>
             setMessage(prevMessage => ({
@@ -117,7 +117,7 @@ const MutualChat = () => {
           }
         />
         <Button size="sm" onClick={sendMessage} variant={'tertiary'}>
-          надіслати
+          Send
         </Button>
       </div>
     </div>

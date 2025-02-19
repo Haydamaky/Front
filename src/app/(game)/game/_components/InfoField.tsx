@@ -41,12 +41,12 @@ const InfoField = forwardRef<HTMLDivElement, InfoFieldProps>(
             <p className="text-base">{field.group}</p>
           </div>
           <p className="translate-y-[-45%] text-xs">
-            Інвестуйте у філії, щоб примножити свої прибутки.
+            Invest in branches to multiply your profits.
           </p>
           {field?.income?.length && (
             <>
               <div className="flex items-center justify-between">
-                <p className="text-sm">Базовий прибуток</p>
+                <p className="text-sm">Base profit</p>
                 <p className="text-base">{field.income[0]}m</p>
               </div>
 
@@ -134,7 +134,7 @@ const InfoField = forwardRef<HTMLDivElement, InfoFieldProps>(
                 <div>
                   <Image
                     src="/images/BuildGold.svg"
-                    alt="silver-building"
+                    alt="gold-building"
                     width={20}
                     height={20}
                   />
@@ -143,19 +143,19 @@ const InfoField = forwardRef<HTMLDivElement, InfoFieldProps>(
               </div>
               <div className="my-3 h-[1px] w-full bg-white"></div>
               <div className="flex items-center justify-between">
-                <p className="text-sm">Вартість поля</p>
+                <p className="text-sm">Field cost</p>
                 <p className="text-base">{field.price}m</p>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-sm">Застава поля</p>
+                <p className="text-sm">Field pledge</p>
                 <p className="text-base">{field.pledgePrice}m</p>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-sm">Викуп поля</p>
+                <p className="text-sm">Field redemption</p>
                 <p className="text-base">{field.redemptionPrice}m</p>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-sm">Купівля філії</p>
+                <p className="text-sm">Branch purchase</p>
                 <p className="text-base">{field.branchPrice}m</p>
               </div>
             </>

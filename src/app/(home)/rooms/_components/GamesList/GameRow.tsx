@@ -7,7 +7,7 @@ const GameRow: FC<{ game: Game }> = ({ game }) => {
     <li className="flex w-full list-none flex-col gap-5 rounded-md border-4 bg-primary p-5">
       <div className="self-center">
         <h3 className="font-custom text-2xl text-white underline underline-offset-8">
-          Звичайна гра
+          Default game
         </h3>
       </div>
       <ul className="grid grid-cols-[25fr_25fr_25fr_25fr] grid-rows-[9rem] gap-4">

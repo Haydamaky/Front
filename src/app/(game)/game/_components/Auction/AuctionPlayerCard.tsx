@@ -47,7 +47,7 @@ const AuctionPlayerCard = ({ player }: AuctionPlayerCardProps) => {
         {!player.refusedFromAuction ? (
           <p className="text-custom text-nowrap text-sm">{player.money}mm</p>
         ) : (
-          <p className="font-custom text-[10px] uppercase">відмовився</p>
+          <p className="font-custom text-[10px] uppercase">Refused</p>
         )}
       </div>
     </div>

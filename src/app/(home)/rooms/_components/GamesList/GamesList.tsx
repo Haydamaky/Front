@@ -69,9 +69,9 @@ const GamesList: FC = () => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-start gap-8 font-custom">
-        <h1 className="self-end text-6xl text-primary">кімнати</h1>
+        <h1 className="self-end text-6xl text-primary">Rooms</h1>
         <Button className="bg-primary text-white" onClick={onCreateGame}>
-          Створити кімнату
+          Create Room
         </Button>
       </div>
       <ul className="flex flex-col gap-6">

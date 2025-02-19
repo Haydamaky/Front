@@ -60,7 +60,7 @@ const TradeOffer = () => {
         }}
       />
       <div className="flex h-[10%] w-full items-center justify-center">
-        <h1 className="text-4xl">Договір</h1>
+        <h1 className="text-4xl">Agreement</h1>
         <div
           className="absolute right-[4%] top-[2%] h-8 w-8 cursor-pointer"
           aria-label="Close"
@@ -108,7 +108,7 @@ const TradeOffer = () => {
               </div>
               <div className="flex flex-col gap-2">
                 <label htmlFor="firstExtraPay" className="text-lg font-medium">
-                  Доплата
+                  Extra Payment
                 </label>
                 <input
                   id="firstExtraPay"
@@ -128,13 +128,13 @@ const TradeOffer = () => {
                   onChange={handleChangeFirstPay}
                   style={{ color: '' }}
                   className="w-[80%] rounded-sm border-1 border-white bg-transparent px-1 py-[2px] text-xs placeholder-white placeholder-opacity-50"
-                  placeholder="Введіть суму"
+                  placeholder="Enter amount"
                 />
               </div>
             </div>
 
             <div>
-              <h2 className="mt-1 text-lg">Пропонує:</h2>
+              <h2 className="mt-1 text-lg">Offers:</h2>
             </div>
           </div>
           <div className="mx-5 w-[0.6%] rounded-full bg-white"></div>
@@ -175,7 +175,7 @@ const TradeOffer = () => {
               </div>
               <div className="flex flex-col gap-2">
                 <label htmlFor="secondExtraPay" className="text-lg font-medium">
-                  Доплата
+                  Extra Payment
                 </label>
                 <input
                   id="secondExtraPay"
@@ -194,19 +194,19 @@ const TradeOffer = () => {
                   }}
                   onChange={handleChangeSecondPay}
                   className="w-[80%] rounded-sm border-1 border-white bg-transparent px-1 py-[2px] text-xs placeholder-white placeholder-opacity-50"
-                  placeholder="Введіть суму"
+                  placeholder="Enter amount"
                 />
               </div>
             </div>
             <div>
-              <h2 className="mt-1 text-lg">Віддає:</h2>
+              <h2 className="mt-1 text-lg">Gives:</h2>
             </div>
           </div>
         </div>
       </div>
       <div className="h-[16%] w-full">
         <div className="flex w-full flex-col items-center">
-          <h2 className="mt-3 text-lg">Загальна сума обміну</h2>
+          <h2 className="mt-3 text-lg">Total Exchange Amount</h2>
           <div className="mt-2 flex w-[60%] justify-between">
             <span className="w-[30%] font-namu text-xl">
               {trade &&
@@ -250,7 +250,7 @@ const TradeOffer = () => {
             size="inspectField"
             className="pb-[1px] text-lg"
           >
-            Відправити
+            Send
           </Button>
         </div>
       </div>

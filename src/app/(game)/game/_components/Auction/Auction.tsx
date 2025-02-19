@@ -1,3 +1,5 @@
+'use client';
+
 import bgImage from '@/../public/images/AuctionBG.svg';
 import { useAppSelector } from '@/hooks/store';
 import {
@@ -83,7 +85,7 @@ const Auction = ({
               />
               <ModalHeader className="z-50 flex flex-row justify-center gap-1">
                 <h1 className="uppercase text-white md:text-2xl lg:text-4xl xl:text-5xl">
-                  Аукціон
+                  Auction
                 </h1>
               </ModalHeader>
               <ModalBody className="h-full gap-0 overflow-hidden">
@@ -110,7 +112,7 @@ const Auction = ({
                                       playerThatPutOnAuction?.color || 'blue'
                                     ]
                                   }
-                                  text="Виставляє поле на аукціон"
+                                  text="Puts the field up for auction"
                                 />
                               );
                             }
@@ -126,7 +128,7 @@ const Auction = ({
                                       playerThatMadeBid?.color || 'blue'
                                     ]
                                   }
-                                  text={`готовий придбати поле за ${bidder.bid}`}
+                                  text={`is ready to buy the field for ${bidder.bid}`}
                                 />
                               );
                             }
@@ -146,7 +148,7 @@ const Auction = ({
                                       playerThatMadeBid?.color || 'blue'
                                     ]
                                   }
-                                  text="відмовляється від участі у аукціоні"
+                                  text="refuses to participate in the auction"
                                 />
                               );
                             }
@@ -155,7 +157,7 @@ const Auction = ({
                       </div>
                     </div>
                     <div className="mt-auto h-[20%] w-full">
-                      <h3>Обери суму для підвищення ставки</h3>
+                      <h3>Select an amount to raise the bid</h3>
                       <div className="mt-3 flex w-full justify-between gap-4">
                         <Button
                           variant={'blueGame'}
@@ -201,7 +203,7 @@ const Auction = ({
                       <div className="mt-4 flex w-full items-center gap-2">
                         <div className="h-8 w-[25%] rounded-[3px] bg-darkBlueGradient p-[1px]">
                           <input
-                            placeholder="Ваша Сума"
+                            placeholder="Your Amount"
                             onChange={handleCustomBidChange}
                             value={customBid}
                             type="text"
@@ -229,7 +231,7 @@ const Auction = ({
                   </div>
                   <div className="z-50 mr-4 flex min-h-0 min-w-0 flex-col">
                     <h1 className="min-w-0 text-center font-ermilov text-[18px]">
-                      Фінальна ціна лоту
+                      Final Lot Price
                     </h1>
                     <span className="my-2 min-w-0 rounded-lg border-2 border-white bg-primaryGame p-2 text-center font-namu text-2xl">
                       {auction?.bidders[auction.bidders.length - 1].bid ||
@@ -245,7 +247,7 @@ const Auction = ({
                         size="inspectField"
                         className="py-3 font-custom text-sm uppercase"
                       >
-                        Відмовитись
+                        Refuse
                       </Button>
                     </div>
                   </div>

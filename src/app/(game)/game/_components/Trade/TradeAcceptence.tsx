@@ -53,7 +53,7 @@ const TradeAcceptence = ({
         }}
       />
       <div className="flex h-[10%] w-full items-center justify-center">
-        <h1 className="text-4xl">Договір</h1>
+        <h1 className="text-4xl">Agreement</h1>
       </div>
       <div className="mt-2 flex h-[65%] w-full px-6">
         <div className="flex h-full w-full">
@@ -92,13 +92,13 @@ const TradeAcceptence = ({
                 })}
               </div>
               <div className="flex flex-col gap-2 text-lg">
-                <h2 className="font-medium">Доплата</h2>
+                <h2 className="font-medium">Additional payment</h2>
                 <p className="font-namu">1800mm</p>
               </div>
             </div>
 
             <div>
-              <h2 className="mt-1 text-lg">Пропонує:</h2>
+              <h2 className="mt-1 text-lg">Offers:</h2>
             </div>
           </div>
           <div className="mx-5 w-[0.6%] rounded-full bg-white"></div>
@@ -112,7 +112,6 @@ const TradeAcceptence = ({
               >
                 <h2 className="mb-[2px] py-1">{toPlayer?.user.nickname}</h2>
               </div>
-              {/* try to play around with gap */}
               <div className="flex h-[68%] flex-col gap-1 overflow-y-auto scrollbar-hide">
                 {trade?.wantedFieldsIndexes.map(offeredFieldIndex => {
                   const offeredField = fields.find(
@@ -138,19 +137,19 @@ const TradeAcceptence = ({
                 })}
               </div>
               <div className="flex flex-col gap-2 text-lg">
-                <h2 className="font-medium">Доплата</h2>
+                <h2 className="font-medium">Additional payment</h2>
                 <p className="font-namu">1800mm</p>
               </div>
             </div>
             <div>
-              <h2 className="mt-1 text-lg">Віддає:</h2>
+              <h2 className="mt-1 text-lg">Gives:</h2>
             </div>
           </div>
         </div>
       </div>
       <div className="h-[16%] w-full">
         <div className="flex w-full flex-col items-center">
-          <h2 className="mt-3 text-lg">Загальна сума обміну</h2>
+          <h2 className="mt-3 text-lg">Total trade amount</h2>
           <div className="mt-2 flex w-[60%] justify-between">
             <span className="w-[30%] font-namu text-xl">
               {trade &&
@@ -197,7 +196,7 @@ const TradeAcceptence = ({
               size="inspectField"
               className="pb-[1px] text-lg"
             >
-              Підписати
+              Sign
             </Button>
           </div>
         </div>
@@ -209,7 +208,7 @@ const TradeAcceptence = ({
               size="inspectField"
               className="pb-[1px] text-lg"
             >
-              Відмовитись
+              Refuse
             </Button>
           </div>
         </div>

@@ -63,7 +63,7 @@ export const OtherPlayerButtons = ({
         <p
           className={`${getGradientClass(hoveredStates.profile)} text-[14px] transition-all duration-300 ease-out`}
         >
-          Профіль
+          Profile
         </p>
       </Button>
 
@@ -80,7 +80,7 @@ export const OtherPlayerButtons = ({
           <p
             className={`${getGradientClass(hoveredStates.exchange)} text-[14px] transition-all duration-300 ease-out`}
           >
-            Обмін
+            Exchange
           </p>
         </Button>
       )}
@@ -96,7 +96,7 @@ export const OtherPlayerButtons = ({
         <p
           className={`${getGradientClass(hoveredStates.report)} text-[14px] transition-all duration-300 ease-out`}
         >
-          Репорт
+          Report
         </p>
       </Button>
     </div>

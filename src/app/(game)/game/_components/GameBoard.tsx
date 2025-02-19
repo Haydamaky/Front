@@ -76,7 +76,7 @@ const GameBoard = () => {
             variant="blueGame"
             size="inspectField"
           >
-            Інвест
+            Invest
           </Button>
         )}
         {noBranches ? (
@@ -85,7 +85,7 @@ const GameBoard = () => {
             className="w-full rounded-[3px] bg-redGradient p-[1px]"
           >
             <Button variant="forGradient" size="inspectField">
-              Застава
+              Pledge
             </Button>
           </div>
         ) : (
@@ -94,7 +94,7 @@ const GameBoard = () => {
             className="w-full rounded-[3px] bg-redGradient p-[1px]"
           >
             <Button variant="forGradient" size="inspectField">
-              Продаж
+              Sale
             </Button>
           </div>
         )}
@@ -109,7 +109,7 @@ const GameBoard = () => {
         className="mt-2 w-[90%] rounded-[3px] bg-greedGradient p-[1px] font-custom"
       >
         <Button variant="forGradient" size="inspectField">
-          Викупити
+          Redeem
         </Button>
       </div>
     ) : (
@@ -118,7 +118,7 @@ const GameBoard = () => {
         className="mt-2 w-[90%] rounded-[3px] bg-redGradient p-[1px] font-custom"
       >
         <Button variant="forGradient" size="inspectField">
-          Застава
+          Pledge
         </Button>
       </div>
     );
@@ -134,7 +134,7 @@ const GameBoard = () => {
         className="mt-2 w-[90%] rounded-[3px] bg-greedGradient p-[1px] font-custom"
       >
         <Button variant="forGradient" size="inspectField">
-          Викупити
+          Redeem
         </Button>
       </div>
     );
@@ -173,7 +173,7 @@ const GameBoard = () => {
         />
       )}
       <div className="absolute right-[-40%] top-[6%] flex w-[27%] flex-col text-white">
-        <h2>К-сть будинків та готелів :</h2>
+        <h2>Number of houses and hotels:</h2>
         <div className="mt-4 flex w-full justify-between">
           <div className="flex items-center gap-4">
             <p className="text-2xl">x{game.housesQty}</p>

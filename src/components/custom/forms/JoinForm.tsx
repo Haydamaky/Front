@@ -10,7 +10,7 @@ function JoinForm() {
   return (
     <div>
       <div className="mt-16 w-[10rem] space-y-8 rounded-2xl border-2 p-8 lg:w-[26rem]">
-        <p className="text-center text-2xl font-bold">Приєднайтесь до нас</p>
+        <p className="text-center text-2xl font-bold">Join Us</p>
         <div className="flex flex-col">
           <Button
             radius="sm"
@@ -18,7 +18,7 @@ function JoinForm() {
             className="w-full bg-zinc-200 text-large font-bold text-black"
             endContent={<GoogleIcon />}
           >
-            Продовжити з Google
+            Continue with Google
           </Button>
         </div>
 
@@ -30,13 +30,13 @@ function JoinForm() {
           className="w-full bg-zinc-200 text-large font-bold text-black"
           endContent={<Mail size={26} />}
         >
-          Використовуючи пошту
+          Use Email
         </Button>
 
         <footer className="text-center">
-          Вже маєте акаунт?{' '}
+          Already have an account?{' '}
           <Link href={siteConfig.links.login}>
-            <span className="ml-1 text-green-600">Увійти</span>
+            <span className="ml-1 text-green-600">Log in</span>
           </Link>
         </footer>
       </div>

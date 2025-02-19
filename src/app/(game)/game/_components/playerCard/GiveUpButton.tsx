@@ -24,7 +24,7 @@ const GiveUpButton = ({ opacity, lost }: GiveUpButtonProps) => {
               <span className="absolute h-0.5 w-[70%] rotate-45 bg-[#FF8C8C]"></span>
               <span className="absolute h-0.5 w-[70%] -rotate-45 bg-[#FF8C8C]"></span>
             </div>
-            <p className="text-sm">Здатись</p>
+            <p className="text-sm">Surrender</p>
           </div>
         </Button>
       )}
