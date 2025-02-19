@@ -1,7 +1,7 @@
 'use client';
 import { useAppSelector } from '@/hooks/store';
 import { socket } from '@/socket';
-import { Game } from '@/types';
+import { DataWithGame, Game } from '@/types';
 import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
@@ -13,6 +13,43 @@ const GamesList: FC = () => {
   const user = useAppSelector(state => state.user);
 
   useEffect(() => {
+    const handleLeaveGame = (id: string) => {
+      socket.emit('leaveGame', { id });
+    };
+    const handleClearStartedGame = (gameId: string) => {
+      setGames(prevGames => {
+        const indexOfGame = prevGames.findIndex(game => game.id === gameId);
+        const updatedGames = [...prevGames];
+        if (indexOfGame !== -1) updatedGames.splice(indexOfGame, 1);
+        return updatedGames;
+      });
+    };
+
+    const fetchGames = async () => {
+      const games = await socket.emitWithAck('getVisibleGames');
+      setGames(games);
+    };
+
+    const onNewGameCreated = (game: Game) => {
+      setGames(prevGames => [game, ...prevGames]);
+    };
+
+    const handleStartGame = ({ game }: DataWithGame) => {
+      if (game) {
+        document.cookie = `gameId=${game.id}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+      }
+      router.push('/game');
+    };
+
+    const handleOnParticipateGame = (game: Game) => {
+      setGames(prevGames => {
+        const index = prevGames.findIndex(curGame => curGame.id === game.id);
+        const updatedGames = [...prevGames];
+        updatedGames[index] = game;
+        return updatedGames;
+      });
+    };
+
     socket.on('clearStartedGame', handleClearStartedGame);
     socket.on('startGame', handleStartGame);
     socket.on('onParticipateGame', handleOnParticipateGame);
@@ -25,49 +62,9 @@ const GamesList: FC = () => {
       socket.off('newGameCreated', onNewGameCreated);
     };
   }, [router]);
-
-  const handleClearStartedGame = (gameId: string) => {
-    setGames(prevGames => {
-      const indexOfGame = prevGames.findIndex(game => game.id === gameId);
-      const updatedGames = [...prevGames];
-      if (indexOfGame !== -1) updatedGames.splice(indexOfGame, 1);
-      return updatedGames;
-    });
+  const onCreateGame = () => {
+    socket.emit('createGame', { userId: user.data?.id });
   };
-
-  const fetchGames = async () => {
-    const games = await socket.emitWithAck('getVisibleGames');
-    setGames(games);
-  };
-
-  const onNewGameCreated = (game: Game) => {
-    setGames(prevGames => [game, ...prevGames]);
-  };
-
-  const handleStartGame = ({ gameId }: { gameId: string }) => {
-    if (gameId) {
-      document.cookie = `gameId=${gameId}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
-    }
-    router.push('/game');
-  };
-
-  const handleOnParticipateGame = (game: Game) => {
-    setGames(prevGames => {
-      const index = prevGames.findIndex(curGame => curGame.id === game.id);
-      const updatedGames = [...prevGames];
-
-      const updatedGame = { ...prevGames[index], ...game };
-      if (index !== -1) updatedGames.splice(index, 1, updatedGame);
-
-      return updatedGames;
-    });
-  };
-
-  const handleLeaveGame = (id: string) => {
-    socket.emit('leaveGame', { id });
-  };
-
-  const onCreateGame = () => socket.emit('createGame');
 
   return (
     <div className="flex flex-col gap-6">

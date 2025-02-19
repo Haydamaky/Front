@@ -8,6 +8,7 @@ interface PlayerChipProps {
   colorOfPlayer: string;
   colorOfPlayerDarker: string;
   beforeToPositions: string[];
+  dices: string;
 }
 
 const PlayerChip = ({
@@ -16,6 +17,7 @@ const PlayerChip = ({
   colorOfPlayer,
   colorOfPlayerDarker,
   beforeToPositions,
+  dices,
 }: PlayerChipProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const [posToGo, setPosToGo] = useState<string>(
@@ -43,7 +45,9 @@ const PlayerChip = ({
     }
   };
   useEffect(() => {
-    handleSequentialUpdates();
+    if (dices !== '0:0') {
+      handleSequentialUpdates();
+    }
   }, [posOfPlayer]);
   const waitForTransition = (element: HTMLElement | null): Promise<void> => {
     return new Promise(resolve => {

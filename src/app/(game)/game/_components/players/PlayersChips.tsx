@@ -29,7 +29,8 @@ const PlayersChips = ({ game }: PlayersChipsProps) => {
           const isHorizonatlField =
             player.currentFieldIndex < 11 ||
             (player.currentFieldIndex > 20 && player.currentFieldIndex < 31);
-          const dicesStringsArr = game?.dices.split(':');
+          const dices = game?.dices || '0:0';
+          const dicesStringsArr = dices.split(':');
           const dicesNumArr = dicesStringsArr.map(Number);
           let indexBefore =
             player.currentFieldIndex - dicesNumArr[0] - dicesNumArr[1];
@@ -111,6 +112,7 @@ const PlayersChips = ({ game }: PlayersChipsProps) => {
               translate={translate}
               colorOfPlayer={colorOfPlayer}
               colorOfPlayerDarker={colorOfPlayerDarker}
+              dices={dices}
             />
           );
         })}

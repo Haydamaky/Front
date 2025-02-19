@@ -21,7 +21,7 @@ const InfoField = forwardRef<HTMLDivElement, InfoFieldProps>(
     return (
       <div
         ref={ref}
-        className={`flex w-auto flex-col items-center overflow-hidden rounded-xl border border-[rgb(0,17,37)] bg-primaryGame pb-2 text-white shadow-[0px_0px_4px_2px_#ffffff40] ${classNames || ''}`}
+        className={`flex flex-col items-center overflow-hidden rounded-xl border border-[rgb(0,17,37)] bg-primaryGame pb-2 text-white shadow-[0px_0px_4px_2px_#ffffff40] ${classNames || ''}`}
       >
         <div className="w-[90%]">
           <div className="relative mx-auto mt-[5%] flex h-[10vh] w-full items-center justify-center rounded-[10px] bg-white">

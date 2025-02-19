@@ -47,7 +47,6 @@ const PlayersList = () => {
         fields => fields.index === currentPlayer?.currentFieldIndex,
       );
       if (currentField?.ownedBy === user.data?.id) {
-        console.log('PassTurn');
         socket.emit('passTurn');
       }
 
@@ -63,7 +62,6 @@ const PlayersList = () => {
     };
 
     const dispatchSetFields = (data: DataWithGame) => {
-      console.log({ data });
       if (data.fields) {
         dispatch(setFields(data.fields));
       }

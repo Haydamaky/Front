@@ -21,6 +21,7 @@ import { useAppDispatch } from '@/hooks/store';
 import { setUserState, User } from '@/store/slices/user';
 import { useRouter } from 'next/navigation';
 import { GoogleIcon } from '@/components/icons';
+import { createSocket, socket } from '@/socket';
 export const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(2),
@@ -49,7 +50,8 @@ export const LogInForm: FC = () => {
 
       if (res.status === 200 && res.data.user) {
         dispatch(setUserState(res.data.user));
-
+        const result = await client.get('auth/local/me');
+        socket.recconect();
         router.replace('/');
       }
     } catch (error: any) {

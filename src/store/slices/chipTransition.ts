@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  data: true,
+  data: false,
 };
 
 const chipTransitionSlice = createSlice({

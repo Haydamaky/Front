@@ -121,7 +121,6 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
       className={`relative h-full w-full cursor-pointer text-wrap`}
       style={{ background: bg }}
       onClick={() => {
-        console.log({ possibleForTrade });
         if (possibleForTrade) {
           handleFieldTradeClick(field);
           return;

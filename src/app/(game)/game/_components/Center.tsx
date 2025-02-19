@@ -31,11 +31,14 @@ type Action =
 
 const Center = () => {
   const screenSize = useScreenSize();
-  const [action, setAction] = useState<Action>('');
   const dispatch = useAppDispatch();
   const fields = useAppSelector(state => state.fields.fields);
   const game = useAppSelector(state => state.game.game);
   const { data: user } = useAppSelector(state => state.user);
+  const [action, setAction] = useState<Action>(
+    game.turnOfUserId === user?.id && !game.dices ? 'rollDice' : '',
+  );
+
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
   );
@@ -158,7 +161,6 @@ const Center = () => {
       }
     };
     const hadleTradeOffered = (data: any) => {
-      console.log('Trade Offered');
       setTradeAcceptance(data.trade);
     };
     socket.on('tradeOffered', hadleTradeOffered);
@@ -208,7 +210,12 @@ const Center = () => {
   const handlePutUpForAuction = () => {
     socket.emit('putUpForAuction');
   };
-  console.log({ action });
+  const rollDiceModalCond =
+    (turnOfUser || action === 'secretPay') &&
+    !chipTransition &&
+    action &&
+    action !== 'auction' &&
+    (currentField.ownedBy !== game.turnOfUserId || !game.dices);
   return (
     <div className="relative h-full p-3">
       {tradeAcceptance && (
