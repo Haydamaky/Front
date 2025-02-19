@@ -50,7 +50,6 @@ export const LogInForm: FC = () => {
 
       if (res.status === 200 && res.data.user) {
         dispatch(setUserState(res.data.user));
-        const result = await client.get('auth/local/me');
         socket.recconect();
         router.replace('/');
       }

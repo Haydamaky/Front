@@ -63,7 +63,7 @@ const GamesList: FC = () => {
     };
   }, [router]);
   const onCreateGame = () => {
-    socket.emit('createGame', { userId: user.data?.id });
+    socket.emit('createGame');
   };
 
   return (

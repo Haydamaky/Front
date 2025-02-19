@@ -11,7 +11,7 @@ const PlayerCard: FC<{ player: any; gameId: string }> = ({
 }) => {
   const user = useAppSelector(state => state.user);
   const handleJoinGame = () => {
-    user.data && socket.emit('joinGame', { id: gameId, userId: user.data.id });
+    user.data && socket.emit('joinGame', { id: gameId });
   };
 
   return (
