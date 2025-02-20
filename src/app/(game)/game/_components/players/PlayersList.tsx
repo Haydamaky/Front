@@ -47,7 +47,6 @@ const PlayersList = () => {
         fields => fields.index === currentPlayer?.currentFieldIndex,
       );
       if (currentField?.ownedBy === user.data?.id) {
-        console.log('PassTurn');
         socket.emit('passTurn');
       }
 
@@ -57,7 +56,9 @@ const PlayersList = () => {
   const intervalRef = useRef<null | NodeJS.Timeout>(null);
   useEffect(() => {
     const dispatchSetGame = (data: DataWithGame) => {
-      dispatch(setGame(data.game));
+      if (data.game) {
+        dispatch(setGame(data.game));
+      }
     };
 
     const dispatchSetFields = (data: DataWithGame) => {
@@ -65,61 +66,71 @@ const PlayersList = () => {
         dispatch(setFields(data.fields));
       }
     };
-    const getGameDataAndSetStates = () => {
-      socket.emitWithCallbacks(
-        'getGameData',
-        dispatchSetGame,
-        dispatchSetFields,
-        calculateTimeToEndAndSetStates,
-      );
+    const getGameData = () => {
+      socket.emit('getGameData');
     };
-    getGameDataAndSetStates();
-    socket.on('rejoin', getGameDataAndSetStates);
+    getGameData();
+    socket.on('rejoin', getGameData);
+    socket.on(
+      'gameData',
+      dispatchSetGame,
+      dispatchSetFields,
+      calculateTimeToEndAndSetStates,
+    );
+    socket.on('tradeOffered', dispatchSetGame);
     const setRolledDiceSocket = () => {
       rolledDice.current = true;
     };
     socket.on('rolledDice', setRolledDiceSocket);
     socket.on(
-      ['hasPutUpForAuction', 'passTurnToNext'],
+      ['hasPutUpForAuction', 'getGameData', 'passTurnToNext', 'updateGameData'],
       calculateTimeToEndAndSetStates,
     );
 
     socket.on('passTurnToNext', dispatchSetGame, dispatchSetFields);
     socket.on(
-      ['payedForField', 'playerSurrendered'],
+      ['payedForField', 'playerSurrendered', 'updateGameData'],
       dispatchSetGame,
       dispatchSetFields,
     );
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       socket.off(
-        ['hasPutUpForAuction', 'getGameData', 'passTurnToNext'],
+        [
+          'hasPutUpForAuction',
+          'getGameData',
+          'passTurnToNext',
+          'tradeOffered',
+          'updateGameData',
+        ],
         calculateTimeToEndAndSetStates,
       );
       socket.off(['passTurnToNext'], dispatchSetGame);
       socket.off(
-        ['payedForField', 'playerSurrendered'],
+        ['payedForField', 'playerSurrendered', 'updateGameData'],
         dispatchSetFields,
         dispatchSetGame,
       );
-      socket.off('rejoin', getGameDataAndSetStates);
+      socket.off('rejoin', getGameData);
       socket.off('rolledDice', setRolledDiceSocket);
+      socket.off('tradeOffered', dispatchSetGame);
     };
   }, []);
 
   return (
     <div className="relative my-auto flex h-[88%] flex-col gap-[2.7%] overflow-visible text-xs md:text-sm lg:text-lg">
-      {game.players?.map((player: Player, index) => {
-        return (
-          <PlayerCard
-            player={player}
-            key={player.id}
-            turnOfUserId={game.turnOfUserId}
-            turnTime={turnTime}
-            index={index}
-          ></PlayerCard>
-        );
-      })}
+      {game?.players &&
+        game.players?.map((player: Player, index) => {
+          return (
+            <PlayerCard
+              player={player}
+              key={player.id}
+              turnOfUserId={game.turnOfUserId}
+              turnTime={turnTime}
+              index={index}
+            ></PlayerCard>
+          );
+        })}
     </div>
   );
 };

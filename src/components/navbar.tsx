@@ -39,9 +39,9 @@ export const Navbar = () => {
           as={Link}
           href="/rooms"
           className="ml-0 h-[40px] w-[140px] rounded-[17.5px] border-[4px] border-primary bg-base text-center font-custom text-[15px] leading-[22px] text-primary transition-colors duration-300 hover:bg-primary hover:text-base md:ml-[105px]"
-          aria-label="Грати"
+          aria-label="Play"
         >
-          Грати
+          Play
         </Button>
 
         <ul className="ml-[30px] hidden h-10 items-center space-x-[30px] font-custom text-base md:flex">
@@ -72,7 +72,7 @@ export const Navbar = () => {
             >
               <div className="absolute h-[80px] w-[80px] rounded-full bg-primary"></div>
               <div className="relative flex h-[75px] w-[75px] items-center justify-center rounded-full border-[2px] border-dashed border-base">
-                <span className="font-custom text-[14px]">Увійти</span>
+                <span className="font-custom text-[14px]">Enter</span>
               </div>
             </div>
           </Link>

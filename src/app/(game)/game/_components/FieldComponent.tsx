@@ -1,13 +1,13 @@
-import { useAppSelector } from '@/hooks/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { Field } from '@/types/field';
 import {
   gradientColorVariantsFields,
   gradientColorVariantsFields0Deg,
 } from '../_utils';
 import Image from 'next/image';
-import Locker from './Locker/Locker';
 import PledgeCounter from './PledgeCounter/PledgeCounter';
 import { useState } from 'react';
+import { setTrade } from '@/store/slices/trade';
 
 interface FieldProps {
   field: Field;
@@ -15,8 +15,11 @@ interface FieldProps {
 }
 
 const FieldComponent = ({ field, onClick }: FieldProps) => {
+  const dispatch = useAppDispatch();
   const game = useAppSelector(state => state.game.game);
+  const { data: trade } = useAppSelector(state => state.trade);
   const [open, setOpen] = useState(false);
+  const { data: user } = useAppSelector(state => state.user);
   const handleOpen = (toOpen: boolean) => setOpen(toOpen);
   const fieldColorPosVariants: Record<string, string> = {
     'vertical-left': 'left-0 top-0 h-[100%] w-[18%] translate-x-[-100%]',
@@ -59,6 +62,41 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
   const priceColor = colorVariants[field.color];
   const fieldColorPos = fieldColorPosVariants[field.line];
   const branchesPos = branchesPositions[field.line];
+  const impossibleForTrade =
+    trade && field.ownedBy !== user?.id && field.ownedBy !== trade.toUserId;
+  const possibleForTrade =
+    trade && (field.ownedBy === user?.id || field.ownedBy === trade.toUserId);
+  const darkDivForTrade = impossibleForTrade ? (
+    <div className="absolute h-full w-full bg-[rgba(11,17,23,0.8)]"></div>
+  ) : (
+    ''
+  );
+  const handleFieldTradeClick = (field: Field) => {
+    if (possibleForTrade) {
+      if (
+        field.ownedBy === user?.id &&
+        !trade.offerFieldsIndexes.includes(field.index)
+      ) {
+        dispatch(
+          setTrade({
+            ...trade,
+            offerFieldsIndexes: [...trade.offerFieldsIndexes, field.index],
+          }),
+        );
+      }
+      if (
+        field.ownedBy === trade.toUserId &&
+        !trade.wantedFieldsIndexes.includes(field.index)
+      ) {
+        dispatch(
+          setTrade({
+            ...trade,
+            wantedFieldsIndexes: [...trade.wantedFieldsIndexes, field.index],
+          }),
+        );
+      }
+    }
+  };
   const textPos = field.line.includes('vertical-right')
     ? 'rotate-90'
     : field.line.includes('vertical-left')
@@ -82,8 +120,15 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
     <div
       className={`relative h-full w-full cursor-pointer text-wrap`}
       style={{ background: bg }}
-      onClick={() => onClick(field)}
+      onClick={() => {
+        if (possibleForTrade) {
+          handleFieldTradeClick(field);
+          return;
+        }
+        onClick(field);
+      }}
     >
+      {darkDivForTrade}
       <div
         className={`absolute ${pledgedPosition} ${pledgedSize} bg-[#0b1117] bg-opacity-80 transition-all duration-700 ease-in-out`}
       ></div>
@@ -110,7 +155,11 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
           className={`absolute ${fieldColorPos} ${priceColor} flex items-center justify-center text-[13px] text-gray-100`}
         >
           <p className={`${textPos} flex items-center`}>
-            {field.ownedBy ? field.income[field.amountOfBranches] : field.price}
+            {field.ownedBy &&
+              !field.isPledged &&
+              field.income[field.amountOfBranches]}
+            {!field.ownedBy && !field.isPledged && field.price}
+            {field.isPledged && 0}
             <span className="font-namu">mm</span>
           </p>
         </div>
@@ -121,7 +170,7 @@ const FieldComponent = ({ field, onClick }: FieldProps) => {
         >
           {Array.from({ length: field.amountOfBranches }).map((_, index) => (
             <Image
-              key={field.id + index}
+              key={field._id + index}
               src="/images/BuildSilver.svg"
               alt="silver-building"
               width={13}

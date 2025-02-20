@@ -11,13 +11,12 @@ import { useAppSelector } from '@/hooks/store';
 const MutualChat = () => {
   const [message, setMessage] = useState<MessageObjType>({
     text: '',
-    chatId: MUTUAL_CHAT_ID,
+    chatId: '',
     updatedAt: '',
     senderId: '',
   });
   const [messages, setMessages] = useState<MessageObjType[]>([]);
   const user = useAppSelector(state => state.user);
-
   const isScrolledToBottom = (container: HTMLDivElement | null) =>
     container &&
     container.scrollHeight - container.scrollTop - container.clientHeight < 10;
@@ -28,14 +27,13 @@ const MutualChat = () => {
       data.senderId === user.data?.id ||
       isScrolledToBottom(containerRef.current)
     ) {
-      setScroll(_ => true);
+      setScroll(true);
     }
   };
 
   const fetchChatData = async () => {
-    const chatData = await socket.emitWithAck('chatData', {
-      chatId: MUTUAL_CHAT_ID,
-    });
+    const chatData = await socket.emitWithAck('mutualChatData');
+    setMessage(prevMessage => ({ ...prevMessage, chatId: chatData.id }));
     setMessages(chatData.messages);
   };
 
@@ -45,10 +43,10 @@ const MutualChat = () => {
     return () => {
       socket.off('onMessage', handleOnMessage);
     };
-  }, []);
+  }, [user]);
 
   const sendMessage = () => {
-    socket.emit('newMessage', { text: message.text, chatId: MUTUAL_CHAT_ID });
+    socket.emit('newMessage', { text: message.text, chatId: message.chatId });
     setMessage(prevMessage => ({ ...prevMessage, text: '' }));
   };
 
@@ -74,27 +72,29 @@ const MutualChat = () => {
   return (
     <div className="flex h-[40vh] max-w-3xl flex-col rounded-lg border-2 border-solid px-2 md:sticky md:top-[10vh] md:h-[80vh]">
       <h1 className="mx-auto w-32 text-center font-custom text-sm">
-        Спільний чат
+        Group Chat
       </h1>
       <div className="scrollbar flex-1 overflow-y-scroll" ref={containerRef}>
-        {messages.map((message, index: number) => {
-          const time = formatDateToTime(message.updatedAt);
-          if (index === messages.length - 1 && scroll) {
+        <div className="flex min-h-full flex-col justify-end">
+          {messages.map((message, index: number) => {
+            const time = formatDateToTime(message.updatedAt);
+            if (index === messages.length - 1 && scroll) {
+              return (
+                <div key={message.id}>
+                  <p
+                    className="bg-pink-400"
+                    ref={messageRef}
+                  >{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
+                </div>
+              );
+            }
             return (
               <div key={message.id}>
-                <p
-                  className="bg-pink-400"
-                  ref={messageRef}
-                >{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
+                <p>{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
               </div>
             );
-          }
-          return (
-            <div key={message.id}>
-              <p>{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
-            </div>
-          );
-        })}
+          })}
+        </div>
       </div>
       <div className="mb-1 mt-1 flex items-center">
         <Input
@@ -107,7 +107,7 @@ const MutualChat = () => {
             input: ['bg-base', 'text-primary', 'placeholder:text-primary'],
             inputWrapper: ['divide-solid border-2'],
           }}
-          placeholder="Написати повідомлення..."
+          placeholder="Write a message..."
           radius="sm"
           onChange={e =>
             setMessage(prevMessage => ({
@@ -117,7 +117,7 @@ const MutualChat = () => {
           }
         />
         <Button size="sm" onClick={sendMessage} variant={'tertiary'}>
-          надіслати
+          Send
         </Button>
       </div>
     </div>

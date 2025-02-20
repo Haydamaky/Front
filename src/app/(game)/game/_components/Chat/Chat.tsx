@@ -79,6 +79,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
             );
             return (
               <Message
+                haveSeparator={true}
                 key={message.id}
                 name={message.sender?.nickname as string}
                 text={message.text}
@@ -100,14 +101,14 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
           className="h-8 border-white"
           value={text}
           onChange={e => setText(e.target.value)}
-          placeholder="Написати повідомлення"
+          placeholder="Write a message"
         />
 
         <Button
           className="h-8 rounded-[5px] bg-white font-custom"
           onClick={onSendMessage}
         >
-          надіслати
+          Send
         </Button>
       </div>
     </div>

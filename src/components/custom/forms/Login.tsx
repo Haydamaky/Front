@@ -21,6 +21,7 @@ import { useAppDispatch } from '@/hooks/store';
 import { setUserState, User } from '@/store/slices/user';
 import { useRouter } from 'next/navigation';
 import { GoogleIcon } from '@/components/icons';
+import { socket } from '@/socket';
 export const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(2),
@@ -49,7 +50,7 @@ export const LogInForm: FC = () => {
 
       if (res.status === 200 && res.data.user) {
         dispatch(setUserState(res.data.user));
-
+        socket.recconect();
         router.replace('/');
       }
     } catch (error: any) {
@@ -86,7 +87,7 @@ export const LogInForm: FC = () => {
         className="mt-16 w-[10rem] space-y-8 rounded-2xl border-2 p-8 lg:w-[26rem]"
         autoFocus
       >
-        <p className="text-center text-2xl font-bold">Вхід</p>
+        <p className="text-center text-2xl font-bold">Log In</p>
         <div className="flex flex-col gap-4">
           <Button
             radius="sm"
@@ -94,7 +95,7 @@ export const LogInForm: FC = () => {
             className="w-full bg-zinc-200 text-large font-bold text-black"
             startContent={<GoogleIcon />}
           >
-            Увійти за допомогою Google
+            Log in with Google
           </Button>
         </div>
         <FormField
@@ -102,7 +103,7 @@ export const LogInForm: FC = () => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="capitalize">Емейл</FormLabel>
+              <FormLabel className="capitalize">Email</FormLabel>
               <FormControl>
                 <Input
                   size="lg"
@@ -124,10 +125,10 @@ export const LogInForm: FC = () => {
           render={({ field }) => (
             <FormItem>
               <div className="flex flex-row justify-between">
-                <FormLabel className="capitalize">Пароль</FormLabel>
+                <FormLabel className="capitalize">Password</FormLabel>
                 <FormLabel>
                   <Link className="text-sm text-zinc-500" href="/">
-                    Забули пароль?
+                    Forgot Password?
                   </Link>
                 </FormLabel>
               </div>
@@ -165,7 +166,7 @@ export const LogInForm: FC = () => {
           size="lg"
           className="w-full bg-zinc-200 text-large font-bold text-black"
         >
-          Увійти
+          Log In
         </Button>
         {form.formState.errors.root && (
           <p className="text-center text-red-600">
@@ -173,11 +174,9 @@ export const LogInForm: FC = () => {
           </p>
         )}
         <footer className="text-center">
-          Не маєте акаунта?{' '}
+          Don't have an account?{' '}
           <Link href={'/signup'}>
-            <span className="ml-1 font-semibold text-green-600">
-              Зареєструватись
-            </span>
+            <span className="ml-1 font-semibold text-green-600">Sign Up</span>
           </Link>
         </footer>
       </form>

@@ -1,5 +1,5 @@
 export interface Field {
-  id: string;
+  _id: string;
   index: number;
   name: string;
   price: number;

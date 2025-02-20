@@ -10,7 +10,7 @@ const PlayerChipsContainer = () => {
   const shouldUpdate = useRef(false);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    const handleRollDiced = (data: any) => {
+    const handleRolledDice = (data: any) => {
       prevGameAfterRolledDices.current = data.game;
       shouldUpdate.current = true;
       dispatch(setChipTransition(true));
@@ -19,10 +19,11 @@ const PlayerChipsContainer = () => {
       prevGameAfterRolledDices.current = data.game;
       shouldUpdate.current = true;
     };
-    socket.emit('getGameData', handleGetGameData);
-    socket.on('rolledDice', handleRollDiced);
+    socket.on('gameData', handleGetGameData);
+    socket.on('rolledDice', handleRolledDice);
     return () => {
-      socket.off('rolledDice', handleRollDiced);
+      socket.off('rolledDice', handleRolledDice);
+      socket.off('gameData', handleGetGameData);
     };
   }, []);
   if (shouldUpdate.current) {

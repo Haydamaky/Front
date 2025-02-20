@@ -9,15 +9,15 @@ export const siteConfig = {
       href: '/',
     },
     {
-      label: 'Друзі',
+      label: 'Friends',
       href: '/',
     },
     {
-      label: 'Інвентар',
+      label: 'Inventory',
       href: '/',
     },
     {
-      label: 'Магазин',
+      label: 'Shop',
       href: '/',
     },
   ],
@@ -27,19 +27,19 @@ export const siteConfig = {
       href: '/',
     },
     {
-      label: 'Друзі',
+      label: 'Friends',
       href: '/',
     },
     {
-      label: 'Інвентар',
+      label: 'Inventory',
       href: '/',
     },
     {
-      label: 'Магазин',
+      label: 'Shop',
       href: '/',
     },
     {
-      label: 'Вийти',
+      label: 'Log out',
       href: '/logout',
     },
   ],

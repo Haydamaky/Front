@@ -10,7 +10,7 @@ export interface Game {
   gameFields: [];
   gameMoves: [];
   fieldTransactions: [];
-  fields: [];
+  fields: Array<any>;
   turnOfUserId: string;
   playersCapacity: number;
   dices: string;

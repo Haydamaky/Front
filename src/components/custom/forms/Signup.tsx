@@ -25,7 +25,7 @@ export const formSchema = z.object({
   email: z.string().email({ message: 'Please provide a valid email address' }),
   nickname: z
     .string()
-    .min(4, { message: 'Name should contain atleast 4 symbols' }),
+    .min(4, { message: 'Name should contain at least 4 symbols' }),
   password: z.string().min(2),
 });
 
@@ -85,14 +85,14 @@ export const SignUpForm: FC = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-16 w-[10rem] space-y-8 rounded-2xl border-2 p-8 lg:w-[26rem]"
       >
-        <p className="text-center text-2xl font-bold">Створити акаунт</p>
+        <p className="text-center text-2xl font-bold">Create an Account</p>
 
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="capitalize">Емейл</FormLabel>
+              <FormLabel className="capitalize">Email</FormLabel>
               <FormControl>
                 <Input
                   size="lg"
@@ -114,7 +114,7 @@ export const SignUpForm: FC = () => {
           name="nickname"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="capitalize">Нікнейм</FormLabel>
+              <FormLabel className="capitalize">Nickname</FormLabel>
               <FormControl>
                 <Input
                   size="lg"
@@ -134,7 +134,7 @@ export const SignUpForm: FC = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="capitalize">Пароль</FormLabel>
+              <FormLabel className="capitalize">Password</FormLabel>
               <FormControl>
                 <Input
                   size="lg"
@@ -177,7 +177,7 @@ export const SignUpForm: FC = () => {
           </p>
         )}
         <footer className="flex flex-col items-center justify-center text-center">
-          <p>Реєструючись, ви погоджуєтесь на</p>
+          <p>By signing up, you agree to our</p>
           <Link href={'/'}>
             <span className="ml-1 text-green-500">Terms & Privacy</span>
           </Link>

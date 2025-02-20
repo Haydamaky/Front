@@ -2,18 +2,21 @@ import { Button } from '@/components/ui/button';
 import useScreenSize from '@/hooks/screenSize';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { socket } from '@/socket';
-import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
 import { useEffect, useRef, useState } from 'react';
 import Chat from './Chat/Chat';
 import HintBulb from './HintBulb';
 import DicesContainer from './Dice/DicesContainer';
+import Auction from './Auction/Auction';
 import Image from 'next/image';
 import { Avatar } from '@nextui-org/react';
 import { Player } from '@/types/player';
 import Link from 'next/link';
-
+import { AuctionType } from '@/types/auction';
+import TradeOffer from './Trade/TradeOffer';
+import TradeAcceptence from './Trade/TradeAcceptence';
+import { TradeData } from '@/types/trade';
 type Action =
   | 'rollDice'
   | 'auction'
@@ -27,16 +30,22 @@ type Action =
 
 const Center = () => {
   const screenSize = useScreenSize();
-  const [action, setAction] = useState<Action>('');
   const dispatch = useAppDispatch();
   const fields = useAppSelector(state => state.fields.fields);
   const game = useAppSelector(state => state.game.game);
   const { data: user } = useAppSelector(state => state.user);
+  const [action, setAction] = useState<Action>(
+    game.turnOfUserId === user?.id && !game.dices ? 'rollDice' : '',
+  );
+
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
   );
+  const { data: trade } = useAppSelector(state => state.trade);
+  const [tradeAcceptance, setTradeAcceptance] = useState<null | TradeData>(
+    null,
+  );
   const [playerWon, setPlayerWon] = useState<undefined | Player>(undefined);
-  const [player] = game.players.filter(player => player.userId === user?.id);
   const [playerWithTurn] = game.players.filter(
     player => player.userId === game.turnOfUserId,
   );
@@ -52,6 +61,8 @@ const Center = () => {
   });
   const [amountToPay, setAmountToPay] = useState(0);
   const rolledDice = useRef(false);
+  const [auction, setAuction] = useState<null | AuctionType>(null);
+
   useEffect(() => {
     if (rolledDice.current) {
       if (!currentField.ownedBy && !currentField.specialField) {
@@ -66,24 +77,18 @@ const Center = () => {
       if (currentField.toPay && currentField.name === 'COIN') {
         setAction('COIN');
       }
-      console.log({ currentField, amountToPay, user });
 
       if (currentField.secret && secretInfo) {
-        console.log('secret');
         if (secretInfo.users.length === 1) {
-          console.log('users length 1');
           if (secretInfo.amounts[0] < 0) {
             setAction('secretPay');
-            console.log('users 1 amount[0] < 0');
             setAmountToPay(secretInfo.amounts[0]);
           }
         } else if (secretInfo.users.length === 2) {
-          console.log('users length 2');
           const index = secretInfo.users.findIndex(
             userId => userId === user?.id,
           );
           if (secretInfo.amounts[index] < 0) {
-            console.log('users 2 amount[', index);
             setAction('secretPay');
             setAmountToPay(secretInfo.amounts[index]);
           }
@@ -91,10 +96,8 @@ const Center = () => {
           secretInfo.users.length > 2 &&
           user?.id !== secretInfo.users[0]
         ) {
-          console.log('Users length > 2');
           if (secretInfo.amounts.length === 2) {
             if (secretInfo.amounts[1] < 0) {
-              console.log('2');
               setAction('secretPay');
               setAmountToPay(secretInfo.amounts[1]);
             }
@@ -102,7 +105,6 @@ const Center = () => {
 
           if (secretInfo.amounts.length === 1) {
             if (secretInfo.amounts[0] < 0) {
-              console.log('1');
               setAction('secretPay');
               setAmountToPay(secretInfo.amounts[0]);
             }
@@ -119,6 +121,10 @@ const Center = () => {
     };
     const handleHasPutUpForAuction = (data: any) => {
       setAction('auction');
+      setAuction(data.auction);
+    };
+    const handleChangeAuction = (data: any) => {
+      setAuction(data.auction);
     };
     const handleSecret = (data: any) => {
       setSecretInfo(data);
@@ -144,7 +150,22 @@ const Center = () => {
         setPlayerWon(playerWon);
       }
     };
+    const handleGameData = (data: any) => {
+      if (data.auction) {
+        setAction('auction');
+        setAuction(data.auction);
+      }
+      if (data.secretInfo) {
+        setSecretInfo(data);
+      }
+    };
+    const hadleTradeOffered = (data: any) => {
+      setTradeAcceptance(data.trade);
+    };
+    socket.on('tradeOffered', hadleTradeOffered);
+    socket.on('gameData', handleGameData);
     socket.on('playerWon', onPlayerWon);
+    socket.on(['raisedPrice', 'refusedFromAuction'], handleChangeAuction);
     socket.on('rolledDice', handleRolledDice);
     socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
     socket.on('passTurnToNext', handlePassTurnToNext);
@@ -152,11 +173,17 @@ const Center = () => {
     socket.on('updatePlayers', handleUpdatePlayers);
     return () => {
       socket.off('rolledDice', handleRolledDice);
-      socket.off('hasPutUpForAuction', handleHasPutUpForAuction);
+      socket.off(
+        ['raisedPrice', 'refusedFromAuction'],
+        handleHasPutUpForAuction,
+      );
+      socket.off('raisedPrice', handleChangeAuction);
       socket.off('passTurnToNext', handlePassTurnToNext);
       socket.off('playerWon', onPlayerWon);
       socket.off('secret', handleSecret);
       socket.off('updatePlayers', handleUpdatePlayers);
+      socket.off('gameData', handleGameData);
+      socket.off('tradeOffered', hadleTradeOffered);
     };
   }, [user]);
   const rollDice = () => {
@@ -179,31 +206,45 @@ const Center = () => {
     }
   };
   const turnOfUser = game.turnOfUserId === user?.id;
-  console.log({ action, secretInfo });
+  const handlePutUpForAuction = () => {
+    socket.emit('putUpForAuction');
+  };
+  const rollDiceModalCond =
+    (turnOfUser || action === 'secretPay') &&
+    !chipTransition &&
+    action &&
+    action !== 'auction' &&
+    (currentField.ownedBy !== game.turnOfUserId || !game.dices);
   return (
     <div className="relative h-full p-3">
+      {tradeAcceptance && (
+        <TradeAcceptence
+          trade={tradeAcceptance}
+          setTradeAcceptance={setTradeAcceptance}
+        />
+      )}
+      {trade && <TradeOffer />}
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
-        {(turnOfUser || action === 'auction' || action === 'secretPay') &&
+        {(turnOfUser || action === 'secretPay') &&
           !chipTransition &&
           action &&
+          action !== 'auction' &&
           (currentField.ownedBy !== game.turnOfUserId || !game.dices) && (
             <div className="flex flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
               <div className="mb-3 text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
                 {action === 'rollDice'
-                  ? 'Ваш хід'
+                  ? 'Your turn'
                   : action === 'buy'
-                    ? 'Придбати поле?'
+                    ? 'Buy field?'
                     : action === 'payForField'
-                      ? 'Оплата оренди'
+                      ? 'Pay for rent'
                       : action === 'secretPay'
-                        ? 'Неочікувані витрати'
+                        ? 'Unexpected expenses'
                         : action === 'COIN'
-                          ? 'Податок на розкіш'
+                          ? 'Luxury tax'
                           : action === 'VDNH'
-                            ? 'ВДНГ – час для розваг!'
-                            : action === 'auction'
-                              ? 'Аукціон'
-                              : ''}
+                            ? 'VDNH is a time for fun!'
+                            : ''}
               </div>
               {action === 'rollDice' && (
                 <>
@@ -212,11 +253,11 @@ const Center = () => {
                       <div className="h-5 w-5">
                         <HintBulb />
                       </div>
-                      <p className="text-xs">Порада</p>
+                      <p className="text-xs">Tip</p>
                     </div>
                     <p className="text-[10px]">
-                      Пам'ятайте: інколи краще зберегти гроші, ніж витратити їх
-                      на все, що трапляється.
+                      Remember: sometimes it's better to save money than to
+                      spend it on everything that happens.
                     </p>
                   </div>
                   <Button
@@ -225,7 +266,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={rollDice}
                   >
-                    Кинути кубики
+                    Roll Dice
                   </Button>
                 </>
               )}
@@ -238,8 +279,8 @@ const Center = () => {
                       </div>
                     </div>
                     <p className="text-[10px]">
-                      Якщо ви відмовитесь від покупки, поле буде виставлено на
-                      аукціон.
+                      If you cancel the purchase, the field will be put up for
+                      auction.
                     </p>
                   </div>
                   <div className="flex w-full gap-1 lg:gap-4">
@@ -249,18 +290,19 @@ const Center = () => {
                       className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                       onClick={buyField}
                     >
-                      Придбати за {currentField.price}
+                      Buy for {currentField.price}
                     </Button>
                     <div
                       className={`flex h-[38px] w-full flex-col items-center justify-center overflow-hidden rounded-md bg-buttonBlueGradient px-[1px]`}
                     >
                       <Button
                         variant={'gameDarkBlue'}
+                        onClick={handlePutUpForAuction}
                         size={screenSize.width > 1200 ? 'default' : 'xs'}
                         className="font-custom"
                       >
                         <p className="bg-[linear-gradient(184.39deg,#5AB2F7_4.38%,#12CFF3_97.25%)] bg-clip-text text-4xl text-[9px] font-bold text-transparent md:text-sm lg:text-lg">
-                          На аукціон
+                          Put up for auction
                         </p>
                       </Button>
                     </div>
@@ -271,8 +313,8 @@ const Center = () => {
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <p className="text-[10px]">
-                      Попадаючи на чуже поле, ви зобов'язані сплатити власнику
-                      орендну плату відповідно до вартості цього поля.
+                      When you enter someone else's field, you are obliged to
+                      pay the owner a rent according to the value of this field.
                     </p>
                   </div>
                   <Button
@@ -281,7 +323,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payForField}
                   >
-                    Оплатити оренду{' '}
+                    Pay for rent{' '}
                     {currentField.income[currentField.amountOfBranches]}
                   </Button>
                 </>
@@ -290,8 +332,8 @@ const Center = () => {
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <p className="text-[10px]">
-                      Ти потрапив(ла) на фестиваль у ВДНГ! Ярмарки, атракціони
-                      та смачна їжа — незабутні враження гарантовано!
+                      You've come to the festival at VDNH! Fairs, attractions
+                      and delicious food - unforgettable impressions guaranteed!
                     </p>
                   </div>
                   <Button
@@ -300,7 +342,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payToBank}
                   >
-                    Оплатити {Math.abs(currentField.toPay)}
+                    Pay {Math.abs(currentField.toPay)}
                   </Button>
                 </>
               )}
@@ -308,8 +350,8 @@ const Center = () => {
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <p className="text-[10px]">
-                      Держава вирішила, що ти живеш занадто розкішно! Сплати
-                      податок та підтримай баланс у грі.
+                      The state has decided that you live too luxuriously! Pay
+                      your taxes and maintain the balance in the game.
                     </p>
                   </div>
                   <Button
@@ -318,7 +360,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payToBank}
                   >
-                    Оплатити {Math.abs(currentField.toPay)}
+                    Pay {Math.abs(currentField.toPay)}
                   </Button>
                 </>
               )}
@@ -328,9 +370,8 @@ const Center = () => {
                     <p className="text-[10px]">
                       {secretInfo &&
                         (secretInfo.users.length === 1
-                          ? `Невідомість вимагає жертв! Ти потрапив(ла) на секретне
-                      поле і маєш здійснити платіж.`
-                          : `Гравець ${game.players.find(player => player.userId === secretInfo?.users[0])?.user.nickname} активував(ла) секретне поле, і це призвело до події, яка зачепила вас.`)}
+                          ? `The unknown demands sacrifices! You have entered a secret field and must make a payment.`
+                          : `Player ${game.players.find(player => player.userId === secretInfo?.users[0])?.user.nickname} activated a secret field, and this led to an event that affected you.`)}
                     </p>
                   </div>
                   <Button
@@ -339,7 +380,7 @@ const Center = () => {
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                     onClick={payForSecret}
                   >
-                    Сплатити {Math.abs(amountToPay)}
+                    Pay {Math.abs(amountToPay)}
                   </Button>
                 </>
               )}
@@ -349,8 +390,9 @@ const Center = () => {
                   <>
                     <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                       <p className="text-[10px]">
-                        Попадаючи на чуже поле, ви зобов'язані сплатити власнику
-                        орендну плату відповідно до вартості цього поля.
+                        When you enter someone else's field, you are obliged to
+                        pay the owner a rent according to the value of this
+                        field.
                       </p>
                     </div>
                     <Button
@@ -359,44 +401,20 @@ const Center = () => {
                       className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
                       onClick={payForField}
                     >
-                      Оплатити оренду{' '}
+                      Pay rent{' '}
                       {currentField.income[currentField.amountOfBranches]}
                     </Button>
                   </>
                 )}
-              {action === 'auction' && (
-                <>
-                  <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
-                    <div className="flex h-6 items-center justify-center gap-1 rounded-md bg-gradient-to-r from-[#FBD07C] to-[#F7F779] px-1 text-[#19376D]">
-                      <div className="h-5 w-5">
-                        <HintBulb />
-                      </div>
-                    </div>
-                    <p className="text-[10px]">
-                      Якщо ви відмовитесь від покупки, поле буде виставлено на
-                      аукціон.
-                    </p>
-                  </div>
-                  <div className="flex gap-1 lg:gap-4">
-                    <Button
-                      size={screenSize.width > 1200 ? 'default' : 'xs'}
-                      className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
-                    >
-                      Підняти на 100
-                    </Button>
-                    <Button
-                      variant={'white'}
-                      size={screenSize.width > 1200 ? 'default' : 'xs'}
-                      className="font-custom text-[9px] md:text-sm lg:text-lg"
-                    >
-                      Відмовитись
-                    </Button>
-                  </div>
-                </>
-              )}
             </div>
           )}
       </div>
+      <Auction
+        isOpen={action === 'auction'}
+        currentField={currentField}
+        auction={auction}
+        defaultOpen={!!auction && action === 'auction'}
+      />
       <div className="absolute left-[50%] top-[46%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex gap-5">
           <DicesContainer />
@@ -406,7 +424,7 @@ const Center = () => {
       {playerWon && !chipTransition && (
         <div className="fixed left-0 top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-[#060606F2]">
           <h1 className="bg-[linear-gradient(268.72deg,#F6BE19_20.14%,#FBFBFA_125.62%)] bg-clip-text text-7xl font-bold text-transparent">
-            Переможець
+            Winner
           </h1>
 
           <div className="pb-[9%]">
@@ -438,7 +456,7 @@ const Center = () => {
                 height={32}
               />
               <p className="mb-[10%] ml-[14%] font-custom text-2xl text-white">
-                Вийти
+                Exit
               </p>
             </div>
           </Link>

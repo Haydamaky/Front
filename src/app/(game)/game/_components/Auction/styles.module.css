@@ -1,0 +1,8 @@
+.bar div div {
+  background: linear-gradient(to right, #06afec, #7fd6fb);
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}

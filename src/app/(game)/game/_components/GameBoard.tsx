@@ -13,21 +13,11 @@ import Image from 'next/image';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
+
   const { data: user } = useAppSelector(state => state.user);
   const { game } = useAppSelector(state => state.game);
   const [fieldClicked, setFieldClicked] = useState<null | Field>(null);
   const inspectFieldRef = useRef<HTMLDivElement | null>(null);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    socket.on('error', (err: any) => console.log(err));
-    socket.on('updateGameData', data => {
-      dispatch(setFields(data.fields));
-      dispatch(setGame(data.game));
-    });
-    return () => {
-      socket.off('error');
-    };
-  }, []);
 
   const handleFieldClicked = (field: Field) => {
     setFieldClicked(field);
@@ -86,7 +76,7 @@ const GameBoard = () => {
             variant="blueGame"
             size="inspectField"
           >
-            Інвест
+            Invest
           </Button>
         )}
         {noBranches ? (
@@ -95,7 +85,7 @@ const GameBoard = () => {
             className="w-full rounded-[3px] bg-redGradient p-[1px]"
           >
             <Button variant="forGradient" size="inspectField">
-              Застава
+              Pledge
             </Button>
           </div>
         ) : (
@@ -104,7 +94,7 @@ const GameBoard = () => {
             className="w-full rounded-[3px] bg-redGradient p-[1px]"
           >
             <Button variant="forGradient" size="inspectField">
-              Продаж
+              Sale
             </Button>
           </div>
         )}
@@ -119,7 +109,7 @@ const GameBoard = () => {
         className="mt-2 w-[90%] rounded-[3px] bg-greedGradient p-[1px] font-custom"
       >
         <Button variant="forGradient" size="inspectField">
-          Викупити
+          Redeem
         </Button>
       </div>
     ) : (
@@ -128,7 +118,7 @@ const GameBoard = () => {
         className="mt-2 w-[90%] rounded-[3px] bg-redGradient p-[1px] font-custom"
       >
         <Button variant="forGradient" size="inspectField">
-          Застава
+          Pledge
         </Button>
       </div>
     );
@@ -144,7 +134,7 @@ const GameBoard = () => {
         className="mt-2 w-[90%] rounded-[3px] bg-greedGradient p-[1px] font-custom"
       >
         <Button variant="forGradient" size="inspectField">
-          Викупити
+          Redeem
         </Button>
       </div>
     );
@@ -154,35 +144,36 @@ const GameBoard = () => {
   }
   return (
     <div className="relative grid h-[100vh] w-[calc(100vh-3rem)] grid-cols-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] grid-rows-[14fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_7fr_14fr] gap-[1px] py-10 text-black">
-      {fields.map((field: Field, index: number) => {
-        if (index === 13) {
+      {fields &&
+        fields.map((field: Field, index: number) => {
+          if (index === 13) {
+            return (
+              <Fragment key={field._id}>
+                <div className="col-span-9 col-start-2 row-span-9 row-start-2 bg-primaryGame">
+                  <Center />
+                </div>
+                <FieldComponent field={field} onClick={handleFieldClicked} />
+              </Fragment>
+            );
+          }
           return (
-            <Fragment key={field.id}>
-              <div className="col-span-9 col-start-2 row-span-9 row-start-2 bg-primaryGame">
-                <Center />
-              </div>
-              <FieldComponent field={field} onClick={handleFieldClicked} />
-            </Fragment>
+            <FieldComponent
+              field={field}
+              key={field._id}
+              onClick={handleFieldClicked}
+            />
           );
-        }
-        return (
-          <FieldComponent
-            field={field}
-            key={field.id}
-            onClick={handleFieldClicked}
-          />
-        );
-      })}
+        })}
       <PlayerChipsContainer />
       {fieldClicked && (
         <InspectField
           field={fieldClicked}
-          ref={inspectFieldRef}
+          infoFieldRef={inspectFieldRef}
           buttons={buttons}
         />
       )}
       <div className="absolute right-[-40%] top-[6%] flex w-[27%] flex-col text-white">
-        <h2>К-сть будинків та готелів :</h2>
+        <h2>Number of houses and hotels:</h2>
         <div className="mt-4 flex w-full justify-between">
           <div className="flex items-center gap-4">
             <p className="text-2xl">x{game.housesQty}</p>

@@ -1,3 +1,4 @@
+import { createSocket } from '@/socket';
 import { Socket } from 'socket.io-client';
 
 type EventCallback = (data: any) => void;
@@ -43,5 +44,11 @@ export class UpgradedSocket {
 
   emitWithAck(event: string, data?: unknown) {
     return this.socket.emitWithAck(event, data);
+  }
+
+  recconect() {
+    this.socket.disconnect();
+    this.socket = createSocket();
+    return this;
   }
 }

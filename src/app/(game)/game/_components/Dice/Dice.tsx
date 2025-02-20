@@ -1,12 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import styles from './Dice.module.css';
 import { defaultTransform, spinTransform } from './transforms';
-import { useAppDispatch } from '@/hooks/store';
-import { socket } from '@/socket';
-import { Game } from '@/types';
-import { setGame } from '@/store/slices/game';
-import { Field } from '@/types/field';
-import { setFields } from '@/store/slices/fields';
 
 interface DiceProps {
   diceNum: number;
