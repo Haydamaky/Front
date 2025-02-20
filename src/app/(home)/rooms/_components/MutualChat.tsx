@@ -11,13 +11,12 @@ import { useAppSelector } from '@/hooks/store';
 const MutualChat = () => {
   const [message, setMessage] = useState<MessageObjType>({
     text: '',
-    chatId: MUTUAL_CHAT_ID,
+    chatId: '',
     updatedAt: '',
     senderId: '',
   });
   const [messages, setMessages] = useState<MessageObjType[]>([]);
   const user = useAppSelector(state => state.user);
-
   const isScrolledToBottom = (container: HTMLDivElement | null) =>
     container &&
     container.scrollHeight - container.scrollTop - container.clientHeight < 10;
@@ -33,9 +32,8 @@ const MutualChat = () => {
   };
 
   const fetchChatData = async () => {
-    const chatData = await socket.emitWithAck('chatData', {
-      chatId: MUTUAL_CHAT_ID,
-    });
+    const chatData = await socket.emitWithAck('mutualChatData');
+    setMessage(prevMessage => ({ ...prevMessage, chatId: chatData.id }));
     setMessages(chatData.messages);
   };
 
@@ -48,7 +46,7 @@ const MutualChat = () => {
   }, []);
 
   const sendMessage = () => {
-    socket.emit('newMessage', { text: message.text, chatId: MUTUAL_CHAT_ID });
+    socket.emit('newMessage', { text: message.text, chatId: message.chatId });
     setMessage(prevMessage => ({ ...prevMessage, text: '' }));
   };
 
