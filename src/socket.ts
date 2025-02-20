@@ -2,7 +2,9 @@ import { io } from 'socket.io-client';
 import { UpgradedSocket } from './lib/UpgradedSocket';
 
 export const createSocket = () => {
-  const socketIO = io(process.env.API_URL, { withCredentials: true });
+  const socketIO = io(process.env.NEXT_PUBLIC_API_URL, {
+    withCredentials: true,
+  });
   return socketIO;
 };
 
