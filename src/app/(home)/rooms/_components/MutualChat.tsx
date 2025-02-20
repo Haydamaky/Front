@@ -27,7 +27,7 @@ const MutualChat = () => {
       data.senderId === user.data?.id ||
       isScrolledToBottom(containerRef.current)
     ) {
-      setScroll(_ => true);
+      setScroll(true);
     }
   };
 
@@ -43,7 +43,7 @@ const MutualChat = () => {
     return () => {
       socket.off('onMessage', handleOnMessage);
     };
-  }, []);
+  }, [user]);
 
   const sendMessage = () => {
     socket.emit('newMessage', { text: message.text, chatId: message.chatId });
@@ -75,24 +75,26 @@ const MutualChat = () => {
         Group Chat
       </h1>
       <div className="scrollbar flex-1 overflow-y-scroll" ref={containerRef}>
-        {messages.map((message, index: number) => {
-          const time = formatDateToTime(message.updatedAt);
-          if (index === messages.length - 1 && scroll) {
+        <div className="flex min-h-full flex-col justify-end">
+          {messages.map((message, index: number) => {
+            const time = formatDateToTime(message.updatedAt);
+            if (index === messages.length - 1 && scroll) {
+              return (
+                <div key={message.id}>
+                  <p
+                    className="bg-pink-400"
+                    ref={messageRef}
+                  >{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
+                </div>
+              );
+            }
             return (
               <div key={message.id}>
-                <p
-                  className="bg-pink-400"
-                  ref={messageRef}
-                >{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
+                <p>{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
               </div>
             );
-          }
-          return (
-            <div key={message.id}>
-              <p>{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
-            </div>
-          );
-        })}
+          })}
+        </div>
       </div>
       <div className="mb-1 mt-1 flex items-center">
         <Input

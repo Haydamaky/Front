@@ -21,7 +21,7 @@ import { useAppDispatch } from '@/hooks/store';
 import { setUserState, User } from '@/store/slices/user';
 import { useRouter } from 'next/navigation';
 import { GoogleIcon } from '@/components/icons';
-import { createSocket, socket } from '@/socket';
+import { socket } from '@/socket';
 export const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(2),
