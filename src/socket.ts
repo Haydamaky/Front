@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 import { UpgradedSocket } from './lib/UpgradedSocket';
 
 export const createSocket = () => {
-  const socketIO = io('http://localhost:3000/', { withCredentials: true });
+  const socketIO = io(process.env.API_URL, { withCredentials: true });
   return socketIO;
 };
 
