@@ -6,6 +6,7 @@ import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 import GameRow from './GameRow';
+import { setGameIdCookie } from '@/actions/actions';
 
 const GamesList: FC = () => {
   const router = useRouter();
@@ -34,9 +35,9 @@ const GamesList: FC = () => {
       setGames(prevGames => [game, ...prevGames]);
     };
 
-    const handleStartGame = ({ game }: DataWithGame) => {
+    const handleStartGame = async ({ game }: DataWithGame) => {
       if (game) {
-        document.cookie = `gameId=${game.id}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=None; domain=.plankton-app-sfddt.ondigitalocean.app; Secure`;
+        await setGameIdCookie(game.id);
       }
       router.push('/game');
     };
