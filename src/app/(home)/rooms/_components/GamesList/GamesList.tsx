@@ -36,7 +36,7 @@ const GamesList: FC = () => {
 
     const handleStartGame = ({ game }: DataWithGame) => {
       if (game) {
-        document.cookie = `gameId=${game.id}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+        document.cookie = `gameId=${game.id}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=None; domain=.plankton-app-sfddt.ondigitalocean.app; Secure`;
       }
       router.push('/game');
     };
