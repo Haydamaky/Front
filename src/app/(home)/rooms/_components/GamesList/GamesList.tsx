@@ -6,7 +6,7 @@ import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 import GameRow from './GameRow';
-import { setGameIdCookie } from '@/actions/actions';
+import { client } from '@/client';
 
 const GamesList: FC = () => {
   const router = useRouter();
@@ -36,10 +36,14 @@ const GamesList: FC = () => {
     };
 
     const handleStartGame = async ({ game }: DataWithGame) => {
+      console.log({ game });
       if (game) {
-        await setGameIdCookie(game.id);
+        const res = await client.post('game/set-cookie', { gameId: game.id });
+        console.log({ res });
+        if ([200, 201].includes(res.status)) {
+          router.push('/game');
+        }
       }
-      router.push('/game');
     };
 
     const handleOnParticipateGame = (game: Game) => {
