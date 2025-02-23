@@ -131,7 +131,8 @@ const Center = () => {
     };
     const handleUpdatePlayers = (data: any) => {
       setSecretInfo(data.secretInfo);
-      if (!secretInfo.users.includes(user?.id || 'notIncluded')) setAction('');
+      if (!data.secretInfo.users?.includes(user?.id || 'notIncluded'))
+        setAction('');
       dispatch(setGame(data.game));
     };
     const handlePassTurnToNext = (data: DataWithGame) => {
@@ -206,15 +207,10 @@ const Center = () => {
     }
   };
   const turnOfUser = game.turnOfUserId === user?.id;
+  const currentPlayer = game.players.find(player => player.userId === user?.id);
   const handlePutUpForAuction = () => {
     socket.emit('putUpForAuction');
   };
-  const rollDiceModalCond =
-    (turnOfUser || action === 'secretPay') &&
-    !chipTransition &&
-    action &&
-    action !== 'auction' &&
-    (currentField.ownedBy !== game.turnOfUserId || !game.dices);
   return (
     <div className="relative h-full p-3">
       {tradeAcceptance && (
@@ -226,6 +222,7 @@ const Center = () => {
       {trade && <TradeOffer />}
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
         {(turnOfUser || action === 'secretPay') &&
+          currentPlayer?.lost &&
           !chipTransition &&
           action &&
           action !== 'auction' &&
