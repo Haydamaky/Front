@@ -24,7 +24,11 @@ export default function ConfirmEmail({
     if (!token) return;
     try {
       const res = await client.get(
-        `${process.env.NEXT_PUBLIC_API_URL}auth/confirm-email/${token}`,
+        `${
+          process.env.NODE_ENV === 'development'
+            ? process.env.NEXT_PUBLIC_API_URL_DEV
+            : process.env.NEXT_PUBLIC_API_URL_PROD
+        }auth/confirm-email/${token}`,
       );
       if ([200, 201].includes(res.status)) {
         router.replace(siteConfig.links.login);
