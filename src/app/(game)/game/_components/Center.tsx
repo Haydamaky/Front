@@ -144,7 +144,7 @@ const Center = () => {
     };
     const onPlayerWon = (data: any) => {
       const playerWon = data.game.players.find(
-        (player: Player) => player.lost,
+        (player: Player) => !player.lost,
       ) as Player | undefined;
 
       if (playerWon) {
