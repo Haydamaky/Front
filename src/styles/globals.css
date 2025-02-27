@@ -3,9 +3,14 @@
 @tailwind utilities;
 @layer base {
   * {
+    box-sizing: border-box;
     @apply border-primary;
   }
-  body {
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
     @apply bg-base text-primary;
   }
 }
