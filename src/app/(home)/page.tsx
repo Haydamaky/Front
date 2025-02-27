@@ -6,12 +6,12 @@ export default function Home() {
           <section className="flex flex-col mt-80 items-center justify-center text-center">
             <div className="relative z-10 max-w-3xl text-justify font-fixelDisplay text-standard">
               <p>
-                Готовий підкорити світ нерухомості та стати справжнім магнатом?
-                Ласкаво просимо до онлайн монополії “Yuka”! Грай з друзями або
-                новими знайомими, інвестуй, купуй, торгуй та захоплюй міста.
-                Випробуй свою стратегію та покажи, хто справжній король бізнесу!
-                Натискай, щоб розпочати гру і втілити свої фінансові мрії в
-                реальність!
+                Ready to conquer the world of real estate and become a real tycoon?
+                Welcome to the online monopoly game Yuka! Play with friends or
+                or new acquaintances, invest, buy, trade, and take over cities.
+                Put your strategy to the test and show who is the real king of business!
+                Click to start the game and make your financial dreams come true!
+                into reality!
               </p>
             </div>
 
@@ -19,8 +19,8 @@ export default function Home() {
       <span
           className="absolute inset-0 translate-x-1 translate-y-1 rounded-[5px] border border-white transition-all duration-200 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-primaryGame"></span>
               <button
-                  className="relative h-[40px] w-[190px] rounded-[5px] border border-white bg-primaryGame font-custom text-standard font-bold transition-all duration-200 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:bg-primary">
-                РОЗПОЧАТИ ГРУ
+                  className="relative h-[40px] w-[190px] rounded-[5px] border border-white bg-primaryGame font-custom text-standard font-bold transition-all duration-200 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:bg-darkHome">
+                START THE GAME
               </button>
             </div>
             <div className="flex-grow"></div>
@@ -31,9 +31,9 @@ export default function Home() {
               <div className="flex items-center gap-4 ml-32">
                 <img src="/images/monkey%231.png" alt="Грай безкоштовно" className="h-auto w-48"/>
                 <div>
-                  <h3 className="font-custom text-lg">ГРАЙ БЕЗКОШТОВНО!</h3>
+                  <h3 className="font-custom text-lg">PLAY FOR FREE</h3>
                   <p className="mt-1 w-[287px] text-justify font-fixelDisplay text-standard">
-                    Ніяких оплат чи підписок – просто створюйте акаунт і починайте будувати свою імперію!
+                    No payments or subscriptions - just create an account and start building your empire!
                   </p>
                 </div>
               </div>
@@ -41,10 +41,10 @@ export default function Home() {
               <div className="flex items-center gap-4 self-end mt-0 mr-40">
                 <img src="/images/monkey%232.png" alt="Знайомства" className="h-auto w-48"/>
                 <div>
-                  <h3 className="font-custom text-lg">ЗНАЙОМСТВА ТА НОВІ ДРУЗІ!</h3>
+                  <h3 className="font-custom text-lg">MEETINGS AND NEW FRIENDS</h3>
                   <p className="mt-1 w-[290px] text-justify font-fixelDisplay text-standard">
-                    Грай з новими людьми, знаходь друзів та спілкуйся прямо в грі. Створюйте тактики або просто
-                    веселіться разом!
+                    Play with new people, make friends, and chat right in the game. Create tactics or just
+                    have fun together!
                   </p>
                 </div>
               </div>
@@ -52,9 +52,9 @@ export default function Home() {
               <div className="flex items-center gap-4 mt-0 ml-32">
                 <img src="/images/monkey%233.png" alt="Грай будь-де" className="h-auto w-48"/>
                 <div>
-                  <h3 className="font-custom text-lg">ГРАЙ БУДЬ-ДЕ І БУДЬ-КОЛИ</h3>
+                  <h3 className="font-custom text-lg">PLAY ANYWHERE AND ANYTIME</h3>
                   <p className="mt-1 w-[295px] text-justify font-fixelDisplay text-standard">
-                    Наша гра доступна на будь-якому пристрої – вдома на комп’ютері чи в дорозі на смартфоні.
+                    Our game is available on any device - at home on your computer or on the go on your smartphone.
                   </p>
                 </div>
               </div>
@@ -69,12 +69,12 @@ export default function Home() {
 
             <div className="relative z-10 w-full max-w-5xl">
               <p className="absolute bottom-[60px] left-0 text-8xl  font-custom">
-                СТАНЬ <br/>
-                ЧАСТИНОЮ
+                STATE <br/>
+                PART
               </p>
 
               <p className="absolute top-0 right-0 text-right text-8xl font-custom">
-                НАШОГО <br/>
+                OURS <br/>
                 COMMUNITY
               </p>
             </div>

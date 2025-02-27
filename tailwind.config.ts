@@ -52,6 +52,7 @@ const config: Config = {
         gameWhite: 'rgba(251, 251, 250, 1)',
         gameCenterModal: 'rgba(25, 55, 109, 1)',
         primaryGame: 'rgba(0, 33, 71, 1)',
+        darkHome: 'rgba(0, 21, 46)',
       },
       backgroundImage: {
         playerGradient:

@@ -34,7 +34,7 @@ export const Navbar = () => {
           maxWidth="2xl"
           isMenuOpen={isMenuOpen}
           onMenuOpenChange={setIsMenuOpen}
-          className="relative mx-auto mt-[35px] flex h-[32px] w-full max-w-[1170px] items-center justify-start overflow-visible rounded-[17.5px] bg-primary px-[25px] text-base sm:px-[25px] sm:w-[calc(100%-50px)]"
+          className="relative mx-auto mt-[35px] flex h-[32px] w-full max-w-[1170px] items-center justify-start overflow-visible rounded-[17.5px] bg-darkHome px-[25px] text-base sm:px-[25px] sm:w-[calc(100%-50px)]"
       >
       <NavbarContent
             className="ml-28 basis-1/5 gap-[35px] sm:basis-full"
@@ -43,10 +43,10 @@ export const Navbar = () => {
           <Button
               as={Link}
               href="/rooms"
-              className="h-[40px] w-[140px] shrink-0 rounded-[17.5px] border-[4px] border-primary bg-base text-center font-custom text-[15px] leading-[22px] text-primary transition-colors duration-300 hover:border-base hover:bg-primary hover:text-base"
+              className="h-[40px] w-[140px] shrink-0 rounded-[17.5px] border-[4px] border-darkHome bg-base text-center font-custom text-[15px] leading-[22px] text-darkHome transition-colors duration-300 hover:border-base hover:bg-darkHome hover:text-base"
               aria-label="Грати"
           >
-            Грати!
+            Play
           </Button>
 
           <ul className="hidden h-10 items-center space-x-[30px] font-custom text-base md:flex">
@@ -72,9 +72,9 @@ export const Navbar = () => {
                       className="relative flex cursor-pointer items-center justify-center"
                       onClick={() => router.replace(siteConfig.links.login)}
                   >
-                    <div className="absolute h-[80px] w-[80px] rounded-full bg-primary"></div>
+                    <div className="absolute h-[80px] w-[80px] rounded-full bg-darkHome"></div>
                     <div className="relative flex h-[75px] w-[75px] items-center justify-center rounded-full border-[1px] border-dashed border-base">
-                      <span className="font-custom text-[14px]">Увійти</span>
+                      <span className="font-custom text-[14px]">Login</span>
                     </div>
                   </div>
                 </Link>
