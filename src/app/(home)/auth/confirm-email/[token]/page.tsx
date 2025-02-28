@@ -34,7 +34,7 @@ export default function ConfirmEmail({
         router.replace(siteConfig.links.login);
       }
     } catch (error) {
-      console.error('Error confirming email:', error);
+      console.error('Error while confirming email:', error);
     }
   };
 
