@@ -16,12 +16,12 @@ import { Button } from '@nextui-org/button';
 import { Link } from '@nextui-org/react';
 import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import { EyeClosedIcon, EyeIcon } from 'lucide-react';
-import { client } from '@/client';
+import { client } from '@/api/axiosClient';
 import { useAppDispatch } from '@/hooks/store';
 import { setUserState, User } from '@/store/slices/user';
 import { useRouter } from 'next/navigation';
 import { GoogleIcon } from '@/components/icons';
-import { socket } from '@/socket';
+import { socket } from 'api/socket';
 export const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(2),

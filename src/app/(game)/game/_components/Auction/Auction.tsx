@@ -36,8 +36,11 @@ const Auction = ({
   defaultOpen,
 }: AuctionProps) => {
   const players = useAppSelector(state => state.game.game.players);
+  const bidAmount = auction?.bidders.findLast(bidder => {
+    return bidder.accepted && bidder.bid;
+  });
   const raiseBid = (raiseBy: number) => {
-    socket.emit('raisePrice', { raiseBy });
+    socket.emit('raisePrice', { raiseBy, bidAmount: bidAmount?.bid });
   };
   const [customBid, setCustomBid] = useState('');
   const handleCustomBidChange = (
@@ -70,7 +73,7 @@ const Auction = ({
         scrollBehavior={'inside'}
         backdrop="blur"
       >
-        <ModalContent className="relative flex h-[90vh] w-[100vh] max-w-none flex-col rounded-xl bg-bgDark p-2">
+        <ModalContent className="bg-bgDark relative flex h-[90vh] w-[100vh] max-w-none flex-col rounded-xl p-2">
           {_ => (
             <>
               <Image
@@ -134,7 +137,7 @@ const Auction = ({
                             }
                             if (
                               bidder.userId &&
-                              !bidder.accepted &&
+                              bidder.accepted &&
                               bidder.bid === 0
                             ) {
                               const playerThatMadeBid = players.find(

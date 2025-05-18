@@ -1,6 +1,6 @@
 'use client';
 
-import { socket } from '@/socket';
+import { socket } from 'api/socket';
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
