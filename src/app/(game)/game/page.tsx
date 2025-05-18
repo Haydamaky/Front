@@ -3,8 +3,7 @@
 import { useAppDispatch } from '@/hooks/store';
 import { socket } from '@/socket';
 import { getUserInfo } from '@/store/slices/user';
-import { Player } from '@/types/player';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import GameBoard from './_components/GameBoard';
 import PlayersList from './_components/players/PlayersList';
 

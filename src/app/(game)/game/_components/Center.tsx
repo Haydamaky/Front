@@ -196,14 +196,14 @@ const Center = () => {
   const payForField = () => {
     socket.emit('payForField');
   };
-  const payToBank = () => {
-    socket.emit('payToBank');
+  const payToBankForSpecialField = () => {
+    socket.emit('payToBankForSpecialField');
   };
   const payForSecret = () => {
     if (secretInfo.users.length > 2 && secretInfo.amounts[0] === null) {
-      socket.emit('payToUser');
+      socket.emit('payToUserForSecret');
     } else {
-      socket.emit('payToBank');
+      socket.emit('payToBankForSecret');
     }
   };
   const turnOfUser = game.turnOfUserId === user?.id;
@@ -337,7 +337,7 @@ const Center = () => {
                     variant={'blueGame'}
                     size={screenSize.width > 1200 ? 'default' : 'xs'}
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
-                    onClick={payToBank}
+                    onClick={payToBankForSpecialField}
                   >
                     Pay {Math.abs(currentField.toPay)}
                   </Button>
@@ -355,7 +355,7 @@ const Center = () => {
                     variant={'blueGame'}
                     size={screenSize.width > 1200 ? 'default' : 'xs'}
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
-                    onClick={payToBank}
+                    onClick={payToBankForSpecialField}
                   >
                     Pay {Math.abs(currentField.toPay)}
                   </Button>

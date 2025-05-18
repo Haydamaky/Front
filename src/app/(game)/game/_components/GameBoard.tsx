@@ -48,8 +48,8 @@ const GameBoard = () => {
   const userHasAllGroup = groupOfField.every(
     field => field.ownedBy === user?.id,
   );
-  const handlePledgeField = () => {
-    socket.emit('pledgeField', { index: fieldClicked?.index });
+  const handleMortgageField = () => {
+    socket.emit('mortgageField', { index: fieldClicked?.index });
     setFieldClicked(null);
   };
   const handlePayRedeptionField = () => {
@@ -81,7 +81,7 @@ const GameBoard = () => {
         )}
         {noBranches ? (
           <div
-            onClick={handlePledgeField}
+            onClick={handleMortgageField}
             className="w-full rounded-[3px] bg-redGradient p-[1px]"
           >
             <Button variant="forGradient" size="inspectField">
@@ -114,7 +114,7 @@ const GameBoard = () => {
       </div>
     ) : (
       <div
-        onClick={handlePledgeField}
+        onClick={handleMortgageField}
         className="mt-2 w-[90%] rounded-[3px] bg-redGradient p-[1px] font-custom"
       >
         <Button variant="forGradient" size="inspectField">

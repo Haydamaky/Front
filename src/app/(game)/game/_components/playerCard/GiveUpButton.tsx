@@ -1,5 +1,5 @@
+import { socket } from 'api/socket';
 import { Button } from '@/components/ui/button';
-import { socket } from '@/socket';
 
 interface GiveUpButtonProps {
   opacity: string;

@@ -1,7 +1,7 @@
 import { createSocket } from '@/socket';
 import { Socket } from 'socket.io-client';
 
-export type EventCallback = (data: any) => void;
+type EventCallback = (data: any) => void;
 
 export class UpgradedSocket {
   constructor(private socket: Socket) {}
@@ -36,12 +36,12 @@ export class UpgradedSocket {
     });
   }
 
-  emit(event: string, data?: unknown | EventCallback) {
-    this.socket.emit(event, data);
-  }
-
-  emitWithAck(event: string, data?: unknown) {
-    return this.socket.emitWithAck(event, data);
+  emit(
+    event: string,
+    data?: unknown | EventCallback,
+    callback?: EventCallback,
+  ) {
+    return this.socket.emit(event, data, callback);
   }
 
   recconect() {
