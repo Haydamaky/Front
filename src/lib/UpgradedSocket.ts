@@ -1,12 +1,10 @@
 import { createSocket } from '@/socket';
 import { Socket } from 'socket.io-client';
 
-type EventCallback = (data: any) => void;
+export type EventCallback = (data: any) => void;
 
 export class UpgradedSocket {
-  constructor(private socket: Socket) {
-    this.socket = socket;
-  }
+  constructor(private socket: Socket) {}
 
   on(eventsOrEvent: string | string[], ...callbacks: EventCallback[]) {
     const events = Array.isArray(eventsOrEvent)
