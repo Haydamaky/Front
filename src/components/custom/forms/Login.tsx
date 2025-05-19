@@ -50,7 +50,7 @@ export const LogInForm: FC = () => {
 
       if (res.status === 200 && res.data.user) {
         dispatch(setUserState(res.data.user));
-        socket.recconect();
+        api.recconectSocket();
         router.replace('/');
       }
     } catch (error: any) {

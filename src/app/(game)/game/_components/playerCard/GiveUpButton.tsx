@@ -8,7 +8,7 @@ interface GiveUpButtonProps {
 
 const GiveUpButton = ({ opacity, lost }: GiveUpButtonProps) => {
   const handleClick = () => {
-    socket.emit('surrender');
+    api.surrender();
   };
   return (
     <>

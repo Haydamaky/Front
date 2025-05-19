@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { gradientColorVariants } from '../../_utils';
 import { Field } from '@/types/field';
 import { AuctionType } from '@/types/auction';
-import { socket } from '@/socket';
+import { api } from '@/api/api';
 
 interface AuctionProps {
   isOpen: boolean;
@@ -52,13 +52,13 @@ const Auction = ({
   const submitCustomBid = () => {
     const bidAmount = Number(customBid);
     if (bidAmount > 0) {
-      socket.emit('raisePrice', { raiseBy: bidAmount });
+      api.raisePrice({ raiseBy: bidAmount });
       setCustomBid('');
     }
   };
 
   const onRefuseAuction = () => {
-    socket.emit('refuseAuction');
+    api.refuseAuction();
   };
   return (
     <>
@@ -70,7 +70,7 @@ const Auction = ({
         scrollBehavior={'inside'}
         backdrop="blur"
       >
-        <ModalContent className="relative flex h-[90vh] w-[100vh] max-w-none flex-col rounded-xl bg-bgDark p-2">
+        <ModalContent className="bg-bgDark relative flex h-[90vh] w-[100vh] max-w-none flex-col rounded-xl p-2">
           {_ => (
             <>
               <Image

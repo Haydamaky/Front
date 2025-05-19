@@ -6,9 +6,9 @@ import { toast, ToastContainer } from 'react-toastify';
 
 const GatewayError = () => {
   useEffect(() => {
-    socket.on('error', onError);
+    api.on.error(onError);
     return () => {
-      socket.off('error', onError);
+      api.off.error(onError);
     };
   }, []);
 

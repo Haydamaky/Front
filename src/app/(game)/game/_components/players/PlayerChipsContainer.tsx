@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { socket } from '@/socket';
 import { setChipTransition } from '@/store/slices/chipTransition';
 import { useEffect, useRef } from 'react';
 import PlayersChips from './PlayersChips';
+import { api } from '@/api/api';
 
 const PlayerChipsContainer = () => {
   const game = useAppSelector(state => state.game.game);
@@ -19,11 +19,11 @@ const PlayerChipsContainer = () => {
       prevGameAfterRolledDices.current = data.game;
       shouldUpdate.current = true;
     };
-    socket.on('gameData', handleGetGameData);
-    socket.on('rolledDice', handleRolledDice);
+    api.on.gameData(handleGetGameData);
+    api.on.rolledDice(handleRolledDice);
     return () => {
-      socket.off('rolledDice', handleRolledDice);
-      socket.off('gameData', handleGetGameData);
+      api.off.rolledDice(handleRolledDice);
+      api.off.gameData(handleGetGameData);
     };
   }, []);
   if (shouldUpdate.current) {
