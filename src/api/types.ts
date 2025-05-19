@@ -1,3 +1,4 @@
+import { Socket } from 'socket.io-client';
 import { emitWithAck, emitWithoutAck, listenEvents } from './events';
 
 type EventsWithAckArr = typeof emitWithAck;
@@ -5,9 +6,9 @@ type EventsWithoutAckArr = typeof emitWithoutAck;
 type EventsWithListenerArr = typeof listenEvents;
 
 type EmitMethod = <ReturnValueType>(
-  ...args: unknown[]
-) => Promise<ReturnValueType> | void;
-type Listener = (...args: unknown[]) => void;
+  data: unknown,
+) => Promise<ReturnValueType> | any;
+type Listener = (data: any) => void | Promise<void>;
 type EventsWithAck = EventsWithAckArr[number];
 type EventsWithoutAck = EventsWithoutAckArr[number];
 type EventsWithListener = EventsWithListenerArr[number];
@@ -18,7 +19,7 @@ type SubscriptionEvents = Record<
 >;
 
 type API = {
-  [key in EventsWithAck | EventsWithoutAck]?: EmitMethod;
+  [key in EventsWithAck | EventsWithoutAck]: EmitMethod;
 } & {
   on: SubscriptionEvents;
   off: SubscriptionEvents;
