@@ -1,12 +1,12 @@
 import bgTradeImage from '@/../public/images/bgTrade.svg';
 import { Button } from '@/components/ui/button';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { socket } from '@/socket';
 import { setTrade } from '@/store/slices/trade';
 import { PlayerColor } from '@/types/player';
 import Image from 'next/image';
 import { useState } from 'react';
 import { gradientColorVariants } from '../../_utils';
+import { api } from '@/api/api';
 
 const TradeOffer = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +40,7 @@ const TradeOffer = () => {
     setSecondExtraPay(newValue === '' ? '' : Number(newValue));
   };
   const handleSendOffer = () => {
-    socket.emit('offerTrade', {
+    api.offerTrade({
       ...trade,
       offeredMoney: firstExtraPay || 0,
       wantedMoney: secondExtraPay || 0,

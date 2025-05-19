@@ -25,6 +25,9 @@ export const emitWithoutAck = [
   'unmortgageField',
   'payForField',
   'payRedemptionForField',
+  'refuseFromTrade',
+  'acceptTrade',
+  'offerTrade',
 ] as const;
 export const listenEvents = [
   'error',
@@ -45,4 +48,6 @@ export const listenEvents = [
   'passTurnToNext',
   'secret',
   'hasPutUpForAuction',
+  'clearStartedGame',
+  'startGame',
 ] as const;

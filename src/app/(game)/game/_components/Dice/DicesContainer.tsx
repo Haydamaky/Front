@@ -2,10 +2,10 @@ import { useAppDispatch } from '@/hooks/store';
 import Dice from './Dice';
 import { useEffect, useState } from 'react';
 import { Game } from '@/types';
-import { socket } from '@/socket';
 import { setGame } from '@/store/slices/game';
 import { setFields } from '@/store/slices/fields';
 import { Field } from '@/types/field';
+import { api } from '@/api/api';
 
 const DicesContainer = () => {
   const dispatch = useAppDispatch();
@@ -22,11 +22,11 @@ const DicesContainer = () => {
     const handlePassTurnToNext = (data: any) => {
       setLocalGameAfterDiceRoll(null);
     };
-    socket.on('passTurnToNext', handlePassTurnToNext);
-    socket.on('rolledDice', handleRollDiced);
+    api.on.passTurnToNext(handlePassTurnToNext);
+    api.on.rolledDice(handleRollDiced);
     return () => {
-      socket.off('rolledDice', handleRollDiced);
-      socket.off('passTurnToNext', handlePassTurnToNext);
+      api.off.rolledDice(handleRollDiced);
+      api.off.passTurnToNext(handlePassTurnToNext);
     };
   }, []);
   let dicesArrStr: string[];
