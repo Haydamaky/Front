@@ -1,5 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { socket } from '@/socket';
+import { useAppSelector } from '@/hooks/store';
 import { Field } from '@/types/field';
 import { Fragment, useEffect, useState, useRef } from 'react';
 import Center from './Center';
@@ -10,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
 import Image from 'next/image';
+import { api } from '@/api/api';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
@@ -53,15 +53,15 @@ const GameBoard = () => {
     setFieldClicked(null);
   };
   const handlePayRedeptionField = () => {
-    socket.emit('payRedemptionForField', { index: fieldClicked?.index });
+    api.payRedemptionForField({ index: fieldClicked?.index });
     setFieldClicked(null);
   };
   const handleBuyBranch = () => {
-    socket.emit('buyBranch', { index: fieldClicked?.index });
+    api.buyBranch({ index: fieldClicked?.index });
     setFieldClicked(null);
   };
   const handleSellBranch = () => {
-    socket.emit('sellBranch', { index: fieldClicked?.index });
+    api.sellBranch({ index: fieldClicked?.index });
     setFieldClicked(null);
   };
   let buttons: JSX.Element | null = null;
