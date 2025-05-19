@@ -1,11 +1,11 @@
 import bgTradeImage from '@/../public/images/bgTrade.svg';
 import { Button } from '@/components/ui/button';
 import { useAppSelector } from '@/hooks/store';
-import { socket } from '@/socket';
 import { PlayerColor } from '@/types/player';
 import { TradeData } from '@/types/trade';
 import Image from 'next/image';
 import { gradientColorVariants } from '../../_utils';
+import { api } from '@/api/api';
 
 interface TradeAcceptenceProps {
   trade: TradeData;
@@ -19,11 +19,11 @@ const TradeAcceptence = ({
   const fields = useAppSelector(state => state.fields.fields);
   const game = useAppSelector(state => state.game.game);
   const handleSignTrade = () => {
-    socket.emit('acceptTrade');
+    api.acceptTrade();
     setTradeAcceptance(null);
   };
   const handleRefuseFromTrade = () => {
-    socket.emit('refuseFromTrade');
+    api.refuseFromTrade();
     setTradeAcceptance(null);
   };
   const fromPlayer = game.players.find(

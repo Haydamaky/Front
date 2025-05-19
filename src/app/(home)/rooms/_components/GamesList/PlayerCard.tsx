@@ -1,6 +1,5 @@
+import { api } from '@/api/api';
 import { useAppSelector } from '@/hooks/store';
-import { socket } from '@/socket';
-import { Game } from '@/types';
 import { Avatar } from '@nextui-org/react';
 import { Plus, PlusCircleIcon } from 'lucide-react';
 import { FC } from 'react';
@@ -11,7 +10,7 @@ const PlayerCard: FC<{ player: any; gameId: string }> = ({
 }) => {
   const user = useAppSelector(state => state.user);
   const handleJoinGame = () => {
-    user.data && socket.emit('joinGame', { id: gameId });
+    user.data && api.joinGame({ id: gameId });
   };
 
   return (

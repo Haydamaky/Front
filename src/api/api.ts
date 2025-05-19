@@ -1,6 +1,6 @@
 import { socket } from '@/socket';
 import { emitWithAck, emitWithoutAck, listenEvents } from './events';
-import { API, BuildAPIFunction } from './types';
+import { API, BuildAPIFunction, Listener } from './types';
 
 const buildAPI: BuildAPIFunction = (
   withAck,
@@ -35,7 +35,15 @@ const buildAPI: BuildAPIFunction = (
     api.on[event] = (...handlers) => socket.on(event, ...handlers);
     api.off[event] = (...handlers) => socket.off(event, ...handlers);
   }
-
+  api.onMany = (events: string[], ...handlers: Listener[]) => {
+    socket.on(events, ...handlers);
+  };
+  api.offMany = (events: string[], ...handlers: Listener[]) => {
+    socket.off(events, ...handlers);
+  };
+  api.recconectSocket = () => {
+    socket.recconect();
+  };
   return api;
 };
 export const api = buildAPI(emitWithAck, emitWithoutAck, listenEvents);
