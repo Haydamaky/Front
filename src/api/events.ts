@@ -24,6 +24,7 @@ export const emitWithoutAck = [
   'mutualChatData',
   'unmortgageField',
   'payForField',
+  'payRedemptionForField',
 ] as const;
 export const listenEvents = [
   'error',
