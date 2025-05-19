@@ -1,4 +1,4 @@
-import { socket } from '../src/socket';
+import { socket } from '@/socket';
 import { emitWithAck, emitWithoutAck, listenEvents } from './events';
 import { API, BuildAPIFunction } from './types';
 
