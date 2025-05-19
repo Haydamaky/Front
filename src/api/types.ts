@@ -6,7 +6,7 @@ type EventsWithoutAckArr = typeof emitWithoutAck;
 type EventsWithListenerArr = typeof listenEvents;
 
 type EmitMethod = <ReturnValueType>(
-  data: unknown,
+  data?: unknown,
 ) => Promise<ReturnValueType> | any;
 type Listener = (data: any) => void | Promise<void>;
 type EventsWithAck = EventsWithAckArr[number];

@@ -23,8 +23,10 @@ export const emitWithoutAck = [
   'chatData',
   'mutualChatData',
   'unmortgageField',
+  'payForField',
 ] as const;
 export const listenEvents = [
+  'error',
   'onMessage',
   'gameChatMessage',
   'rejoin',
@@ -34,4 +36,12 @@ export const listenEvents = [
   'updatePlayers',
   'updateGameData',
   'playerSurrendered',
+  'tradeOffered',
+  'playerWon',
+  'raisedPrice',
+  'rolledDice',
+  'refusedFromAuction',
+  'passTurnToNext',
+  'secret',
+  'hasPutUpForAuction',
 ] as const;
