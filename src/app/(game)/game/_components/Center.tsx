@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import useScreenSize from '@/hooks/screenSize';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { socket } from '@/socket';
 import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
 import { useEffect, useRef, useState } from 'react';
@@ -17,6 +16,7 @@ import { AuctionType } from '@/types/auction';
 import TradeOffer from './Trade/TradeOffer';
 import TradeAcceptence from './Trade/TradeAcceptence';
 import { TradeData } from '@/types/trade';
+import { api } from '@/api/api';
 type Action =
   | 'rollDice'
   | 'auction'
@@ -163,53 +163,51 @@ const Center = () => {
     const hadleTradeOffered = (data: any) => {
       setTradeAcceptance(data.trade);
     };
-    socket.on('tradeOffered', hadleTradeOffered);
-    socket.on('gameData', handleGameData);
-    socket.on('playerWon', onPlayerWon);
-    socket.on(['raisedPrice', 'refusedFromAuction'], handleChangeAuction);
-    socket.on('rolledDice', handleRolledDice);
-    socket.on('hasPutUpForAuction', handleHasPutUpForAuction);
-    socket.on('passTurnToNext', handlePassTurnToNext);
-    socket.on('secret', handleSecret);
-    socket.on('updatePlayers', handleUpdatePlayers);
+    api.on.tradeOffered(hadleTradeOffered);
+    api.on.gameData(handleGameData);
+    api.on.playerWon(onPlayerWon);
+    api.on.raisedPrice(handleChangeAuction);
+    api.on.refusedFromAuction(handleChangeAuction);
+    api.on.rolledDice(handleRolledDice);
+    api.on.hasPutUpForAuction(handleHasPutUpForAuction);
+    api.on.passTurnToNext(handlePassTurnToNext);
+    api.on.secret(handleSecret);
+    api.on.updatePlayers(handleUpdatePlayers);
     return () => {
-      socket.off('rolledDice', handleRolledDice);
-      socket.off(
-        ['raisedPrice', 'refusedFromAuction'],
-        handleHasPutUpForAuction,
-      );
-      socket.off('raisedPrice', handleChangeAuction);
-      socket.off('passTurnToNext', handlePassTurnToNext);
-      socket.off('playerWon', onPlayerWon);
-      socket.off('secret', handleSecret);
-      socket.off('updatePlayers', handleUpdatePlayers);
-      socket.off('gameData', handleGameData);
-      socket.off('tradeOffered', hadleTradeOffered);
+      api.off.rolledDice(handleRolledDice);
+      api.off.refusedFromAuction(handleChangeAuction);
+      api.off.raisedPrice(handleChangeAuction);
+      api.off.passTurnToNext(handlePassTurnToNext);
+      api.off.playerWon(onPlayerWon);
+      api.off.secret(handleSecret);
+      api.off.updatePlayers(handleUpdatePlayers);
+      api.off.gameData(handleGameData);
+      api.off.tradeOffered(hadleTradeOffered);
     };
   }, [user]);
   const rollDice = () => {
-    socket.emit('rollDice');
+    api.rollDice();
   };
   const buyField = () => {
-    socket.emit('buyField');
+    api.buyField();
   };
   const payForField = () => {
-    socket.emit('payForField');
+    api.payForField();
   };
   const payToBankForSpecialField = () => {
-    socket.emit('payToBankForSpecialField');
+    api.payToBankForSpecialField();
   };
   const payForSecret = () => {
     if (secretInfo.users.length > 2 && secretInfo.amounts[0] === null) {
-      socket.emit('payToUserForSecret');
+      api.payToUserForSecret();
     } else {
-      socket.emit('payToBankForSecret');
+      api.payToBankForSecret();
     }
   };
   const turnOfUser = game.turnOfUserId === user?.id;
   const currentPlayer = game.players.find(player => player.userId === user?.id);
   const handlePutUpForAuction = () => {
-    socket.emit('putUpForAuction');
+    api.putUpForAuction();
   };
   return (
     <div className="relative h-full p-3">
