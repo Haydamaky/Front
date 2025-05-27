@@ -34,7 +34,7 @@ function JoinForm() {
         </Button>
 
         <footer className="text-center">
-          Already have an account?{' '}
+          Already have an account?
           <Link href={siteConfig.links.login}>
             <span className="ml-1 text-green-600">Log in</span>
           </Link>
