@@ -53,7 +53,7 @@ const GameBoard = () => {
     setFieldClicked(null);
   };
   const handlePayRedeptionField = () => {
-    api.payRedemptionForField({ index: fieldClicked?.index });
+    api.unmortgageField({ index: fieldClicked?.index });
     setFieldClicked(null);
   };
   const handleBuyBranch = () => {

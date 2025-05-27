@@ -1,4 +1,4 @@
-import { client } from '@/api/axiosClient';
+import { client } from '@/api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type User = {

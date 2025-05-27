@@ -1,5 +1,10 @@
-export const emitWithAck = ['getVisibleGames', 'getGameData'] as const;
+export const emitWithAck = [
+  'getVisibleGames',
+  'mutualChatData',
+  'chatData',
+] as const;
 export const emitWithoutAck = [
+  'getGameData',
   'createGame',
   'joinGame',
   'leaveGame',
@@ -20,11 +25,8 @@ export const emitWithoutAck = [
   'newMessage',
   'onMessage',
   'newGameMessage',
-  'chatData',
-  'mutualChatData',
   'unmortgageField',
   'payForField',
-  'payRedemptionForField',
   'refuseFromTrade',
   'acceptTrade',
   'offerTrade',

@@ -31,10 +31,8 @@ const GamesList: FC = () => {
     };
 
     const handleStartGame = async ({ game }: DataWithGame) => {
-      console.log({ game });
       if (game) {
         const res = await client.post('game/set-cookie', { gameId: game.id });
-        console.log({ res });
         if ([200, 201].includes(res.status)) {
           router.push('/game');
         }

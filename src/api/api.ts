@@ -18,17 +18,22 @@ const buildAPI: BuildAPIFunction = (
       new Promise<ReturnValueType>((resolve, reject) => {
         const timeout = setTimeout(() => {
           reject(new Error(`No response from server for "${method}"`));
-        }, config?.timeoutMS ?? 1500);
-
-        socket.emit(method, ...args, (data: ReturnValueType) => {
+        }, config?.timeoutMS ?? 2000);
+        const ack = (data: ReturnValueType) => {
           clearTimeout(timeout);
           resolve(data);
-        });
+        };
+
+        if (args.length > 0) {
+          socket.emit(method, ...args, ack);
+        } else {
+          socket.emit(method, {}, ack);
+        }
       });
   }
 
   for (const method of withoutAck) {
-    api[method] = (...args) => socket.emit(method, ...args);
+    api[method] = args => socket.emit(method, args);
   }
 
   for (const event of listeners) {

@@ -1,9 +1,6 @@
 export default function Home() {
   return (
     <div className="relative flex min-h-screen flex-col justify-start text-base">
-      <button className="h-10 w-52 rounded-md bg-blue-500 text-white">
-        Button
-      </button>
       <section className="mt-80 flex flex-col items-center justify-center text-center">
         <div className="relative z-10 max-w-3xl text-justify font-fixelDisplay text-standard">
           <p>
