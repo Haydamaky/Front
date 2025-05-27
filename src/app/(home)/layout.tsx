@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { Navbar } from '@/components/navbar';
 import { genFont, titleFont } from '@/config/fonts';
 import GatewayError from './rooms/_components/GatewayError';
+import BgBubbles from './_components/BgBubbles';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -24,11 +25,12 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={clsx(
-          'min-h-screen font-sans antialiased bg-primaryGame',
+          'relative min-h-screen bg-primaryGame font-sans antialiased',
           genFont.variable,
           titleFont.variable,
         )}
       >
+        <BgBubbles />
         <Providers>
           <div className="relative flex flex-col">
             <Navbar />
