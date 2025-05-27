@@ -39,7 +39,7 @@ const config: Config = {
       fontSize: {
         smallMob: '8px',
         standardMob: '10px',
-        standard: '13px',
+        standard: '16px',
         lg: '16px',
       },
       colors: {
