@@ -30,7 +30,7 @@ export default function RootLayout({
           titleFont.variable,
         )}
       >
-        <BgBubbles />
+        <BgBubbles isMainPage={true} />
         <Providers>
           <div className="relative flex flex-col">
             <Navbar />
