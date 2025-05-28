@@ -1,6 +1,6 @@
 'use client';
 
-import { client } from '@/client';
+import { client } from '@/api';
 import { siteConfig } from '@/config/site';
 import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';

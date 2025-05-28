@@ -6,8 +6,6 @@ import FieldComponent from './FieldComponent';
 import PlayerChipsContainer from './players/PlayerChipsContainer';
 import InspectField from './InspectField';
 import { Button } from '@/components/ui/button';
-import { setFields } from '@/store/slices/fields';
-import { setGame } from '@/store/slices/game';
 import Image from 'next/image';
 import { api } from '@/api/api';
 
@@ -48,6 +46,7 @@ const GameBoard = () => {
   const userHasAllGroup = groupOfField.every(
     field => field.ownedBy === user?.id,
   );
+
   const handleMortgageField = () => {
     api.mortgageField({ index: fieldClicked?.index });
     setFieldClicked(null);
@@ -58,9 +57,11 @@ const GameBoard = () => {
   };
   const handleBuyBranch = () => {
     api.buyBranch({ index: fieldClicked?.index });
+    api.buyBranch({ index: fieldClicked?.index });
     setFieldClicked(null);
   };
   const handleSellBranch = () => {
+    api.sellBranch({ index: fieldClicked?.index });
     api.sellBranch({ index: fieldClicked?.index });
     setFieldClicked(null);
   };
