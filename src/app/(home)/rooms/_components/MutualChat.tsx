@@ -1,12 +1,11 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { socket } from '@/socket';
-import { MUTUAL_CHAT_ID } from '@/lib/constants';
 import { MessageObjType } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@nextui-org/input';
 import { formatDateToTime } from '@/lib/utils';
 import { useAppSelector } from '@/hooks/store';
+import { api } from '@/api/api';
 
 const MutualChat = () => {
   const [message, setMessage] = useState<MessageObjType>({
@@ -32,21 +31,21 @@ const MutualChat = () => {
   };
 
   const fetchChatData = async () => {
-    const chatData = await socket.emitWithAck('mutualChatData');
+    const chatData = await api.mutualChatData();
     setMessage(prevMessage => ({ ...prevMessage, chatId: chatData.id }));
     setMessages(chatData.messages);
   };
 
   useEffect(() => {
-    socket.on('onMessage', handleOnMessage);
+    api.on.onMessage(handleOnMessage);
     fetchChatData();
     return () => {
-      socket.off('onMessage', handleOnMessage);
+      api.off.onMessage(handleOnMessage);
     };
   }, [user]);
 
   const sendMessage = () => {
-    socket.emit('newMessage', { text: message.text, chatId: message.chatId });
+    api.newMessage({ text: message.text, chatId: message.chatId });
     setMessage(prevMessage => ({ ...prevMessage, text: '' }));
   };
 
