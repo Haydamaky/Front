@@ -1,5 +1,5 @@
+import { api } from '@/api/api';
 import { Button } from '@/components/ui/button';
-import { socket } from '@/socket';
 
 interface GiveUpButtonProps {
   opacity: string;
@@ -8,7 +8,7 @@ interface GiveUpButtonProps {
 
 const GiveUpButton = ({ opacity, lost }: GiveUpButtonProps) => {
   const handleClick = () => {
-    socket.emit('surrender');
+    api.surrender();
   };
   return (
     <>

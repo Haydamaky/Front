@@ -4,9 +4,7 @@ import { Socket } from 'socket.io-client';
 type EventCallback = (data: any) => void;
 
 export class UpgradedSocket {
-  constructor(private socket: Socket) {
-    this.socket = socket;
-  }
+  constructor(private socket: Socket) {}
 
   on(eventsOrEvent: string | string[], ...callbacks: EventCallback[]) {
     const events = Array.isArray(eventsOrEvent)
@@ -38,12 +36,12 @@ export class UpgradedSocket {
     });
   }
 
-  emit(event: string, data?: unknown | EventCallback) {
-    this.socket.emit(event, data);
-  }
-
-  emitWithAck(event: string, data?: unknown) {
-    return this.socket.emitWithAck(event, data);
+  emit(
+    event: string,
+    data?: unknown | EventCallback,
+    callback?: EventCallback,
+  ) {
+    return this.socket.emit(event, data, callback);
   }
 
   recconect() {

@@ -1,22 +1,17 @@
 'use client';
-import { useAppSelector } from '@/hooks/store';
-import { socket } from '@/socket';
 import { DataWithGame, Game } from '@/types';
 import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 import GameRow from './GameRow';
-import { client } from '@/client';
+import { api } from '@/api/api';
+import { client } from '@/api';
 
 const GamesList: FC = () => {
   const router = useRouter();
   const [games, setGames] = useState<Game[]>([]);
-  const user = useAppSelector(state => state.user);
 
   useEffect(() => {
-    const handleLeaveGame = (id: string) => {
-      socket.emit('leaveGame', { id });
-    };
     const handleClearStartedGame = (gameId: string) => {
       setGames(prevGames => {
         const indexOfGame = prevGames.findIndex(game => game.id === gameId);
@@ -27,7 +22,7 @@ const GamesList: FC = () => {
     };
 
     const fetchGames = async () => {
-      const games = await socket.emitWithAck('getVisibleGames');
+      const games = await api.getVisibleGames();
       setGames(games);
     };
 
@@ -36,10 +31,8 @@ const GamesList: FC = () => {
     };
 
     const handleStartGame = async ({ game }: DataWithGame) => {
-      console.log({ game });
       if (game) {
         const res = await client.post('game/set-cookie', { gameId: game.id });
-        console.log({ res });
         if ([200, 201].includes(res.status)) {
           router.push('/game');
         }
@@ -55,20 +48,20 @@ const GamesList: FC = () => {
       });
     };
 
-    socket.on('clearStartedGame', handleClearStartedGame);
-    socket.on('startGame', handleStartGame);
-    socket.on('onParticipateGame', handleOnParticipateGame);
-    socket.on('newGameCreated', onNewGameCreated);
+    api.on.clearStartedGame(handleClearStartedGame);
+    api.on.startGame(handleStartGame);
+    api.on.onParticipateGame(handleOnParticipateGame);
+    api.on.newGameCreated(onNewGameCreated);
     fetchGames();
     return () => {
-      socket.off('clearStartedGame', handleClearStartedGame);
-      socket.off('startGame', handleStartGame);
-      socket.off('onParticipateGame', handleOnParticipateGame);
-      socket.off('newGameCreated', onNewGameCreated);
+      api.off.clearStartedGame(handleClearStartedGame);
+      api.off.startGame(handleStartGame);
+      api.off.onParticipateGame(handleOnParticipateGame);
+      api.off.newGameCreated(onNewGameCreated);
     };
   }, [router]);
   const onCreateGame = () => {
-    socket.emit('createGame');
+    api.createGame();
   };
 
   return (

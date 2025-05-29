@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { UpgradedSocket } from './lib/UpgradedSocket';
+import { UpgradedSocket } from '@/lib/UpgradedSocket';
 
 export const createSocket = () => {
   const socketIO = io(

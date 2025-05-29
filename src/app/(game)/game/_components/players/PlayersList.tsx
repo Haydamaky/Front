@@ -1,13 +1,13 @@
 'use client';
 
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { socket } from '@/socket';
 import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
 import { Player } from '@/types/player';
 import { useEffect, useRef, useState } from 'react';
 import PlayerCard from '../playerCard/PlayerCard';
+import { api } from '@/api/api';
 
 const PlayersList = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +47,7 @@ const PlayersList = () => {
         fields => fields.index === currentPlayer?.currentFieldIndex,
       );
       if (currentField?.ownedBy === user.data?.id) {
-        socket.emit('passTurn');
+        api.passTurn();
       }
 
       rolledDice.current = false;
@@ -67,35 +67,34 @@ const PlayersList = () => {
       }
     };
     const getGameData = () => {
-      socket.emit('getGameData');
+      api.getGameData();
     };
     getGameData();
-    socket.on('rejoin', getGameData);
-    socket.on(
-      'gameData',
+    api.on.rejoin(getGameData);
+    api.on.gameData(
       dispatchSetGame,
       dispatchSetFields,
       calculateTimeToEndAndSetStates,
     );
-    socket.on('tradeOffered', dispatchSetGame);
-    const setRolledDiceSocket = () => {
+    api.on.tradeOffered(dispatchSetGame);
+    const setRolledDiceapi = () => {
       rolledDice.current = true;
     };
-    socket.on('rolledDice', setRolledDiceSocket);
-    socket.on(
+    api.on.rolledDice(setRolledDiceapi);
+    api.onMany(
       ['hasPutUpForAuction', 'getGameData', 'passTurnToNext', 'updateGameData'],
       calculateTimeToEndAndSetStates,
     );
 
-    socket.on('passTurnToNext', dispatchSetGame, dispatchSetFields);
-    socket.on(
+    api.on.passTurnToNext(dispatchSetGame, dispatchSetFields);
+    api.onMany(
       ['payedForField', 'playerSurrendered', 'updateGameData'],
       dispatchSetGame,
       dispatchSetFields,
     );
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
-      socket.off(
+      api.offMany(
         [
           'hasPutUpForAuction',
           'getGameData',
@@ -105,15 +104,15 @@ const PlayersList = () => {
         ],
         calculateTimeToEndAndSetStates,
       );
-      socket.off(['passTurnToNext'], dispatchSetGame);
-      socket.off(
+      api.off.passTurnToNext(dispatchSetGame);
+      api.offMany(
         ['payedForField', 'playerSurrendered', 'updateGameData'],
         dispatchSetFields,
         dispatchSetGame,
       );
-      socket.off('rejoin', getGameData);
-      socket.off('rolledDice', setRolledDiceSocket);
-      socket.off('tradeOffered', dispatchSetGame);
+      api.off.rejoin(getGameData);
+      api.off.rolledDice(setRolledDiceapi);
+      api.off.tradeOffered(dispatchSetGame);
     };
   }, []);
 

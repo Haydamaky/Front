@@ -16,12 +16,12 @@ import { Button } from '@nextui-org/button';
 import { Link } from '@nextui-org/react';
 import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import { EyeClosedIcon, EyeIcon } from 'lucide-react';
-import { client } from '@/client';
+import { client } from '@/api';
 import { useAppDispatch } from '@/hooks/store';
 import { setUserState, User } from '@/store/slices/user';
 import { useRouter } from 'next/navigation';
 import { GoogleIcon } from '@/components/icons';
-import { socket } from '@/socket';
+import { api } from '@/api/api';
 export const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(2),
@@ -50,7 +50,7 @@ export const LogInForm: FC = () => {
 
       if (res.status === 200 && res.data.user) {
         dispatch(setUserState(res.data.user));
-        socket.recconect();
+        api.recconectSocket();
         router.replace('/');
       }
     } catch (error: any) {

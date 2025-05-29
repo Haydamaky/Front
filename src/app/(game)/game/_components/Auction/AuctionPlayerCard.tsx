@@ -1,8 +1,6 @@
 import { Player } from '@/types/player';
 import { Avatar } from '@nextui-org/react';
 import Image from 'next/image';
-import { FC } from 'react';
-import { X } from 'lucide-react';
 import { gradientColorVariants } from '../../_utils';
 
 interface AuctionPlayerCardProps {

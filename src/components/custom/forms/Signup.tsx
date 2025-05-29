@@ -18,7 +18,7 @@ import { Link } from '@nextui-org/link';
 import { ChangeEvent, FC, useState } from 'react';
 import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import { siteConfig } from '@/config/site';
-import { client } from '@/client';
+import { client } from '@/api';
 import { useRouter } from 'next/navigation';
 
 export const formSchema = z.object({

@@ -1,12 +1,11 @@
 import { Input } from '@/components/ui/input';
-import { socket } from '@/socket';
 import { MessageObjType } from '@/types';
 import { Button } from '@nextui-org/react';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import Message from './message';
 import { Player, PlayerColor } from '@/types/player';
 import { gradientColorVariants } from '../../_utils';
-import { useAppSelector } from '@/hooks/store';
+import { api } from '@/api/api';
 
 const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
   chatId,
@@ -15,18 +14,19 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
 }) => {
   const isInitialRender = useRef<boolean>(true);
   const [text, setText] = useState('');
-  const game = useAppSelector(state => state.game.game);
   const [messages, setMessages] = useState<MessageObjType[]>([]);
   useEffect(() => {
-    socket.on('gameChatMessage', onChatMessage);
+    api.on.gameChatMessage(onChatMessage);
     if (chatId) getChatData();
     return () => {
-      socket.off('gameChatMessage');
+      api.off.gameChatMessage(onChatMessage);
     };
   }, [chatId]);
 
   const getChatData = useCallback(async () => {
-    const chatData = await socket.emitWithAck('chatData', { chatId });
+    const chatData = await api.chatData<{ messages: MessageObjType[] }>({
+      chatId,
+    });
     setMessages(chatData.messages);
   }, [chatId]);
 
@@ -35,7 +35,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
   }, []);
 
   const onSendMessage = useCallback(() => {
-    socket.emit('newGameMessage', { chatId, text, gameId });
+    api.newGameMessage({ chatId, text, gameId });
     setText('');
   }, [chatId, text, gameId]);
 
