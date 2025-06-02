@@ -1,6 +1,9 @@
+import BgBubbles from './_components/BgBubbles';
+
 export default function Home() {
   return (
     <div className="relative flex min-h-screen flex-col justify-start text-base">
+      <BgBubbles isMainPage={true} />
       <section className="flex h-[calc(100vh-67px)] flex-col items-center justify-center text-center">
         <div className="h-[60%] w-full"></div>
         <div className="group relative mt-14 inline-block h-[45px] w-[200px]">
@@ -97,7 +100,7 @@ export default function Home() {
           </button>
         </div>
       </section>
-      <section className="relative flex min-h-[50vh] items-center justify-center">
+      <section className="relative flex min-h-[70vh] items-center justify-center">
         Footer
       </section>
     </div>
