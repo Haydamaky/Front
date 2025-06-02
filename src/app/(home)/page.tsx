@@ -70,24 +70,35 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="relative flex min-h-screen items-center justify-center">
-        <img
-          src="/images/molecule.png"
-          alt="Molecule"
-          className="absolute h-auto"
-        />
+      <section className="relative min-h-screen">
+        <div className="flex h-[80vh] w-full items-center justify-center">
+          <img
+            src="/images/molecule.png"
+            alt="Molecule"
+            className="absolute h-auto"
+          />
+          <div className="relative z-10 w-[90%]">
+            <p className="absolute bottom-[60px] left-0 font-custom text-9xl">
+              Become <br />
+              PART OF
+            </p>
 
-        <div className="relative z-10 w-full max-w-5xl">
-          <p className="absolute bottom-[60px] left-0 font-custom text-8xl">
-            Become <br />
-            PART OF
-          </p>
-
-          <p className="absolute right-0 top-0 text-right font-custom text-8xl">
-            OUR <br />
-            COMMUNITY
-          </p>
+            <p className="absolute right-0 top-0 text-right font-custom text-9xl">
+              OUR <br />
+              COMMUNITY
+            </p>
+          </div>
         </div>
+
+        <div className="group relative ml-[calc(50%-100px)] inline-block h-[45px] w-[200px]">
+          <span className="absolute inset-0 translate-x-1 translate-y-1 rounded-[5px] border border-white transition-all duration-200 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-primaryGame"></span>
+          <button className="relative h-[45px] w-[200px] rounded-[5px] border border-white bg-primaryGame font-custom text-standard font-bold transition-all duration-200 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:bg-darkHome">
+            START THE GAME
+          </button>
+        </div>
+      </section>
+      <section className="relative flex min-h-[50vh] items-center justify-center">
+        Footer
       </section>
     </div>
   );
