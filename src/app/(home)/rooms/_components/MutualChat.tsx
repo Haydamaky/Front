@@ -6,6 +6,7 @@ import { Input } from '@nextui-org/input';
 import { formatDateToTime } from '@/lib/utils';
 import { useAppSelector } from '@/hooks/store';
 import { api } from '@/api/api';
+import Image from 'next/image';
 
 const MutualChat = () => {
   const [message, setMessage] = useState<MessageObjType>({
@@ -69,8 +70,8 @@ const MutualChat = () => {
   }, []);
 
   return (
-    <div className="flex h-[40vh] max-w-3xl flex-col rounded-lg border-2 border-solid px-2 md:sticky md:top-[10vh] md:h-[80vh]">
-      <h1 className="mx-auto w-32 text-center font-custom text-sm">
+    <div className="flex h-full w-full flex-col rounded-lg bg-chatGradient px-2 md:sticky md:top-[10vh]">
+      <h1 className="mx-auto mt-2 w-full text-center font-custom text-xl">
         Group Chat
       </h1>
       <div className="scrollbar flex-1 overflow-y-scroll" ref={containerRef}>
@@ -103,8 +104,36 @@ const MutualChat = () => {
           value={message.text}
           onKeyDown={handleKeyDown}
           classNames={{
-            input: ['bg-base', 'text-primary', 'placeholder:text-primary'],
-            inputWrapper: ['divide-solid border-2'],
+            input: [
+              'text-[rgba(245,239,255,0.51)]',
+              'placeholder:text-[rgba(245,239,255,0.51)]',
+              'bg-transparent',
+              '!bg-transparent',
+            ],
+            inputWrapper: [
+              'bg-transparent',
+              '!bg-transparent',
+              'hover:!bg-transparent',
+              'focus:!bg-transparent',
+              'focus-within:!bg-transparent',
+              'data-[hover=true]:!bg-transparent',
+              'data-[focus=true]:!bg-transparent',
+              'data-[focus-within=true]:!bg-transparent',
+              'data-[filled=true]:!bg-transparent',
+              'group-data-[focus=true]:!bg-transparent',
+              'group-data-[focus-within=true]:!bg-transparent',
+              'group-data-[filled=true]:!bg-transparent',
+              'divide-solid',
+              'border border-[rgba(245,239,255,0.25)]',
+            ],
+            innerWrapper: [
+              'bg-transparent',
+              '!bg-transparent',
+              'hover:!bg-transparent',
+              'focus:!bg-transparent',
+              'data-[hover=true]:!bg-transparent',
+              'group-data-[focus=true]:!bg-transparent',
+            ],
           }}
           placeholder="Write a message..."
           radius="sm"
@@ -115,8 +144,17 @@ const MutualChat = () => {
             }))
           }
         />
-        <Button size="sm" onClick={sendMessage} variant={'tertiary'}>
-          Send
+        <Button
+          onClick={sendMessage}
+          variant={'chatButton'}
+          className="h-full w-9"
+        >
+          <Image
+            src="/images/MessageBtn.svg"
+            alt="telegram"
+            width={25}
+            height={25}
+          />
         </Button>
       </div>
     </div>

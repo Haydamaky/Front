@@ -18,7 +18,7 @@ const buttonVariants = cva(
           'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
-        tertiary: 'bg-primary text-base font-custom',
+        chatButton: 'bg-[rgba(245,239,255,0.5)] text-base font-custom',
         forGradient:
           'flex w-full font-normal cursor-pointer items-center bg-[#002147] justify-center',
         forGradientWithGreenText:
