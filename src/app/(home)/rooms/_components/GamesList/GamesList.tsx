@@ -6,6 +6,7 @@ import { FC, useEffect, useState } from 'react';
 import GameRow from './GameRow';
 import { api } from '@/api/api';
 import { client } from '@/api';
+import DoubleLayerBtn from '@/components/custom/DoubleLayerBtn';
 
 const GamesList: FC = () => {
   const router = useRouter();
@@ -68,9 +69,7 @@ const GamesList: FC = () => {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-start gap-8 font-custom">
         <h1 className="self-end text-6xl">Rooms</h1>
-        <Button className="bg-primary text-white" onClick={onCreateGame}>
-          Create Room
-        </Button>
+        <DoubleLayerBtn>Create Room</DoubleLayerBtn>
       </div>
       <ul className="flex flex-col gap-6">
         {games?.map(game => <GameRow game={game} key={game.id} />)}

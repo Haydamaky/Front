@@ -1,15 +1,12 @@
+import DoubleLayerBtn from '@/components/custom/DoubleLayerBtn';
+
 export default function Home() {
   return (
     <main className="w-full pt-16">
       <div className="relative flex min-h-screen flex-col justify-start text-base">
         <section className="flex h-[calc(100vh-67px)] flex-col items-center justify-center text-center">
           <div className="h-[60%] w-full"></div>
-          <div className="group relative mt-14 inline-block h-[45px] w-[200px]">
-            <span className="absolute inset-0 translate-x-1 translate-y-1 rounded-[5px] border border-white transition-all duration-200 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-primaryGame"></span>
-            <button className="relative h-[45px] w-[200px] rounded-[5px] border border-white bg-primaryGame font-custom text-standard font-bold transition-all duration-200 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:bg-darkHome">
-              START THE GAME
-            </button>
-          </div>
+          <DoubleLayerBtn outerClasses="mt-14">START THE GAME</DoubleLayerBtn>
           <div className="relative z-10 mt-14 max-w-3xl text-justify font-fixelDisplay text-standard">
             <p>
               Ready to conquer the world of real estate and become a real
@@ -94,13 +91,9 @@ export default function Home() {
               </p>
             </div>
           </div>
-
-          <div className="group relative ml-[calc(50%-100px)] inline-block h-[45px] w-[200px]">
-            <span className="absolute inset-0 translate-x-1 translate-y-1 rounded-[5px] border border-white transition-all duration-200 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-primaryGame"></span>
-            <button className="relative h-[45px] w-[200px] rounded-[5px] border border-white bg-primaryGame font-custom text-standard font-bold transition-all duration-200 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:bg-darkHome">
-              START THE GAME
-            </button>
-          </div>
+          <DoubleLayerBtn outerClasses="ml-[calc(50%-100px)]">
+            START THE GAME
+          </DoubleLayerBtn>
         </section>
         <section className="relative flex min-h-[70vh] items-center justify-center">
           Footer
