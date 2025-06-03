@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
@@ -34,6 +33,8 @@ const buttonVariants = cva(
           'flex w-full font-normal cursor-pointer items-start gap-1 py-[3px] hover:bg-[#002147] justify-normal',
         close:
           'mt-auto w-full bg-transparent text-center text-[#FF8C8C] transition-all duration-300 ease-in-out hover:bg-[#002147]',
+        startGame:
+          'relative h-[45px] w-[200px] rounded-[5px] border border-white bg-primaryGame font-custom text-standard font-bold transition-all duration-200 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:bg-darkHome',
       },
       size: {
         xs: 'h-5 rounded-sm w-15',
@@ -43,6 +44,7 @@ const buttonVariants = cva(
         lg: 'h-10 rounded-md w-30',
         icon: 'h-9 w-9',
         widthFull: 'w-full h-6',
+        empty: '',
       },
     },
     defaultVariants: {
