@@ -32,7 +32,7 @@ export default function RootLayout({
         <Providers>
           <div className="relative flex flex-col">
             <Navbar />
-            <main className="w-full pt-16">{children}</main>
+            {children}
             <GatewayError />
           </div>
         </Providers>
