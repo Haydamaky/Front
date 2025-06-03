@@ -62,6 +62,10 @@ const config: Config = {
         redGradient: 'linear-gradient(180deg, #F83D5C 0%, #DA0C1C 100%);',
         greedGradient: 'linear-gradient(180deg, #6EEE87 0%, #43B692 100%)',
         darkBlueGradient: 'linear-gradient(180deg, #36A4FB 0%, #0058CC 100%)',
+        chatGradient:
+          'linear-gradient(161.45deg, rgba(255, 255, 255, 0.16) 1.45%, rgba(0, 102, 153, 0) 87.41%)',
+        chatBorderGradient:
+          'linear-gradient(146.74deg, rgba(143, 200, 235, 0.2) 0.61%, rgba(25, 51, 90, 0.3) 77.59%)',
       },
       boxShadow: {
         gameCenterModaShadowCombined:
