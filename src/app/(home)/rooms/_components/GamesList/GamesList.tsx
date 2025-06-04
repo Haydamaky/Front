@@ -11,7 +11,6 @@ import DoubleLayerBtn from '@/components/custom/DoubleLayerBtn';
 const GamesList: FC = () => {
   const router = useRouter();
   const [games, setGames] = useState<Game[]>([]);
-
   useEffect(() => {
     const handleClearStartedGame = (gameId: string) => {
       setGames(prevGames => {
@@ -44,7 +43,11 @@ const GamesList: FC = () => {
       setGames(prevGames => {
         const index = prevGames.findIndex(curGame => curGame.id === game.id);
         const updatedGames = [...prevGames];
-        updatedGames[index] = game;
+        if (game.players.length !== 0) {
+          updatedGames[index] = game;
+        } else {
+          updatedGames.splice(index, 1);
+        }
         return updatedGames;
       });
     };
@@ -64,14 +67,13 @@ const GamesList: FC = () => {
   const onCreateGame = () => {
     api.createGame();
   };
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-start gap-8 font-custom">
         <h1 className="self-end text-6xl">Rooms</h1>
-        <DoubleLayerBtn>Create Room</DoubleLayerBtn>
+        <DoubleLayerBtn onClick={onCreateGame}>Create Room</DoubleLayerBtn>
       </div>
-      <ul className="flex flex-col gap-6">
+      <ul className="mt-4 flex flex-col gap-6">
         {games?.map(game => <GameRow game={game} key={game.id} />)}
       </ul>
     </div>
