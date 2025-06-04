@@ -2,7 +2,12 @@ import DoubleLayerBtn from '@/components/custom/DoubleLayerBtn';
 
 export default function Home() {
   return (
-    <main className="w-full pt-16">
+    <main
+      className='mt-16 w-full bg-[url("/images/roomsBg.svg")] bg-left-top bg-repeat-y'
+      style={{
+        backgroundSize: '100% auto',
+      }}
+    >
       <div className="relative flex min-h-screen flex-col justify-start text-base">
         <section className="flex h-[calc(100vh-67px)] flex-col items-center justify-center text-center">
           <div className="h-[60%] w-full"></div>
