@@ -48,7 +48,7 @@ export const LogInForm: FC = () => {
         user?: User;
       }>('auth/local/signin', values);
 
-      if (res.status === 200 && res.data.user) {
+      if (res.data.user) {
         dispatch(setUserState(res.data.user));
         api.recconectSocket();
         router.replace('/');
