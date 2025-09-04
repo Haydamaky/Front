@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { Navbar } from '@/components/navbar';
 import { genFont, titleFont } from '@/config/fonts';
 import GatewayError from './rooms/_components/GatewayError';
+import BgBubbles from './_components/BgBubbles';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -29,6 +30,7 @@ export default function RootLayout({
           titleFont.variable,
         )}
       >
+        <BgBubbles isMainPage={true} />
         <Providers>
           <div className="relative flex flex-col">
             <Navbar />
