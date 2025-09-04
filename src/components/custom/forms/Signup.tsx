@@ -20,6 +20,8 @@ import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { client } from '@/api';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/hooks/store';
+import { setUserState, User } from '@/store/slices/user';
 
 export const formSchema = z.object({
   email: z.string().email({ message: 'Please provide a valid email address' }),
@@ -41,16 +43,17 @@ export const SignUpForm: FC = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isReveal, setIsReveal] = useState<boolean>(false);
-
+  const dispatch = useAppDispatch();
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
       const res = await client.post<{
-        message?: string;
+        user: User;
       }>('auth/local/signup', values);
-
-      if ([200, 201].includes(res.status))
-        router.replace(siteConfig.links.login);
+      if (res.data.user) {
+        dispatch(setUserState(res.data.user));
+      }
+      router.replace('/auth/check-email');
     } catch (error: any) {
       form.setError('root', {
         type: 'value',

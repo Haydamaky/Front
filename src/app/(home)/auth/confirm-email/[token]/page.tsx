@@ -30,9 +30,7 @@ export default function ConfirmEmail({
             : process.env.NEXT_PUBLIC_API_URL_PROD
         }auth/confirm-email/${token}`,
       );
-      if ([200, 201].includes(res.status)) {
-        router.replace(siteConfig.links.login);
-      }
+      router.replace('/');
     } catch (error) {
       console.error('Error while confirming email:', error);
     }
