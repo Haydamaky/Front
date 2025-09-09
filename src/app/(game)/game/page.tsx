@@ -5,7 +5,7 @@ import { getUserInfo } from '@/store/slices/user';
 import { useEffect } from 'react';
 import GameBoard from './_components/GameBoard';
 import PlayersList from './_components/players/PlayersList';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 
 const GamePage = () => {
   const dispatch = useAppDispatch();

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@nextui-org/input';
 import { formatDateToTime } from '@/lib/utils';
 import { useAppSelector } from '@/hooks/store';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 import Image from 'next/image';
 
 const MutualChat = () => {

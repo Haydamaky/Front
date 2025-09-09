@@ -1,7 +1,7 @@
 'use client';
 
 import { client } from '@/api';
-import { siteConfig } from '@/config/site';
+import { api } from '@/api/build/api';
 import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -23,13 +23,7 @@ export default function ConfirmEmail({
   const onConfirm = async () => {
     if (!token) return;
     try {
-      const res = await client.get(
-        `${
-          process.env.NEXT_PUBLIC_NODE_ENV === 'development'
-            ? process.env.NEXT_PUBLIC_API_URL_DEV
-            : process.env.NEXT_PUBLIC_API_URL_PROD
-        }auth/confirm-email/${token}`,
-      );
+      const res = await api.confirmEmail(token);
       router.replace('/');
     } catch (error) {
       console.error('Error while confirming email:', error);

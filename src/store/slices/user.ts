@@ -23,7 +23,7 @@ export const getUserInfo = createAsyncThunk(
   'user/getUserInfo',
   async (_, thunkAPI) => {
     try {
-      const response = await client.get(`auth/local/me`);
+      const response = await client.get('auth/local/me');
       return thunkAPI.fulfillWithValue(response.data);
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.message);

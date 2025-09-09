@@ -5,7 +5,7 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import Message from './message';
 import { Player, PlayerColor } from '@/types/player';
 import { gradientColorVariants } from '../../_utils';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 
 const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
   chatId,

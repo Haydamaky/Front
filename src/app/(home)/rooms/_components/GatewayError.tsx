@@ -1,5 +1,5 @@
 'use client';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 

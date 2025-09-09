@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { setChipTransition } from '@/store/slices/chipTransition';
 import { useEffect, useRef } from 'react';
 import PlayersChips from './PlayersChips';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 
 const PlayerChipsContainer = () => {
   const game = useAppSelector(state => state.game.game);

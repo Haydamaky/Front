@@ -16,7 +16,7 @@ import { AuctionType } from '@/types/auction';
 import TradeOffer from './Trade/TradeOffer';
 import TradeAcceptence from './Trade/TradeAcceptence';
 import { TradeData } from '@/types/trade';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 type Action =
   | 'rollDice'
   | 'auction'

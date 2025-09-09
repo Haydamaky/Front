@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
 import Image from 'next/image';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);

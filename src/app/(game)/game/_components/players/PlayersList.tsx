@@ -7,7 +7,7 @@ import { DataWithGame } from '@/types';
 import { Player } from '@/types/player';
 import { useEffect, useRef, useState } from 'react';
 import PlayerCard from '../playerCard/PlayerCard';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 
 const PlayersList = () => {
   const dispatch = useAppDispatch();
@@ -82,7 +82,7 @@ const PlayersList = () => {
     };
     api.on.rolledDice(setRolledDiceapi);
     api.onMany(
-      ['hasPutUpForAuction', 'getGameData', 'passTurnToNext', 'updateGameData'],
+      ['hasPutUpForAuction', 'gameData', 'passTurnToNext', 'updateGameData'],
       calculateTimeToEndAndSetStates,
     );
 
@@ -97,7 +97,7 @@ const PlayersList = () => {
       api.offMany(
         [
           'hasPutUpForAuction',
-          'getGameData',
+          'gameData',
           'passTurnToNext',
           'tradeOffered',
           'updateGameData',

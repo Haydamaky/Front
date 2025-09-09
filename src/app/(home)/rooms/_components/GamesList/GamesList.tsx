@@ -4,7 +4,7 @@ import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 import GameRow from './GameRow';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 import { client } from '@/api';
 import DoubleLayerBtn from '@/components/custom/DoubleLayerBtn';
 
@@ -22,7 +22,6 @@ const GamesList: FC = () => {
     };
 
     const fetchGames = async () => {
-      const games = await api.getVisibleGames();
       const games = await api.getVisibleGames();
       setGames(games);
     };

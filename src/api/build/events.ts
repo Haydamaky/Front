@@ -49,6 +49,7 @@ export const listenEvents = [
   'refusedFromAuction',
   'passTurnToNext',
   'secret',
+  'payedForField',
   'hasPutUpForAuction',
   'clearStartedGame',
   'startGame',

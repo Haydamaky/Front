@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { gradientColorVariants } from '../../_utils';
 import { Field } from '@/types/field';
 import { AuctionType } from '@/types/auction';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 
 interface AuctionProps {
   isOpen: boolean;

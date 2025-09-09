@@ -5,7 +5,7 @@ import { Game } from '@/types';
 import { setGame } from '@/store/slices/game';
 import { setFields } from '@/store/slices/fields';
 import { Field } from '@/types/field';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 
 const DicesContainer = () => {
   const dispatch = useAppDispatch();

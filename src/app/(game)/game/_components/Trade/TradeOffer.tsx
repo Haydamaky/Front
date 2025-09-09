@@ -6,7 +6,7 @@ import { PlayerColor } from '@/types/player';
 import Image from 'next/image';
 import { useState } from 'react';
 import { gradientColorVariants } from '../../_utils';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 
 const TradeOffer = () => {
   const dispatch = useAppDispatch();

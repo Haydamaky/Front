@@ -1,10 +1,12 @@
+import { ActionNames, actions } from './actions';
 import { emitWithAck, emitWithoutAck, listenEvents } from './events';
 
 type EventsWithAckArr = typeof emitWithAck;
 type EventsWithoutAckArr = typeof emitWithoutAck;
 type EventsWithListenerArr = typeof listenEvents;
+type Actions = typeof actions;
 
-type EmitMethod = <ReturnValueType>(
+type DbCall = <ReturnValueType>(
   ...data: unknown[]
 ) => Promise<ReturnValueType> | any;
 export type Listener = (data: any) => void | Promise<void> | any;
@@ -18,24 +20,31 @@ type SubscriptionEvents = Record<
 >;
 
 type API = {
-  [key in EventsWithAck | EventsWithoutAck]: EmitMethod;
+  [key in EventsWithAck | EventsWithoutAck | ActionNames]: DbCall;
 } & {
   on: SubscriptionEvents;
   off: SubscriptionEvents;
-  onMany: (events: string[], ...handlers: Listener[]) => void;
-  offMany: (events: string[], ...handlers: Listener[]) => void;
+  onMany: (
+    events: EventsWithListener[] | EventsWithAck[],
+    ...handlers: Listener[]
+  ) => void;
+  offMany: (
+    events: EventsWithListener[] | EventsWithAck[],
+    ...handlers: Listener[]
+  ) => void;
   recconectSocket: () => void;
 };
 
-type APIConfig = {
-  timeoutMS?: number;
-};
+interface CreatedCall {
+  name: string;
+  fn: DbCall;
+}
 
 type BuildAPIFunction = (
+  actions: Actions,
   withAck: EventsWithAckArr,
   withoutAck: EventsWithoutAckArr,
   listeners: EventsWithListenerArr,
-  config?: APIConfig,
 ) => API;
 
-export type { BuildAPIFunction, API };
+export type { BuildAPIFunction, API, CreatedCall };

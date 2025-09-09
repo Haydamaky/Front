@@ -5,7 +5,7 @@ import { PlayerColor } from '@/types/player';
 import { TradeData } from '@/types/trade';
 import Image from 'next/image';
 import { gradientColorVariants } from '../../_utils';
-import { api } from '@/api/api';
+import { api } from '@/api/build/api';
 
 interface TradeAcceptenceProps {
   trade: TradeData;
