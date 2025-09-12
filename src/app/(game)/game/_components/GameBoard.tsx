@@ -1,15 +1,13 @@
+import { api } from '@/api/build/api';
+import { Button } from '@/components/ui/button';
 import { useAppSelector } from '@/hooks/store';
 import { Field } from '@/types/field';
-import { Fragment, useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import Center from './Center';
 import FieldComponent from './FieldComponent';
-import PlayerChipsContainer from './players/PlayerChipsContainer';
 import InspectField from './InspectField';
-import { Button } from '@/components/ui/button';
-import { setFields } from '@/store/slices/fields';
-import { setGame } from '@/store/slices/game';
-import Image from 'next/image';
-import { api } from '@/api/build/api';
+import PlayerChipsContainer from './players/PlayerChipsContainer';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);

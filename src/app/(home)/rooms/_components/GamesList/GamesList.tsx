@@ -7,6 +7,7 @@ import GameRow from './GameRow';
 import { api } from '@/api/build/api';
 import { client } from '@/api';
 import DoubleLayerBtn from '@/components/custom/DoubleLayerBtn';
+import { AxiosResponse } from 'axios';
 
 const GamesList: FC = () => {
   const router = useRouter();
@@ -22,7 +23,7 @@ const GamesList: FC = () => {
     };
 
     const fetchGames = async () => {
-      const games = await api.getVisibleGames();
+      const games = await api.getVisibleGames<Game[]>();
       setGames(games);
     };
 
@@ -32,7 +33,9 @@ const GamesList: FC = () => {
 
     const handleStartGame = async ({ game }: DataWithGame) => {
       if (game) {
-        const res = await client.post('game/set-cookie', { gameId: game.id });
+        const res = await api.setGameCookie<AxiosResponse>({
+          gameId: game.id,
+        });
         if ([200, 201].includes(res.status)) {
           router.push('/game');
         }

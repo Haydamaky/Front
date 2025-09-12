@@ -18,7 +18,7 @@ const GamePage = () => {
     };
   }, []);
   return (
-    <main className="w-full pt-16">
+    <main className="w-full">
       <div className="ml-[22%] grid h-full grid-cols-[105fr_895fr] gap-10">
         <PlayersList />
         <GameBoard />

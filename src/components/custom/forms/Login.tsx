@@ -22,6 +22,7 @@ import { setUserState, User } from '@/store/slices/user';
 import { useRouter } from 'next/navigation';
 import { GoogleIcon } from '@/components/icons';
 import { api } from '@/api/build/api';
+import { AxiosResponse } from 'axios';
 export const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(2),
@@ -43,10 +44,12 @@ export const LogInForm: FC = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      const res = await client.post<{
-        message?: string;
-        user?: User;
-      }>('auth/local/signin', values);
+      const res = await api.signin<
+        AxiosResponse<{
+          message?: string;
+          user?: User;
+        }>
+      >(values);
 
       if (res.data.user) {
         dispatch(setUserState(res.data.user));

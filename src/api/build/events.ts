@@ -54,3 +54,11 @@ export const listenEvents = [
   'clearStartedGame',
   'startGame',
 ] as const;
+
+export type EventsWithAckArr = typeof emitWithAck;
+export type EventsWithoutAckArr = typeof emitWithoutAck;
+export type EventsWithListenerArr = typeof listenEvents;
+
+export type EventsWithAck = EventsWithAckArr[number];
+export type EventsWithoutAck = EventsWithoutAckArr[number];
+export type EventsWithListener = EventsWithListenerArr[number];

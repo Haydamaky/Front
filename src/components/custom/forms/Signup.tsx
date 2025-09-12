@@ -22,6 +22,8 @@ import { client } from '@/api';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/store';
 import { setUserState, User } from '@/store/slices/user';
+import { api } from '@/api/build/api';
+import { AxiosResponse } from 'axios';
 
 export const formSchema = z.object({
   email: z.string().email({ message: 'Please provide a valid email address' }),
@@ -47,9 +49,11 @@ export const SignUpForm: FC = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      const res = await client.post<{
-        user: User;
-      }>('auth/local/signup', values);
+      const res = await api.signup<
+        AxiosResponse<{
+          user: User;
+        }>
+      >('auth/local/signup', values);
       if (res.data.user) {
         dispatch(setUserState(res.data.user));
       }

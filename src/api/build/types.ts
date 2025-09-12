@@ -1,23 +1,12 @@
-import { ActionNames, actions } from './actions';
-import { emitWithAck, emitWithoutAck, listenEvents } from './events';
+import { ActionNames } from './actions';
+import { EventsWithAck, EventsWithListener, EventsWithoutAck } from './events';
 
-type EventsWithAckArr = typeof emitWithAck;
-type EventsWithoutAckArr = typeof emitWithoutAck;
-type EventsWithListenerArr = typeof listenEvents;
-type Actions = typeof actions;
+type DbCall = <ReturnValueType>(...args: unknown[]) => Promise<ReturnValueType>;
+export type Listener = (data: unknown) => void;
 
-type DbCall = <ReturnValueType>(
-  ...data: unknown[]
-) => Promise<ReturnValueType> | any;
-export type Listener = (data: any) => void | Promise<void> | any;
-type EventsWithAck = EventsWithAckArr[number];
-type EventsWithoutAck = EventsWithoutAckArr[number];
-type EventsWithListener = EventsWithListenerArr[number];
+export type SubscribeFn = (...handlers: Listener[]) => void;
 
-type SubscriptionEvents = Record<
-  EventsWithListener,
-  (...handlers: Listener[]) => void
->;
+type SubscriptionEvents = Record<EventsWithListener, SubscribeFn>;
 
 type API = {
   [key in EventsWithAck | EventsWithoutAck | ActionNames]: DbCall;
@@ -35,16 +24,20 @@ type API = {
   recconectSocket: () => void;
 };
 
-interface CreatedCall {
-  name: string;
-  fn: DbCall;
+type InteractionNames =
+  | EventsWithAck
+  | EventsWithoutAck
+  | ActionNames
+  | EventsWithListener;
+
+interface BackendInteraction {
+  name: InteractionNames | 'onMany' | 'offMany' | 'recconectSocket';
+  fn:
+    | DbCall
+    | SubscribeFn
+    | API['onMany']
+    | API['offMany']
+    | API['recconectSocket'];
 }
 
-type BuildAPIFunction = (
-  actions: Actions,
-  withAck: EventsWithAckArr,
-  withoutAck: EventsWithoutAckArr,
-  listeners: EventsWithListenerArr,
-) => API;
-
-export type { BuildAPIFunction, API, CreatedCall };
+export type { API, BackendInteraction };

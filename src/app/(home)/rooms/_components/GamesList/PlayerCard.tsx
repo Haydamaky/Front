@@ -1,5 +1,4 @@
 import { api } from '@/api/build/api';
-import { api } from '@/api/build/api';
 import { useAppSelector } from '@/hooks/store';
 import { Avatar } from '@nextui-org/react';
 import { PlusCircleIcon, X } from 'lucide-react';

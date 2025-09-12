@@ -1,5 +1,6 @@
-import { client } from '@/api';
+import { api } from '@/api/build/api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AxiosResponse } from 'axios';
 
 export type User = {
   id: string;
@@ -23,7 +24,7 @@ export const getUserInfo = createAsyncThunk(
   'user/getUserInfo',
   async (_, thunkAPI) => {
     try {
-      const response = await client.get('auth/local/me');
+      const response = await api.getUserInfo<AxiosResponse>();
       return thunkAPI.fulfillWithValue(response.data);
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.message);
