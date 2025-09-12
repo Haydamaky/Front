@@ -55,28 +55,19 @@ const GamesList: FC = () => {
       });
     };
 
-    api.on.clearStartedGame(handleClearStartedGame);
-    api.on.startGame(handleStartGame);
-    api.on.onParticipateGame(handleOnParticipateGame);
     api.on.newGameCreated(onNewGameCreated);
     api.on.clearStartedGame(handleClearStartedGame);
     api.on.startGame(handleStartGame);
     api.on.onParticipateGame(handleOnParticipateGame);
-    api.on.newGameCreated(onNewGameCreated);
     fetchGames();
     return () => {
-      api.off.clearStartedGame(handleClearStartedGame);
-      api.off.startGame(handleStartGame);
-      api.off.onParticipateGame(handleOnParticipateGame);
       api.off.newGameCreated(onNewGameCreated);
       api.off.clearStartedGame(handleClearStartedGame);
       api.off.startGame(handleStartGame);
       api.off.onParticipateGame(handleOnParticipateGame);
-      api.off.newGameCreated(onNewGameCreated);
     };
   }, [router]);
   const onCreateGame = () => {
-    api.createGame();
     api.createGame();
   };
   return (
