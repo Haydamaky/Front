@@ -1,11 +1,8 @@
-import type { Metadata, Viewport } from 'next';
-import '@/styles/globals.css';
-import { Providers } from '../../providers/providers';
-import clsx from 'clsx';
 import { Navbar } from '@/components/navbar';
-import { genFont, titleFont } from '@/config/fonts';
-import GatewayError from './rooms/_components/GatewayError';
+import '@/styles/globals.css';
+import type { Metadata, Viewport } from 'next';
 import BgBubbles from './_components/BgBubbles';
+import GatewayError from './rooms/_components/GatewayError';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -22,23 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html suppressHydrationWarning lang="en">
-      <body
-        className={clsx(
-          'relative min-h-screen bg-primaryGame font-sans antialiased',
-          genFont.variable,
-          titleFont.variable,
-        )}
-      >
-        <BgBubbles isMainPage={true} />
-        <Providers>
-          <div className="relative flex flex-col">
-            <Navbar />
-            {children}
-            <GatewayError />
-          </div>
-        </Providers>
-      </body>
-    </html>
+    <div className="relative min-h-screen">
+      <div className="relative flex flex-col">
+        <Navbar />
+        {children}
+        <GatewayError />
+      </div>
+    </div>
   );
 }

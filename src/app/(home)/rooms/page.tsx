@@ -1,14 +1,6 @@
-'use client';
-import { useAppDispatch } from '@/hooks/store';
 import GamesList from './_components/GamesList/GamesList';
 import MutualChat from './_components/MutualChat';
-import { useEffect } from 'react';
-import { getUserInfo } from '@/store/slices/user';
 const RoomsPage = () => {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(getUserInfo());
-  }, []);
   return (
     <main
       className='mt-16 w-full bg-[url("/images/roomsBg.svg")] bg-left-top bg-repeat-y'

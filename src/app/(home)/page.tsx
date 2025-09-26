@@ -1,4 +1,5 @@
 import DoubleLayerBtn from '@/components/custom/DoubleLayerBtn';
+import BgBubbles from './_components/BgBubbles';
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
         backgroundSize: '100% auto',
       }}
     >
+      <BgBubbles />
       <div className="relative flex min-h-screen flex-col justify-start text-base">
         <section className="flex h-[calc(100vh-67px)] flex-col items-center justify-center text-center">
           <div className="h-[60%] w-full"></div>

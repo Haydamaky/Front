@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import { Providers } from '@/providers/providers';
 import clsx from 'clsx';
 import { ermilovFont, genFont, titleFont, namuFont } from '@/config/fonts';
+import ErrorRedirectWrapper from '@/components/custom/ErrorRedirectWrapper';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -22,9 +23,8 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={clsx(
-          'max-h-screen overflow-y-hidden font-sans antialiased light',
+          'font-sans antialiased',
           'bg-primaryGame',
-          'text-white',
           genFont.variable,
           titleFont.variable,
           ermilovFont.variable,
@@ -32,7 +32,7 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <main className="h-screen w-full">{children}</main>
+          <ErrorRedirectWrapper>{children}</ErrorRedirectWrapper>
         </Providers>
       </body>
     </html>

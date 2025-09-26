@@ -1,13 +1,11 @@
 'use client';
+import { api } from '@/api/build/api';
+import DoubleLayerBtn from '@/components/custom/DoubleLayerBtn';
 import { DataWithGame, Game } from '@/types';
-import { Button } from '@nextui-org/react';
+import { AxiosResponse } from 'axios';
 import { useRouter } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 import GameRow from './GameRow';
-import { api } from '@/api/build/api';
-import { client } from '@/api';
-import DoubleLayerBtn from '@/components/custom/DoubleLayerBtn';
-import { AxiosResponse } from 'axios';
 
 const GamesList: FC = () => {
   const router = useRouter();
