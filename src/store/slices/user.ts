@@ -15,7 +15,7 @@ type InitialState = {
 
 const initialState: InitialState = {
   data: null,
-  loading: false,
+  loading: true,
   isError: false,
 };
 

@@ -1,18 +1,9 @@
 'use client';
 
-import { api } from '@/api/build/api';
-import { useEffect } from 'react';
 import GameBoard from './_components/GameBoard';
 import PlayersList from './_components/players/PlayersList';
 
 const GamePage = () => {
-  useEffect(() => {
-    const handleError = (err: any) => console.log(err);
-    api.on.error(handleError);
-    return () => {
-      api.off.error(handleError);
-    };
-  }, []);
   return (
     <main className="max-h-screen overflow-y-hidden text-white light">
       <div className="h-screen w-full">
