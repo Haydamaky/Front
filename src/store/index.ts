@@ -4,6 +4,7 @@ import gameSlice from './slices/game';
 import fieldsSlice from './slices/fields';
 import chipTransitionSlice from './slices/chipTransition';
 import tradeSlice from './slices/trade';
+import errorSlice from './slices/error';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     fields: fieldsSlice.reducer,
     chipTransition: chipTransitionSlice.reducer,
     trade: tradeSlice.reducer,
+    error: errorSlice.reducer,
   },
 });
 

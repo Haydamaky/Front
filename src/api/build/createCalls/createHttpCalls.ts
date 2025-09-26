@@ -2,6 +2,7 @@ import { client } from '@/api';
 import { AxiosRequestConfig } from 'axios';
 import { actions } from '../actions';
 import { BackendInteraction } from '../types';
+import { retryWrapper } from '../authHandling/retryWrapper';
 
 export const createHttpCalls = (): BackendInteraction[] => {
   return actions.map(action => {
@@ -15,9 +16,10 @@ export const createHttpCalls = (): BackendInteraction[] => {
       }
       return client[action.method]<ReturnValueType>(action.path, ...args);
     };
+    const wrappedCall = retryWrapper(httpCall);
     return {
       name: action.name,
-      fn: httpCall,
+      fn: action.name !== 'refreshTokens' ? wrappedCall : httpCall,
     };
   });
 };

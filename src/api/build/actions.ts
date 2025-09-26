@@ -29,6 +29,12 @@ export const actions = [
     path: 'auth/local/me',
     pathParameter: false,
   },
+  {
+    name: 'refreshTokens',
+    method: 'post',
+    path: 'auth/refresh',
+    pathParameter: false,
+  },
 ] as const;
 
 export type ActionNames = (typeof actions)[number]['name'];

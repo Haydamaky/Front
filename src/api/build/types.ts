@@ -1,7 +1,10 @@
+import { AxiosResponse } from 'axios';
 import { ActionNames } from './actions';
 import { EventsWithAck, EventsWithListener, EventsWithoutAck } from './events';
 
-type DbCall = <ReturnValueType>(...args: unknown[]) => Promise<ReturnValueType>;
+export type DbCall = <ReturnValueType>(
+  ...args: unknown[]
+) => Promise<ReturnValueType | any>;
 export type Listener = (data: any) => void;
 
 export type SubscribeFn = (...handlers: Listener[]) => void;
