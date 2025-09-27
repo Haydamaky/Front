@@ -40,7 +40,6 @@ export default function ErrorRedirectWrapper({
   }, [dispatch, data]);
 
   useEffect(() => {
-    console.log({ error, data, isPublic, loading });
     if ((error.status === 401 || !data) && !isPublic && !loading) {
       router.push('/login');
     }
