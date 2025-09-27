@@ -1,9 +1,11 @@
 'use client';
 import { api } from '@/api/build/api';
+import { useDispatchUser } from '@/hooks/useDispatchUser';
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
 const GatewayError = () => {
+  useDispatchUser();
   useEffect(() => {
     api.on.error(onError);
     return () => {

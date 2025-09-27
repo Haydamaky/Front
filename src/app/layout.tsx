@@ -1,9 +1,10 @@
-import type { Metadata, Viewport } from 'next';
-import '@/styles/globals.css';
-import { Providers } from '@/providers/providers';
-import clsx from 'clsx';
-import { ermilovFont, genFont, titleFont, namuFont } from '@/config/fonts';
 import ErrorRedirectWrapper from '@/components/custom/ErrorRedirectWrapper';
+import { ermilovFont, genFont, namuFont, titleFont } from '@/config/fonts';
+import { Providers } from '@/providers/providers';
+import '@/styles/globals.css';
+import clsx from 'clsx';
+import type { Metadata, Viewport } from 'next';
+import GatewayError from './(home)/rooms/_components/GatewayError';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -32,6 +33,7 @@ export default function RootLayout({
         )}
       >
         <Providers>
+          <GatewayError />
           <ErrorRedirectWrapper>{children}</ErrorRedirectWrapper>
         </Providers>
       </body>
