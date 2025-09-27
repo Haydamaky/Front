@@ -1,7 +1,8 @@
 'use client';
-import { useAppSelector } from '@/hooks/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useIsPublicRoute } from '@/hooks/useIsPublicRoute';
 import { useUser } from '@/hooks/useUser';
+import { clearError } from '@/store/slices/error';
 import '@/styles/globals.css';
 import { Spinner } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
@@ -16,10 +17,11 @@ export default function ErrorRedirectWrapper({
   const error = useAppSelector(state => state.error);
   const { data, loading } = useUser();
   const { isPublic } = useIsPublicRoute();
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if ((error.status === 401 || !data) && !isPublic && !loading) {
       router.push('/login');
+      dispatch(clearError());
     }
   }, [error, data, isPublic, loading, router]);
 

@@ -4,12 +4,14 @@ import { createEmitWithoutAckCalls } from './createCalls/createEmitWithoutAckCal
 import { createHttpCalls } from './createCalls/createHttpCalls';
 import { createOffListeners } from './createCalls/createOffListeners';
 import { createOnListeners } from './createCalls/createOnListeners';
-import { API } from './types';
+import { API, Hanlder } from './types';
 import { attachMethods } from './utils/attachMethods';
 
 const buildAPI = (): API => {
   const api = { on: {}, off: {} } as API;
-
+  api.setErrorHandler = (errorHandler: Hanlder) => {
+    api.errorHandler = errorHandler;
+  };
   attachMethods(api.on, [createOnListeners]);
   attachMethods(api.off, [createOffListeners]);
   attachMethods(api, [

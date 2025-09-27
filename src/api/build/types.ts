@@ -5,24 +5,26 @@ import { EventsWithAck, EventsWithListener, EventsWithoutAck } from './events';
 export type DbCall = <ReturnValueType>(
   ...args: unknown[]
 ) => Promise<ReturnValueType | any>;
-export type Listener = (data: any) => void;
+export type Hanlder = (data: any) => void;
 
-export type SubscribeFn = (...handlers: Listener[]) => void;
+export type SubscribeFn = (...handlers: Hanlder[]) => void;
 
 type SubscriptionEvents = Record<EventsWithListener, SubscribeFn>;
 
 type API = {
   [key in EventsWithAck | EventsWithoutAck | ActionNames]: DbCall;
 } & {
+  setErrorHandler: (errorHandler: Hanlder) => void;
+  errorHandler?: Hanlder;
   on: SubscriptionEvents;
   off: SubscriptionEvents;
   onMany: (
     events: EventsWithListener[] | EventsWithAck[],
-    ...handlers: Listener[]
+    ...handlers: Hanlder[]
   ) => void;
   offMany: (
     events: EventsWithListener[] | EventsWithAck[],
-    ...handlers: Listener[]
+    ...handlers: Hanlder[]
   ) => void;
   recconectSocket: () => void;
 };
