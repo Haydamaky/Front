@@ -4,7 +4,7 @@ export const emitWithAck = [
   'chatData',
 ] as const;
 export const emitWithoutAck = [
-  'getGameData',
+  'getAllGameData',
   'createGame',
   'joinGame',
   'leaveGame',
