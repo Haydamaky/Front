@@ -1,20 +1,25 @@
 'use client';
 import { api } from '@/api/build/api';
 import { useDispatchUser } from '@/hooks/useDispatchUser';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
 const GatewayError = () => {
   useDispatchUser();
+  const router = useRouter();
   useEffect(() => {
+    const onError = (error: { message: string; code?: string }) => {
+      if (error.code === 'USER_NOT_IN_GAME') {
+        router.push('/rooms');
+      }
+      toast(error.message, { type: 'warning' });
+    };
     api.on.error(onError);
     return () => {
       api.off.error(onError);
     };
   }, []);
-
-  const onError = ({ message }: { message: string }) =>
-    toast(message, { type: 'warning' });
 
   return <ToastContainer hideProgressBar closeOnClick closeButton={false} />;
 };
