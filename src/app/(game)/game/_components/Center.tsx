@@ -21,7 +21,7 @@ type Action =
   | 'rollDice'
   | 'auction'
   | 'buy'
-  | 'payForField'
+  | 'payForPrivateField'
   | 'secretPay'
   | 'toPay'
   | 'VDNH'
@@ -69,7 +69,7 @@ const Center = () => {
         setAction('buy');
       }
       if (currentField.ownedBy && currentField.ownedBy !== user?.id) {
-        setAction('payForField');
+        setAction('payForPrivateField');
       }
       if (currentField.toPay && currentField.name === 'ВДНХ') {
         setAction('VDNH');
@@ -191,8 +191,8 @@ const Center = () => {
   const buyField = () => {
     api.buyField();
   };
-  const payForField = () => {
-    api.payForField();
+  const payForPrivateField = () => {
+    api.payForPrivateField();
   };
   const payToBankForSpecialField = () => {
     api.payToBankForSpecialField();
@@ -231,7 +231,7 @@ const Center = () => {
                   ? 'Your turn'
                   : action === 'buy'
                     ? 'Buy field?'
-                    : action === 'payForField'
+                    : action === 'payForPrivateField'
                       ? 'Pay for rent'
                       : action === 'secretPay'
                         ? 'Unexpected expenses'
@@ -304,7 +304,7 @@ const Center = () => {
                   </div>
                 </>
               )}
-              {action === 'payForField' && (
+              {action === 'payForPrivateField' && (
                 <>
                   <div className="mb-3 flex w-full items-center gap-2 font-fixelDisplay">
                     <p className="text-[10px]">
@@ -316,7 +316,7 @@ const Center = () => {
                     variant={'blueGame'}
                     size={screenSize.width > 1200 ? 'default' : 'xs'}
                     className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
-                    onClick={payForField}
+                    onClick={payForPrivateField}
                   >
                     Pay for rent{' '}
                     {currentField.income[currentField.amountOfBranches]}
@@ -394,7 +394,7 @@ const Center = () => {
                       variant={'blueGame'}
                       size={screenSize.width > 1200 ? 'default' : 'xs'}
                       className="font-custom text-[9px] text-white md:text-sm lg:text-lg"
-                      onClick={payForField}
+                      onClick={payForPrivateField}
                     >
                       Pay rent{' '}
                       {currentField.income[currentField.amountOfBranches]}
