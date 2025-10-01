@@ -88,7 +88,7 @@ const PlayersList = () => {
 
     api.on.passTurnToNext(dispatchSetGame, dispatchSetFields);
     api.onMany(
-      ['payedForField', 'playerSurrendered', 'updateGameData'],
+      ['payedForField', 'updateGameData'],
       dispatchSetGame,
       dispatchSetFields,
     );
@@ -106,7 +106,7 @@ const PlayersList = () => {
       );
       api.off.passTurnToNext(dispatchSetGame);
       api.offMany(
-        ['payedForField', 'playerSurrendered', 'updateGameData'],
+        ['payedForField', 'updateGameData'],
         dispatchSetFields,
         dispatchSetGame,
       );
