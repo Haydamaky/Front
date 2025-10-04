@@ -20,6 +20,17 @@ export interface Game {
   hotelsQty: number;
 }
 
+export type Action =
+  | 'rollDice'
+  | 'auction'
+  | 'buy'
+  | 'payForField'
+  | 'secretPay'
+  | 'toPay'
+  | 'VDNH'
+  | 'COIN'
+  | '';
+
 export interface DataWithGame {
   game: Game;
   fields?: Field[];
