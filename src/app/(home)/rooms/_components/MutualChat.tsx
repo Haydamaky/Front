@@ -46,7 +46,9 @@ const MutualChat = () => {
   }, [user]);
 
   const sendMessage = () => {
-    api.newMessage({ text: message.text, chatId: message.chatId });
+    api.newMessage({
+      newMessage: { text: message.text, chatId: message.chatId },
+    });
     setMessage(prevMessage => ({ ...prevMessage, text: '' }));
   };
 

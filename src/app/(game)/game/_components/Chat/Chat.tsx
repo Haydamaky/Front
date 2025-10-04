@@ -35,7 +35,7 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
   }, []);
 
   const onSendMessage = useCallback(() => {
-    api.newGameMessage({ chatId, text, gameId });
+    api.newGameMessage({ newMessage: { chatId, text, gameId } });
     setText('');
   }, [chatId, text, gameId]);
 
