@@ -36,7 +36,6 @@ const ProgressBar: FC<ProgressBarProps> = ({ auction }) => {
       if (animationId.current) cancelAnimationFrame(animationId.current);
     };
   }, [auction, startTime]);
-
   return (
     <div className="flex w-[95%] flex-col items-center gap-2">
       <span className="mb-4 flex w-14 items-center justify-center rounded-lg border-2 border-white bg-primaryGame p-2 px-2 font-ermilov text-4xl">
@@ -45,7 +44,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ auction }) => {
       <Progress
         aria-label="Loading..."
         className={styles.bar}
-        maxValue={15}
+        maxValue={auction?.bidTimeSec || 30}
         minValue={0}
         value={value}
       />

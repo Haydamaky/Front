@@ -5,6 +5,7 @@ interface Bidder {
 }
 
 export interface AuctionType {
+  bidTimeSec: number;
   fieldIndex: number;
   bidders: Bidder[];
   turnEnds: string;
