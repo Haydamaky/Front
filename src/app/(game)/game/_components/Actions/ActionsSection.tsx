@@ -40,10 +40,11 @@ const ActionsSection: FC<Props> = ({
       api.payToBankForSecret();
     }
   };
-
+  console.log('action', action);
   switch (action) {
     case 'rollDice':
       renderJsx = <RollDiceAction onRollDice={api.rollDice} />;
+      break;
 
     case 'buy':
       if (!currentField.ownedBy) {
@@ -59,7 +60,7 @@ const ActionsSection: FC<Props> = ({
         renderJsx = (
           <PayRentAction
             rentAmount={currentField.income[currentField.amountOfBranches]}
-            onPayRent={api.payForField}
+            onPayRent={api.payForPrivateField}
           />
         );
       }
@@ -70,7 +71,7 @@ const ActionsSection: FC<Props> = ({
       renderJsx = (
         <PayRentAction
           rentAmount={currentField.income[currentField.amountOfBranches]}
-          onPayRent={api.payForField}
+          onPayRent={api.payForPrivateField}
         />
       );
       break;
@@ -104,7 +105,7 @@ const ActionsSection: FC<Props> = ({
       );
       break;
   }
-
+  console.log('renderJsx', renderJsx);
   return (
     <div className="flex flex-col justify-between rounded-xl bg-gameCenterModal px-4 py-2 text-xs text-white shadow-gameCenterModaShadowCombined lg:py-3">
       <div className="mb-3 text-small font-bold md:text-standard lg:text-xl xl:text-3xl">
