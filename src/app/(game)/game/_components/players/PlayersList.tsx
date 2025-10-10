@@ -1,5 +1,6 @@
 'use client';
 
+import { api } from '@/api/build/api';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { setFields } from '@/store/slices/fields';
 import { setGame } from '@/store/slices/game';
@@ -7,7 +8,6 @@ import { DataWithGame } from '@/types';
 import { Player } from '@/types/player';
 import { useEffect, useRef, useState } from 'react';
 import PlayerCard from '../playerCard/PlayerCard';
-import { api } from '@/api/build/api';
 
 const PlayersList = () => {
   const dispatch = useAppDispatch();
@@ -67,10 +67,17 @@ const PlayersList = () => {
       }
     };
     const getAllGameData = () => {
-      api.getAllGameData();
+      if (user.data) {
+        api.getAllGameData();
+      }
     };
     getAllGameData();
-    api.on.rejoin(getAllGameData);
+    api.on.rejoin(() => {
+      console.log('Rejoin');
+      if (!game || !fields) {
+        getAllGameData();
+      }
+    });
     api.on.gameData(
       dispatchSetGame,
       dispatchSetFields,
@@ -114,7 +121,7 @@ const PlayersList = () => {
       api.off.rolledDice(setRolledDiceapi);
       api.off.tradeOffered(dispatchSetGame);
     };
-  }, []);
+  }, [user.data]);
 
   return (
     <div className="relative my-auto flex h-[88%] flex-col gap-[2.7%] overflow-visible text-xs md:text-sm lg:text-lg">

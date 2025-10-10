@@ -14,8 +14,8 @@ type SubscriptionEvents = Record<EventsWithListener, SubscribeFn>;
 type API = {
   [key in EventsWithAck | EventsWithoutAck | ActionNames]: DbCall;
 } & {
-  setErrorHandler: (errorHandler: Hanlder) => void;
-  errorHandler?: Hanlder;
+  setErrorHandlers: (errorHandlers: Record<string, Hanlder>) => void;
+  errorHandlers: Record<string, Hanlder>;
   on: SubscriptionEvents;
   off: SubscriptionEvents;
   onMany: (

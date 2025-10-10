@@ -1,6 +1,7 @@
 import store from '@/store';
 import { api } from './api';
 import { setError } from '@/store/slices/error';
+import { setUserNotValid } from '@/store/slices/user';
 const errorHandler = (error: any) => {
   store.dispatch(
     setError({
@@ -10,4 +11,8 @@ const errorHandler = (error: any) => {
   );
 };
 
-api.setErrorHandler(errorHandler);
+const userErrorHandler = () => {
+  store.dispatch(setUserNotValid());
+};
+
+api.setErrorHandlers({ errorHandler, userErrorHandler });

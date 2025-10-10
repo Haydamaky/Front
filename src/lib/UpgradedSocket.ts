@@ -4,7 +4,7 @@ import { Socket } from 'socket.io-client';
 type EventCallback = (data: any) => void;
 
 export class UpgradedSocket {
-  constructor(private socket: Socket) {}
+  constructor(public socket: Socket) {}
 
   on(eventsOrEvent: string | string[], ...callbacks: EventCallback[]) {
     const events = Array.isArray(eventsOrEvent)

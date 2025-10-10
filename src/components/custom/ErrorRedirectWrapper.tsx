@@ -7,6 +7,7 @@ import '@/styles/globals.css';
 import { Spinner } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import '@/api/build/setErrorHandler';
 
 export default function ErrorRedirectWrapper({
   children,
@@ -15,11 +16,15 @@ export default function ErrorRedirectWrapper({
 }) {
   const router = useRouter();
   const error = useAppSelector(state => state.error);
-  const { data, loading } = useUser();
+  const { data, loading, refetching } = useUser();
   const { isPublic } = useIsPublicRoute();
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if ((error.status === 401 || !data) && !isPublic && !loading) {
+    if (
+      (error.status === 401 || (!data && !refetching)) &&
+      !isPublic &&
+      !loading
+    ) {
       router.push('/login');
       dispatch(clearError());
     }
