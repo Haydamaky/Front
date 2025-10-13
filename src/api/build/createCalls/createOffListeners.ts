@@ -1,6 +1,6 @@
 import { socket } from '@/socket';
 import { listenEvents } from '../events';
-import { BackendInteraction, Listener } from '../types';
+import { BackendInteraction, Hanlder as Listener } from '../types';
 
 export const createOffListeners = (): BackendInteraction[] => {
   return listenEvents.map(event => {
