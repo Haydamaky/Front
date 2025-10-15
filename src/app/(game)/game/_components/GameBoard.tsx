@@ -1,3 +1,4 @@
+'use client';
 import { api } from '@/api/build/api';
 import { Button } from '@/components/ui/button';
 import { useAppSelector } from '@/hooks/store';
@@ -8,12 +9,13 @@ import Center from './Center';
 import FieldComponent from './FieldComponent';
 import InspectField from './InspectField';
 import PlayerChipsContainer from './players/PlayerChipsContainer';
+import { Spinner } from '@nextui-org/react';
 
 const GameBoard = () => {
   const fields = useAppSelector(state => state.fields.fields);
 
   const { data: user } = useAppSelector(state => state.user);
-  const { game } = useAppSelector(state => state.game);
+  const { game, loading } = useAppSelector(state => state.game);
   const [fieldClicked, setFieldClicked] = useState<null | Field>(null);
   const inspectFieldRef = useRef<HTMLDivElement | null>(null);
 
@@ -40,6 +42,14 @@ const GameBoard = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [fieldClicked]);
+  if (loading || !game)
+    return (
+      <div className="h-screen w-full">
+        <div className="fixed right-1/2 top-[45%]">
+          <Spinner color="primary" size="lg" />
+        </div>
+      </div>
+    );
   const groupOfField = fields.filter(
     field => field.group === fieldClicked?.group,
   );

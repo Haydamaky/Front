@@ -3,7 +3,7 @@
 import { api } from '@/api/build/api';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { setFields } from '@/store/slices/fields';
-import { setGame } from '@/store/slices/game';
+import { setErrorGame, setGame, setLoadingGame } from '@/store/slices/game';
 import { DataWithGame } from '@/types';
 import { Player } from '@/types/player';
 import { useEffect, useRef, useState } from 'react';
@@ -12,7 +12,7 @@ import PlayerCard from '../playerCard/PlayerCard';
 const PlayersList = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user);
-  const game = useAppSelector(state => state.game.game);
+  const { game, loading } = useAppSelector(state => state.game);
   const fields = useAppSelector(state => state.fields.fields);
   const { data: chipTransition } = useAppSelector(
     state => state.chipTransition,
@@ -66,9 +66,16 @@ const PlayersList = () => {
         dispatch(setFields(data.fields));
       }
     };
-    const getAllGameData = () => {
-      if (user.data) {
-        api.getAllGameData();
+    const getAllGameData = async () => {
+      try {
+        if (user.data) {
+          dispatch(setLoadingGame(true));
+          await api.getAllGameData();
+          dispatch(setLoadingGame(false));
+        }
+      } catch (err) {
+        dispatch(setErrorGame('Couldnt get game'));
+        dispatch(setLoadingGame(false));
       }
     };
     getAllGameData();
@@ -122,7 +129,7 @@ const PlayersList = () => {
       api.off.tradeOffered(dispatchSetGame);
     };
   }, [user.data]);
-
+  if (loading) return null;
   return (
     <div className="relative my-auto flex h-[88%] flex-col gap-[2.7%] overflow-visible text-xs md:text-sm lg:text-lg">
       {game?.players &&

@@ -20,25 +20,14 @@ export default function ErrorRedirectWrapper({
   const { isPublic } = useIsPublicRoute();
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if (
-      (error.status === 401 || (!data && !refetching)) &&
-      !isPublic &&
-      !loading
-    ) {
-      router.push('/login');
+    if ((error.status === 401 || (!data && !refetching)) && !loading) {
+      if (!isPublic) {
+        router.push('/login');
+      }
+
       dispatch(clearError());
     }
   }, [error, data, isPublic, loading, router]);
-
-  if (!data && !isPublic) {
-    return (
-      <div className="h-screen w-full">
-        <div className="fixed right-1/2 top-[45%]">
-          <Spinner color="primary" size="lg" />
-        </div>
-      </div>
-    );
-  }
 
   return <>{children}</>;
 }
