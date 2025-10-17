@@ -6,7 +6,7 @@ const errorHandler = (error: any) => {
   store.dispatch(
     setError({
       message: 'Session expired. Please log in again.',
-      status: 401,
+      status: error.status,
     }),
   );
 };

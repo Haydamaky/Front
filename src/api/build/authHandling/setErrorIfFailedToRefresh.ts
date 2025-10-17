@@ -10,7 +10,10 @@ export const setErrorIfFailedToRefresh = async (
     api.recconectSocket();
     return apiResponse?.data?.status === 'success';
   } catch (error) {
-    if (isAxiosError(error) && error?.response?.status === 401) {
+    if (
+      isAxiosError(error) &&
+      (error?.response?.status === 401 || error.response?.status === 403)
+    ) {
       errorHandlers['errorHandler']?.(error);
       return false;
     } else {

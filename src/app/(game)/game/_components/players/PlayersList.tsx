@@ -81,9 +81,7 @@ const PlayersList = () => {
     getAllGameData();
     api.on.rejoin(() => {
       console.log('Rejoin');
-      if (!game || !fields) {
-        getAllGameData();
-      }
+      getAllGameData();
     });
     api.on.gameData(
       dispatchSetGame,

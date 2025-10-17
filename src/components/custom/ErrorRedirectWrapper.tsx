@@ -20,7 +20,13 @@ export default function ErrorRedirectWrapper({
   const { isPublic } = useIsPublicRoute();
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if ((error.status === 401 || (!data && !refetching)) && !loading) {
+    if (
+      (error.status === 401 ||
+        error.status === 403 ||
+        (!data && !refetching)) &&
+      !loading
+    ) {
+      console.log({ isPublic });
       if (!isPublic) {
         router.push('/login');
       }
