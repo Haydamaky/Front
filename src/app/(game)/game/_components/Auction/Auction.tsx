@@ -107,6 +107,7 @@ const Auction = ({
                               );
                               return (
                                 <Message
+                                  key={`${bidder.userId}:${bidder.bid}`}
                                   name={
                                     playerThatPutOnAuction?.user.nickname || ''
                                   }
@@ -129,6 +130,7 @@ const Auction = ({
                               );
                               return (
                                 <Message
+                                  key={`${bidder.userId}:${bidder.bid}`}
                                   name={playerThatMadeBid?.user.nickname || ''}
                                   color={
                                     gradientColorVariants[
@@ -149,6 +151,7 @@ const Auction = ({
                               );
                               return (
                                 <Message
+                                  key={`${bidder.userId}:${bidder.bid}`}
                                   name={playerThatMadeBid?.user.nickname || ''}
                                   color={
                                     gradientColorVariants[

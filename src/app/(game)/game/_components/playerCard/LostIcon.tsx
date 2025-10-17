@@ -36,8 +36,8 @@ const LostIcon = () => {
           y2="73.977"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#EBF4F5" />
-          <stop offset="1" stop-color="#B5C6E0" />
+          <stop stopColor="#EBF4F5" />
+          <stop offset="1" stopColor="#B5C6E0" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_845_157"
@@ -47,8 +47,8 @@ const LostIcon = () => {
           y2="41.4464"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#EBF4F5" />
-          <stop offset="1" stop-color="#B5C6E0" />
+          <stop stopColor="#EBF4F5" />
+          <stop offset="1" stopColor="#B5C6E0" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_845_157"
@@ -58,8 +58,8 @@ const LostIcon = () => {
           y2="41.5306"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#EBF4F5" />
-          <stop offset="1" stop-color="#B5C6E0" />
+          <stop stopColor="#EBF4F5" />
+          <stop offset="1" stopColor="#B5C6E0" />
         </linearGradient>
         <linearGradient
           id="paint3_linear_845_157"
@@ -69,8 +69,8 @@ const LostIcon = () => {
           y2="49.2432"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#EBF4F5" />
-          <stop offset="1" stop-color="#B5C6E0" />
+          <stop stopColor="#EBF4F5" />
+          <stop offset="1" stopColor="#B5C6E0" />
         </linearGradient>
         <linearGradient
           id="paint4_linear_845_157"
@@ -80,8 +80,8 @@ const LostIcon = () => {
           y2="20.5286"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#EBF4F5" />
-          <stop offset="1" stop-color="#B5C6E0" />
+          <stop stopColor="#EBF4F5" />
+          <stop offset="1" stopColor="#B5C6E0" />
         </linearGradient>
       </defs>
     </svg>

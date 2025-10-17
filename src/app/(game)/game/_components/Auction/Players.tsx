@@ -16,7 +16,7 @@ const Players = ({ refusedIds }: PlayersProps) => {
   return (
     <div className="grid h-full grid-rows-[auto] gap-3 overflow-hidden pb-10">
       {updatedPlayers.map(player => (
-        <AuctionPlayerCard player={player} />
+        <AuctionPlayerCard player={player} key={player.id} />
       ))}
     </div>
   );

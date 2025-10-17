@@ -10,7 +10,6 @@ export const retryWrapper = <ReturnValueType>(
     try {
       return await backendCall<ReturnValueType>(...args);
     } catch (error) {
-      console.log({ errorInRetry: error });
       if (!isAxiosError(error)) {
         throw error;
       }
