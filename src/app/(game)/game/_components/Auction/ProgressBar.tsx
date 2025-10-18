@@ -35,7 +35,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ auction }) => {
     return () => {
       if (animationId.current) cancelAnimationFrame(animationId.current);
     };
-  }, [auction, startTime]);
+  }, [auction]);
   return (
     <div className="flex w-[95%] flex-col items-center gap-2">
       <span className="mb-4 flex w-14 items-center justify-center rounded-lg border-2 border-white bg-primaryGame p-2 px-2 font-ermilov text-4xl">
