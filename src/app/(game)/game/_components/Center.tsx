@@ -131,7 +131,7 @@ const Center = () => {
     };
     const handleUpdatePlayers = (data: any) => {
       setSecretInfo(data.secretInfo);
-      if (!data.secretInfo.users?.includes(user?.id || 'notIncluded'))
+      if (!data.secretInfo?.users?.includes(user?.id || 'notIncluded'))
         setAction('');
       dispatch(setGame(data.game));
     };

@@ -53,7 +53,7 @@ export const SignUpForm: FC = () => {
         AxiosResponse<{
           user: User;
         }>
-      >('auth/local/signup', values);
+      >(values);
       if (res.data.user) {
         dispatch(setUserState(res.data.user));
       }
