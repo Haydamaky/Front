@@ -64,7 +64,6 @@ const ActionsSection: FC<Props> = ({
           />
         );
       }
-      renderJsx = null;
       break;
 
     case 'payForField':
