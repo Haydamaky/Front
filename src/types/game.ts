@@ -24,7 +24,7 @@ export type Action =
   | 'rollDice'
   | 'auction'
   | 'buy'
-  | 'payForField'
+  | 'payForPrivateField'
   | 'secretPay'
   | 'toPay'
   | 'VDNH'

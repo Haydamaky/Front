@@ -43,7 +43,7 @@ const ActionsSection: FC<Props> = ({
   console.log('action', action);
   switch (action) {
     case 'rollDice':
-      renderJsx = <RollDiceAction onRollDice={api.rollDice} />;
+      renderJsx = <RollDiceAction onRollDice={() => api.rollDice()} />;
       break;
 
     case 'buy':
@@ -51,8 +51,8 @@ const ActionsSection: FC<Props> = ({
         renderJsx = (
           <BuyFieldAction
             fieldPrice={currentField.price}
-            onBuyField={api.buyField}
-            onPutUpForAuction={api.putUpForAuction}
+            onBuyField={() => api.buyField()}
+            onPutUpForAuction={() => api.putUpForAuction()}
           />
         );
       }
@@ -60,17 +60,17 @@ const ActionsSection: FC<Props> = ({
         renderJsx = (
           <PayRentAction
             rentAmount={currentField.income[currentField.amountOfBranches]}
-            onPayRent={api.payForPrivateField}
+            onPayRent={() => api.payForPrivateField()}
           />
         );
       }
       break;
 
-    case 'payForField':
+    case 'payForPrivateField':
       renderJsx = (
         <PayRentAction
           rentAmount={currentField.income[currentField.amountOfBranches]}
-          onPayRent={api.payForPrivateField}
+          onPayRent={() => api.payForPrivateField()}
         />
       );
       break;
@@ -79,7 +79,7 @@ const ActionsSection: FC<Props> = ({
       renderJsx = (
         <VDNHAction
           amountToPay={currentField.toPay || 0}
-          onPay={api.payToBankForSpecialField}
+          onPay={() => api.payToBankForSpecialField()}
         />
       );
       break;
@@ -88,7 +88,7 @@ const ActionsSection: FC<Props> = ({
       renderJsx = (
         <CoinAction
           amountToPay={currentField.toPay || 0}
-          onPay={api.payToBankForSpecialField}
+          onPay={() => api.payToBankForSpecialField()}
         />
       );
       break;
@@ -99,7 +99,7 @@ const ActionsSection: FC<Props> = ({
           secretInfo={secretInfo}
           amountToPay={amountToPay}
           gamePlayers={game.players}
-          onPay={payForSecret}
+          onPay={() => payForSecret()}
         />
       );
       break;

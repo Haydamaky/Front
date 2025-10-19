@@ -47,7 +47,7 @@ export const useGameCenterFunctionality = () => {
         setAction('buy');
       }
       if (currentField.ownedBy && currentField.ownedBy !== user?.id) {
-        setAction('payForField');
+        setAction('payForPrivateField');
       }
       if (currentField.toPay && currentField.name === 'ВДНХ') {
         setAction('VDNH');
@@ -109,7 +109,7 @@ export const useGameCenterFunctionality = () => {
     };
     const handleUpdatePlayers = (data: any) => {
       setSecretInfo(data.secretInfo);
-      if (!data.secretInfo.users?.includes(user?.id || 'notIncluded'))
+      if (!data?.secretInfo?.users?.includes(user?.id || 'notIncluded'))
         setAction('');
       dispatch(setGame(data.game));
     };
