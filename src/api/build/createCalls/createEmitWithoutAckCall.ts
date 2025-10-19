@@ -12,10 +12,8 @@ export const createEmitWithoutAckCalls = (): BackendInteraction[] => {
         }, 2000);
 
         const id = crypto.randomUUID();
-
         const ack = (data: ReturnValueType & { requestId: string }) => {
           if (data.requestId === id) {
-            console.log('Clearing timeout for', emitMethod, data);
             clearTimeout(timeout);
             socket.off(ackMethods, ack);
             resolve(data);

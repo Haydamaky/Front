@@ -1,6 +1,5 @@
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Player } from '@/types/player';
-import { Avatar } from '@nextui-org/react';
-import Image from 'next/image';
 import { gradientColorVariants } from '../../_utils';
 
 interface AuctionPlayerCardProps {
@@ -29,11 +28,9 @@ const AuctionPlayerCard = ({ player }: AuctionPlayerCardProps) => {
         ></div>
       )}
       {!player.refusedFromAuction ? (
-        <Avatar
-          src={'https://i.pravatar.cc/150?u=a04258114e29026302d'}
-          ImgComponent={props => <Image {...props} fill={true} />}
-          size="lg"
-        />
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" />
+        </Avatar>
       ) : (
         <div className="relative h-14 w-14 cursor-pointer" aria-label="Close">
           <div className="absolute left-0 top-1/2 h-1 w-14 -translate-y-1/2 rotate-45 rounded-md bg-white" />

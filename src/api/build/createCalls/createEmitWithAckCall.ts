@@ -8,7 +8,7 @@ export const createEmitWithAckCalls = (): BackendInteraction[] => {
       return new Promise<ReturnValueType>((resolve, reject) => {
         const timeout = setTimeout(() => {
           reject(new Error(`No response from server for "${method}"`));
-        }, 2000);
+        }, 3000);
 
         const ack = (data: ReturnValueType) => {
           clearTimeout(timeout);

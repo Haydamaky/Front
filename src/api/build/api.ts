@@ -9,18 +9,20 @@ import { attachMethods } from './utils/attachMethods';
 
 const buildAPI = (): API => {
   const api = { on: {}, off: {} } as API;
-  api.setErrorHandler = (errorHandler: Hanlder) => {
-    api.errorHandler = errorHandler;
+  api.errorHandlers = {};
+  api.setErrorHandlers = (errorHandlers: Record<string, Hanlder>) => {
+    for (const key in errorHandlers) {
+      api.errorHandlers[key] = errorHandlers[key];
+    }
   };
   attachMethods(api.on, [createOnListeners]);
   attachMethods(api.off, [createOffListeners]);
   attachMethods(api, [
-    createHttpCalls,
+    createHttpCalls(api.errorHandlers),
     createEmitWithAckCalls,
     createEmitWithoutAckCalls,
     createAdditionalMethods,
   ]);
-
   return api;
 };
 

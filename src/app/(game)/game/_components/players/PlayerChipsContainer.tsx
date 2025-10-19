@@ -15,15 +15,15 @@ const PlayerChipsContainer = () => {
       shouldUpdate.current = true;
       dispatch(setChipTransition(true));
     };
-    const handleGetAllGameData = (data: any) => {
+    const handleGameData = (data: any) => {
       prevGameAfterRolledDices.current = data.game;
       shouldUpdate.current = true;
     };
-    api.on.gameData(handleGetAllGameData);
+    api.on.gameData(handleGameData);
     api.on.rolledDice(handleRolledDice);
     return () => {
       api.off.rolledDice(handleRolledDice);
-      api.off.gameData(handleGetAllGameData);
+      api.off.gameData(handleGameData);
     };
   }, []);
   if (shouldUpdate.current) {

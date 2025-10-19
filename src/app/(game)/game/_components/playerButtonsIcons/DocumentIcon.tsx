@@ -26,8 +26,8 @@ const DocumentIcon = ({ isHovered }: DocumentIconProps) => {
           y2="2.14511"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.475" stop-color="#F6BE19" />
-          <stop offset="1" stop-color="#FBFBFA" />
+          <stop offset="0.475" stopColor="#F6BE19" />
+          <stop offset="1" stopColor="#FBFBFA" />
         </linearGradient>
       </defs>
     </svg>
