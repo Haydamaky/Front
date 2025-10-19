@@ -41,9 +41,11 @@ const TradeOffer = () => {
   };
   const handleSendOffer = () => {
     api.offerTrade({
-      ...trade,
-      offeredMoney: firstExtraPay || 0,
-      wantedMoney: secondExtraPay || 0,
+      tradeOffer: {
+        ...trade,
+        offeredMoney: firstExtraPay || 0,
+        wantedMoney: secondExtraPay || 0,
+      },
     });
     handleTradeClose();
   };

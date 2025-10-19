@@ -25,7 +25,7 @@ const GamesList: FC = () => {
       setGames(games);
     };
 
-    const onNewGameCreated = (game: Game) => {
+    const onNewGameCreated = ({ game }: { game: Game }) => {
       setGames(prevGames => [game, ...prevGames]);
     };
 
@@ -40,7 +40,7 @@ const GamesList: FC = () => {
       }
     };
 
-    const handleOnParticipateGame = (game: Game) => {
+    const handleOnParticipateGame = ({ game }: { game: Game }) => {
       setGames(prevGames => {
         const index = prevGames.findIndex(curGame => curGame.id === game.id);
         const updatedGames = [...prevGames];

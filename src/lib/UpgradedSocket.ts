@@ -41,7 +41,13 @@ export class UpgradedSocket {
     data?: unknown | EventCallback,
     callback?: EventCallback,
   ) {
-    return this.socket.emit(event, data, callback);
+    if (data && callback) {
+      return this.socket.emit(event, data, callback);
+    }
+    if (data) {
+      return this.socket.emit(event, data);
+    }
+    return this.socket.emit(event);
   }
 
   recconect() {

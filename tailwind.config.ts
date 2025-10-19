@@ -53,6 +53,7 @@ const config: Config = {
         gameCenterModal: 'rgba(25, 55, 109, 1)',
         primaryGame: 'rgba(0, 33, 71, 1)',
         darkHome: 'rgba(0, 21, 46)',
+        bgAuction: 'rgba(0, 53, 149, 1)',
       },
       backgroundImage: {
         playerGradient:

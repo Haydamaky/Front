@@ -13,6 +13,9 @@ const GatewayError = () => {
       if (error.code === 'USER_NOT_IN_GAME') {
         router.push('/rooms');
       }
+      if (error.code === 'USER_NOT_AUTHENTICATED') {
+        router.push('/login');
+      }
       toast(error.message, { type: 'warning' });
     };
     api.on.error(onError);

@@ -66,11 +66,11 @@ const PlayersList = () => {
         dispatch(setFields(data.fields));
       }
     };
-    const getGameData = () => {
-      api.getGameData();
+    const getAllGameData = () => {
+      api.getAllGameData();
     };
-    getGameData();
-    api.on.rejoin(getGameData);
+    getAllGameData();
+    api.on.rejoin(getAllGameData);
     api.on.gameData(
       dispatchSetGame,
       dispatchSetFields,
@@ -88,7 +88,7 @@ const PlayersList = () => {
 
     api.on.passTurnToNext(dispatchSetGame, dispatchSetFields);
     api.onMany(
-      ['payedForField', 'playerSurrendered', 'updateGameData'],
+      ['payedForField', 'updateGameData'],
       dispatchSetGame,
       dispatchSetFields,
     );
@@ -106,11 +106,11 @@ const PlayersList = () => {
       );
       api.off.passTurnToNext(dispatchSetGame);
       api.offMany(
-        ['payedForField', 'playerSurrendered', 'updateGameData'],
+        ['payedForField', 'updateGameData'],
         dispatchSetFields,
         dispatchSetGame,
       );
-      api.off.rejoin(getGameData);
+      api.off.rejoin(getAllGameData);
       api.off.rolledDice(setRolledDiceapi);
       api.off.tradeOffered(dispatchSetGame);
     };

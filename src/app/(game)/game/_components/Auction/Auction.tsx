@@ -73,7 +73,7 @@ const Auction = ({
         scrollBehavior={'inside'}
         backdrop="blur"
       >
-        <ModalContent className="bg-bgDark relative flex h-[90vh] w-[100vh] max-w-none flex-col rounded-xl p-2">
+        <ModalContent className="relative flex h-[90vh] w-[100vh] max-w-none flex-col rounded-xl bg-bgAuction p-2 font-ermilov text-white">
           {_ => (
             <>
               <Image
@@ -119,7 +119,11 @@ const Auction = ({
                                 />
                               );
                             }
-                            if (bidder.userId && bidder.accepted) {
+                            if (
+                              bidder.userId &&
+                              bidder.accepted &&
+                              bidder.bid >= 100
+                            ) {
                               const playerThatMadeBid = players.find(
                                 player => player.userId === bidder.userId,
                               );
