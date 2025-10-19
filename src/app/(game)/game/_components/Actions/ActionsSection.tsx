@@ -44,6 +44,7 @@ const ActionsSection: FC<Props> = ({
   switch (action) {
     case 'rollDice':
       renderJsx = <RollDiceAction onRollDice={api.rollDice} />;
+      break;
 
     case 'buy':
       if (!currentField.ownedBy) {
@@ -59,18 +60,17 @@ const ActionsSection: FC<Props> = ({
         renderJsx = (
           <PayRentAction
             rentAmount={currentField.income[currentField.amountOfBranches]}
-            onPayRent={api.payForField}
+            onPayRent={api.payForPrivateField}
           />
         );
       }
-      renderJsx = null;
       break;
 
     case 'payForField':
       renderJsx = (
         <PayRentAction
           rentAmount={currentField.income[currentField.amountOfBranches]}
-          onPayRent={api.payForField}
+          onPayRent={api.payForPrivateField}
         />
       );
       break;
