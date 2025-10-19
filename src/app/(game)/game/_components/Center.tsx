@@ -34,7 +34,7 @@ const Center = () => {
       )}
       {trade && <TradeOffer />}
       <div className="absolute left-[50%] top-[2%] w-[calc(100%-24px)] translate-x-[-50%]">
-        {turnOfUser &&
+        {(turnOfUser || action === 'secretPay') &&
           !currentPlayer?.lost &&
           !chipTransition &&
           action &&
