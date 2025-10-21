@@ -46,7 +46,10 @@ const PlayersList = () => {
       const currentField = fields.find(
         fields => fields.index === currentPlayer?.currentFieldIndex,
       );
-      if (currentField?.ownedBy === user.data?.id) {
+      if (
+        currentField?.ownedBy === user.data?.id &&
+        game.turnOfUserId === user.data?.id
+      ) {
         api.passTurn();
       }
 
@@ -80,7 +83,6 @@ const PlayersList = () => {
     };
     getAllGameData();
     api.on.rejoin(() => {
-      console.log('Rejoin');
       getAllGameData();
     });
     api.on.gameData(

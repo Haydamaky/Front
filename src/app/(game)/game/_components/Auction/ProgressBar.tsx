@@ -9,11 +9,10 @@ interface ProgressBarProps {
 
 const ProgressBar: FC<ProgressBarProps> = ({ auction }) => {
   const now = Date.now();
-  const timeToEnd = Math.ceil((+(auction?.turnEnds ?? now) - now + 10) / 1000);
+  const timeToEnd = Math.ceil((+(auction?.turnEnds ?? now) - now) / 1000);
   const [value, setValue] = useState(timeToEnd);
   const [startTime, setStartTime] = useState<number>(Date.now());
   const animationId = useRef<number | null>(null);
-  console.log({ auction });
   useEffect(() => {
     setStartTime(Date.now());
     if (animationId.current) cancelAnimationFrame(animationId.current);
@@ -22,20 +21,20 @@ const ProgressBar: FC<ProgressBarProps> = ({ auction }) => {
       const currentTime = Date.now();
       const elapsed = (currentTime - startTime) / 1000;
       const newValue = Math.max(timeToEnd - elapsed, 0);
-
       setValue(newValue);
 
       if (newValue > 0) {
-        requestAnimationFrame(updateProgress);
+        animationId.current = requestAnimationFrame(updateProgress);
       }
     };
 
-    animationId.current = requestAnimationFrame(updateProgress);
+    updateProgress();
 
     return () => {
       if (animationId.current) cancelAnimationFrame(animationId.current);
     };
   }, [timeToEnd]);
+
   return (
     <div className="flex w-[95%] flex-col items-center gap-2">
       <span className="mb-4 flex w-14 items-center justify-center rounded-lg border-2 border-white bg-primaryGame p-2 px-2 font-ermilov text-4xl">

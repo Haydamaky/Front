@@ -26,7 +26,6 @@ export default function ErrorRedirectWrapper({
         (!data && !refetching)) &&
       !loading
     ) {
-      console.log({ isPublic });
       if (!isPublic) {
         router.push('/login');
       }

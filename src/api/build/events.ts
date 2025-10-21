@@ -11,7 +11,7 @@ export const tiedEvents = [
   ['rollDice', 'rolledDice', 'error'],
   ['payToBankForSpecialField', 'updatePlayers', 'passTurnToNext', 'error'],
   ['payToUserForSecret', 'updatePlayers', 'error'],
-  ['payToBankForSecret', 'updatePlayers', 'error'],
+  ['payToBankForSecret', 'updatePlayers', 'passTurnToNext', 'error'],
   ['payForPrivateField', 'payedForField', 'error'],
   ['putUpForAuction', 'hasPutUpForAuction', 'error'],
   ['raisePrice', 'raisedPrice', 'error'],

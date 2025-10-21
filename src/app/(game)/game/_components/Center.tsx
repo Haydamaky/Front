@@ -80,7 +80,7 @@ const Center = () => {
 
       if (currentField.secret && secretInfo) {
         if (secretInfo.users.length === 1) {
-          if (secretInfo.amounts[0] < 0) {
+          if (secretInfo.amounts[0] < 0 && secretInfo.users[0] === user?.id) {
             setAction('secretPay');
             setAmountToPay(secretInfo.amounts[0]);
           }
