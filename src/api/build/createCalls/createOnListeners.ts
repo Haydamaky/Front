@@ -1,10 +1,10 @@
 import { socket } from '@/socket';
 import { listenEvents } from '../events';
-import { BackendInteraction, Hanlder, SubscribeFn } from '../types';
+import { BackendInteraction, Handler, SubscribeFn } from '../types';
 
 export const createOnListeners = (): BackendInteraction[] => {
   return listenEvents.map(event => {
-    const call: SubscribeFn = (...handlers: Hanlder[]) =>
+    const call: SubscribeFn = (...handlers: Handler[]) =>
       socket.on(event, ...handlers);
 
     return {

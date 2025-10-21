@@ -1,10 +1,10 @@
 import { isAxiosError } from 'axios';
-import { DbCall, Hanlder } from '../types';
+import { DbCall, Handler } from '../types';
 import { setErrorIfFailedToRefresh } from './setErrorIfFailedToRefresh';
 
 export const retryWrapper = <ReturnValueType>(
   backendCall: DbCall,
-  errorHandlers: Record<string, Hanlder>,
+  errorHandlers: Record<string, Handler>,
 ) => {
   return async (...args: unknown[]): Promise<ReturnValueType | undefined> => {
     try {

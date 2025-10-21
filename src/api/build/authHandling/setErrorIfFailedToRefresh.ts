@@ -1,9 +1,9 @@
 import { isAxiosError } from 'axios';
 import { api } from '../api';
-import { Hanlder } from '../types';
+import { Handler } from '../types';
 
 export const setErrorIfFailedToRefresh = async (
-  errorHandlers: Record<string, Hanlder>,
+  errorHandlers: Record<string, Handler>,
 ) => {
   try {
     const apiResponse = await api.refreshTokens<{ data: { status: string } }>();

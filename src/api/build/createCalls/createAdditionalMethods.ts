@@ -1,11 +1,11 @@
 import { socket } from '@/socket';
-import { BackendInteraction, Hanlder } from '../types';
+import { BackendInteraction, Handler } from '../types';
 
 export const createAdditionalMethods = (): BackendInteraction[] => {
-  const onManyCall = (events: string[], ...handlers: Hanlder[]) => {
+  const onManyCall = (events: string[], ...handlers: Handler[]) => {
     socket.on(events, ...handlers);
   };
-  const offManyCall = (events: string[], ...handlers: Hanlder[]) => {
+  const offManyCall = (events: string[], ...handlers: Handler[]) => {
     socket.off(events, ...handlers);
   };
   const recconectSocketCall = () => {

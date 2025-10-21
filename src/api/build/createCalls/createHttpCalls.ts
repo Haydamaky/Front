@@ -1,10 +1,10 @@
 import { client } from '@/api';
 import { AxiosRequestConfig } from 'axios';
 import { actions } from '../actions';
-import { BackendInteraction, Hanlder } from '../types';
+import { BackendInteraction, Handler } from '../types';
 import { retryWrapper } from '../authHandling/retryWrapper';
 
-export const createHttpCalls = (errorHandlers: Record<string, Hanlder>) => {
+export const createHttpCalls = (errorHandlers: Record<string, Handler>) => {
   return (): BackendInteraction[] => {
     return actions.map(action => {
       const httpCall = <ReturnValueType>(...args: unknown[]) => {

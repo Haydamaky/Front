@@ -50,7 +50,7 @@ const GameBoard = () => {
         </div>
       </div>
     );
-  const groupOfField = fields.filter(
+  const groupOfField = fields?.filter(
     field => field.group === fieldClicked?.group,
   );
   const userHasAllGroup = groupOfField.every(

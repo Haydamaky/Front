@@ -4,13 +4,13 @@ import { createEmitWithoutAckCalls } from './createCalls/createEmitWithoutAckCal
 import { createHttpCalls } from './createCalls/createHttpCalls';
 import { createOffListeners } from './createCalls/createOffListeners';
 import { createOnListeners } from './createCalls/createOnListeners';
-import { API, Hanlder } from './types';
+import { API, Handler } from './types';
 import { attachMethods } from './utils/attachMethods';
 
 const buildAPI = (): API => {
   const api = { on: {}, off: {} } as API;
   api.errorHandlers = {};
-  api.setErrorHandlers = (errorHandlers: Record<string, Hanlder>) => {
+  api.setErrorHandlers = (errorHandlers: Record<string, Handler>) => {
     for (const key in errorHandlers) {
       api.errorHandlers[key] = errorHandlers[key];
     }
