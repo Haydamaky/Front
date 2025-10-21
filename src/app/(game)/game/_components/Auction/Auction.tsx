@@ -243,7 +243,7 @@ const Auction = ({
                     <h1 className="min-w-0 text-center font-ermilov text-[18px]">
                       Final Lot Price
                     </h1>
-                    <span className="my-2 min-w-0 rounded-lg border-2 border-white bg-primaryGame p-2 text-center font-namu text-2xl">
+                    <span className="my-2 min-w-0 rounded-lg border-2 border-white bg-primaryGame px-2 pb-2 pt-1 text-center font-namu text-2xl">
                       {auction?.bidders[auction.bidders.length - 1].bid ||
                         currentField.price}{' '}
                       mm
