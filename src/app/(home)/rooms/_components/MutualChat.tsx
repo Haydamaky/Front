@@ -84,7 +84,7 @@ const MutualChat = () => {
               return (
                 <div key={message.id}>
                   <p
-                    className="bg-pink-400"
+                    className="break-all"
                     ref={messageRef}
                   >{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
                 </div>
@@ -92,7 +92,7 @@ const MutualChat = () => {
             }
             return (
               <div key={message.id}>
-                <p>{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
+                <p className="break-all">{`${time} ${message.sender?.nickname} - ${message.text}`}</p>
               </div>
             );
           })}

@@ -24,7 +24,7 @@ const Message = forwardRef<HTMLLIElement, MessageProps>(
           {name}
         </p>
         <div className="flex flex-row items-center">
-          <span>
+          <span className="break-all">
             {haveSeparator && ' : '}
             {text}
           </span>
