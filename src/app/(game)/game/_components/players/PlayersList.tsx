@@ -69,22 +69,7 @@ const PlayersList = () => {
         dispatch(setFields(data.fields));
       }
     };
-    const getAllGameData = async () => {
-      try {
-        if (user.data) {
-          dispatch(setLoadingGame(true));
-          await api.getAllGameData();
-          dispatch(setLoadingGame(false));
-        }
-      } catch (err) {
-        dispatch(setErrorGame('Couldnt get game'));
-        dispatch(setLoadingGame(false));
-      }
-    };
-    getAllGameData();
-    api.on.rejoin(() => {
-      getAllGameData();
-    });
+
     api.on.gameData(
       dispatchSetGame,
       dispatchSetFields,
@@ -124,7 +109,6 @@ const PlayersList = () => {
         dispatchSetFields,
         dispatchSetGame,
       );
-      api.off.rejoin(getAllGameData);
       api.off.rolledDice(setRolledDiceapi);
       api.off.tradeOffered(dispatchSetGame);
     };
