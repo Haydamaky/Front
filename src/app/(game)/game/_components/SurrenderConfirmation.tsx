@@ -1,3 +1,4 @@
+import { api } from '@/api/build/api';
 import { Button } from '@/components/ui/button';
 import { Modal, ModalBody, ModalContent, ModalFooter } from '@heroui/modal';
 
@@ -38,7 +39,10 @@ function SurrenderConfirmation({
                   Cancel
                 </Button>
                 <div
-                  onClick={onClose}
+                  onClick={async () => {
+                    await api.surrender();
+                    onClose();
+                  }}
                   className="w-full rounded-md bg-redGradient p-[1px]"
                 >
                   <Button
