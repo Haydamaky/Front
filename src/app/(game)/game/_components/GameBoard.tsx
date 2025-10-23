@@ -19,7 +19,7 @@ const GameBoard = () => {
   const [fieldClicked, setFieldClicked] = useState<null | Field>(null);
   const inspectFieldRef = useRef<HTMLDivElement | null>(null);
 
-  const handleFieldClicked = (field: Field) => {
+  const handleFieldClicked: (field: Field) => void = (field: Field) => {
     setFieldClicked(field);
   };
 

@@ -70,6 +70,22 @@ const PlayersList = () => {
       }
     };
 
+    const getAllGameData = async () => {
+      try {
+        if (user.data) {
+          dispatch(setLoadingGame(true));
+          await api.getAllGameData();
+          dispatch(setLoadingGame(false));
+        }
+      } catch (err) {
+        dispatch(setErrorGame('Couldnt get game'));
+        dispatch(setLoadingGame(false));
+      }
+    };
+    if (!game) {
+      getAllGameData();
+    }
+
     api.on.gameData(
       dispatchSetGame,
       dispatchSetFields,
