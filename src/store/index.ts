@@ -5,6 +5,7 @@ import fieldsSlice from './slices/fields';
 import chipTransitionSlice from './slices/chipTransition';
 import tradeSlice from './slices/trade';
 import errorSlice from './slices/error';
+import modalOpenSlice from './slices/modalOpen';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     chipTransition: chipTransitionSlice.reducer,
     trade: tradeSlice.reducer,
     error: errorSlice.reducer,
+    modalOpen: modalOpenSlice.reducer,
   },
 });
 

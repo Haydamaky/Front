@@ -22,9 +22,9 @@ const PlayerCard = ({
   index,
 }: PlayerCardProps) => {
   const { data: user } = useAppSelector(state => state.user);
+  const { surrenderModalOpen } = useAppSelector(state => state.modalOpen);
   const [isPlayerClicked, setIsPlayerClicked] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-
   const borderColor = !player.lost
     ? gradientColorVariants[player.color]
     : gradientColorVariants.lost;
@@ -37,11 +37,19 @@ const PlayerCard = ({
   const opacityOtherPlayer =
     isPlayerClicked && !mainPlayer ? 'opacity-100' : 'opacity-0';
 
-  const handleMouseClick = () => setIsPlayerClicked(prev => !prev);
+  const handleMouseClick = () => {
+    if (!surrenderModalOpen) {
+      setIsPlayerClicked(prev => !prev);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+      if (
+        cardRef.current &&
+        !cardRef.current.contains(event.target as Node) &&
+        !surrenderModalOpen
+      ) {
         setIsPlayerClicked(false);
       }
     };
@@ -53,7 +61,11 @@ const PlayerCard = ({
   }, []);
 
   let playerButtons = mainPlayer ? (
-    <GiveUpButton opacity={opacity} lost={player.lost} />
+    <GiveUpButton
+      opacity={opacity}
+      lost={player.lost}
+      isPlayerClicked={isPlayerClicked}
+    />
   ) : (
     <OtherPlayerButtons
       opacity={opacityOtherPlayer}
