@@ -10,39 +10,48 @@ function SurrenderConfirmation({
 }) {
   return (
     <>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} hideCloseButton>
+      <Modal
+        isOpen={isOpen}
+        size="lg"
+        onOpenChange={onOpenChange}
+        hideCloseButton
+        classNames={{ base: 'h-[15vh]' }}
+        scrollBehavior={'inside'}
+        backdrop="blur"
+      >
         <ModalContent>
           {onClose => (
-            <>
-              <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat
-                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+            <div className="flex h-full flex-col justify-between rounded-xl bg-gameCenterModal px-8 py-6 text-xs text-white shadow-gameCenterModaShadowCombined">
+              <ModalBody className="h-full justify-center p-0">
+                <div className="mb-6 flex w-full items-center justify-center font-ermilov">
+                  <h1 className="text-nowrap text-xl">
+                    Are you sure that you want to surrender?
+                  </h1>
+                </div>
               </ModalBody>
-              <ModalFooter>
-                <Button color="danger" onClick={onClose}>
-                  Close
+              <ModalFooter className="flex gap-8 p-0">
+                <Button
+                  variant={'blueGame'}
+                  onClick={onClose}
+                  className="h-[34px] font-custom text-[9px] text-white md:text-sm lg:text-lg"
+                >
+                  Cancel
                 </Button>
-                <Button color="primary" onClick={onClose}>
-                  Action
-                </Button>
+                <div
+                  onClick={onClose}
+                  className="w-full rounded-md bg-redGradient p-[1px]"
+                >
+                  <Button
+                    variant="forGradient"
+                    className="h-8 rounded-md font-custom"
+                  >
+                    <p className="bg-[linear-gradient(180deg,#FB3B47_27.27%,#DA0C1C_240.91%)] bg-clip-text text-[9px] text-transparent lg:text-lg">
+                      Surrender
+                    </p>
+                  </Button>
+                </div>
               </ModalFooter>
-            </>
+            </div>
           )}
         </ModalContent>
       </Modal>
