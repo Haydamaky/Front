@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
 const GatewayError = () => {
-  useDispatchUser();
+  const { loading } = useDispatchUser();
   useRedirectIfActiveGame();
   const router = useRouter();
   useEffect(() => {
@@ -15,7 +15,7 @@ const GatewayError = () => {
       if (error.code === 'USER_NOT_IN_GAME') {
         router.push('/rooms');
       }
-      if (error.code === 'USER_NOT_AUTHENTICATED') {
+      if (error.code === 'USER_NOT_AUTHENTICATED' && !loading) {
         router.push('/login');
       }
       toast(error.message, { type: 'warning' });

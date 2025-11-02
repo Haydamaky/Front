@@ -85,12 +85,7 @@ const PlayersList = () => {
     if (!game) {
       getAllGameData();
     }
-
-    api.on.gameData(
-      dispatchSetGame,
-      dispatchSetFields,
-      calculateTimeToEndAndSetStates,
-    );
+    calculateTimeToEndAndSetStates({ game });
     api.on.tradeOffered(dispatchSetGame);
     const setRolledDiceapi = () => {
       rolledDice.current = true;

@@ -18,5 +18,5 @@ export function useIsPublicRoute() {
     const matched = matcher(pathname);
     return !!matched;
   });
-  return { isPublic };
+  return { isPublic, pathname };
 }

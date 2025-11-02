@@ -2,27 +2,45 @@
 
 import { api } from '@/api/build/api';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { setErrorGame, setLoadingGame } from '@/store/slices/game';
+import { setErrorGame, setGame, setLoadingGame } from '@/store/slices/game';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { DataWithGame } from '@/types';
+import { setFields } from '@/store/slices/fields';
+import Cookies from 'js-cookie';
+import { useUser } from './useUser';
 
 function useRedirectIfActiveGame() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const pathname = usePathname();
-  const user = useAppSelector(state => state.user);
+  const { data } = useUser();
+
   useEffect(() => {
+    const gameId = Cookies.get('gameId');
+    const dispatchSetGame = (data: DataWithGame) => {
+      if (data.game) {
+        dispatch(setGame(data.game));
+      }
+    };
+
+    const dispatchSetFields = (data: DataWithGame) => {
+      if (data.fields) {
+        dispatch(setFields(data.fields));
+      }
+    };
     const getAllGameData = async () => {
       try {
-        if (user.data) {
+        if (gameId && data) {
           dispatch(setLoadingGame(true));
           const data = await api.getAllGameData();
           if (data.game.status === 'ACTIVE' && pathname !== '/game') {
-            // router.push('/game');
-            // Logic for recconecting to active game
+            router.push('/game');
           }
           dispatch(setLoadingGame(false));
+        } else if (data && pathname === '/game') {
+          router.push('/rooms');
         }
       } catch (err) {
         dispatch(setErrorGame('Couldnt get game'));
@@ -30,13 +48,14 @@ function useRedirectIfActiveGame() {
       }
     };
     getAllGameData();
+    api.on.gameData(dispatchSetGame, dispatchSetFields);
     api.on.rejoin(() => {
       getAllGameData();
     });
     return () => {
       api.off.rejoin(getAllGameData);
     };
-  }, [user.data]);
+  }, [data]);
 }
 
 export default useRedirectIfActiveGame;

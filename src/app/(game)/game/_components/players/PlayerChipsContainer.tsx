@@ -19,6 +19,7 @@ const PlayerChipsContainer = () => {
       prevGameAfterRolledDices.current = data.game;
       shouldUpdate.current = true;
     };
+    handleGameData({ game });
     api.on.gameData(handleGameData);
     api.on.rolledDice(handleRolledDice);
     return () => {
@@ -30,7 +31,7 @@ const PlayerChipsContainer = () => {
     shouldUpdate.current = false;
     return <PlayersChips game={game} />;
   }
-  return <PlayersChips game={prevGameAfterRolledDices.current} />;
+  return <PlayersChips game={prevGameAfterRolledDices.current || game} />;
 };
 
 export default PlayerChipsContainer;

@@ -4,6 +4,7 @@ import { Player } from './player';
 export interface Game {
   id: string;
   createdAt: Date;
+  status: 'ACTIVE' | 'FINISHED' | 'LOBBY';
   updatedAt: Date;
   isStarted: boolean;
   players: Player[];

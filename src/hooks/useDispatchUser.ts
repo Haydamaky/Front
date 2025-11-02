@@ -5,11 +5,11 @@ import { useAppDispatch } from './store';
 import { useUser } from './useUser';
 export function useDispatchUser() {
   const dispatch = useAppDispatch();
-  const { data } = useUser();
+  const { data, loading } = useUser();
   useEffect(() => {
     if (!data) {
       dispatch(getUserInfo());
     }
   }, [dispatch, data]);
-  return { isInitialized: !!data };
+  return { isInitialized: !!data, loading };
 }
