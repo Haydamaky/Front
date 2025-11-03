@@ -89,7 +89,6 @@ const Chat: FC<{ chatId: string; gameId: string; players: Player[] }> = ({
                   ]
                 }
                 ref={index === messages.length - 1 ? refMessage : null}
-                time={message.updatedAt}
               />
             );
           })}

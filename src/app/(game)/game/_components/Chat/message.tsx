@@ -4,7 +4,6 @@ interface MessageProps {
   name: string;
   text: string;
   color: string;
-  time?: string;
   haveSeparator?: boolean;
 }
 
