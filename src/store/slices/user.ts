@@ -6,6 +6,7 @@ export type User = {
   id: string;
   nickname: string;
   email: string;
+  timezone: string;
 };
 
 type InitialState = {

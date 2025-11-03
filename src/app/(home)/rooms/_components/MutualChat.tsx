@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { MessageObjType } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@nextui-org/input';
-import { formatDateToTime } from '@/lib/utils';
+import { convertUtcIsoToUserIso, formatDateToTime } from '@/lib/utils';
 import { useAppSelector } from '@/hooks/store';
 import { api } from '@/api/build/api';
 import Image from 'next/image';
@@ -79,7 +79,11 @@ const MutualChat = () => {
       <div className="scrollbar flex-1 overflow-y-scroll" ref={containerRef}>
         <div className="flex min-h-full flex-col justify-end">
           {messages.map((message, index: number) => {
-            const time = formatDateToTime(message.updatedAt);
+            const timeWithUserTimezone = convertUtcIsoToUserIso(
+              message.updatedAt,
+              user.data?.timezone,
+            );
+            const time = formatDateToTime(timeWithUserTimezone);
             if (index === messages.length - 1 && scroll) {
               return (
                 <div key={message.id}>
