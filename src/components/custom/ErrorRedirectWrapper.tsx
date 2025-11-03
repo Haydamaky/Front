@@ -55,7 +55,7 @@ export default function ErrorRedirectWrapper({
   if (!mounted) {
     return loadingElement;
   }
-  if (pathname !== '/game' && gameId && data) {
+  if (pathname !== '/game' && gameId && data && game.status === 'ACTIVE') {
     return loadingElement;
   }
 

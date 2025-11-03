@@ -49,11 +49,14 @@ export const SignUpForm: FC = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
+      const timezone =
+        Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+      const toSend = { ...values, timezone };
       const res = await api.signup<
         AxiosResponse<{
           user: User;
         }>
-      >(values);
+      >(toSend);
       if (res.data.user) {
         dispatch(setUserState(res.data.user));
       }

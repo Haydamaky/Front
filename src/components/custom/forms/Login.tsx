@@ -43,13 +43,16 @@ export const LogInForm: FC = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      const timezone =
+        Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+      const toSend = { ...values, timezone };
       setIsLoading(true);
       const res = await api.signin<
         AxiosResponse<{
           message?: string;
           user?: User;
         }>
-      >(values);
+      >(toSend);
 
       if (res.data.user) {
         dispatch(setUserState(res.data.user));
